@@ -28,8 +28,12 @@ nvm use
 ## Setup
 
 ```bash
-git clone https://github.com/alexiscampusano/alma-natura-frontend
-cd alma-natura-frontend
+# 1. Clonar el repositorio
+# 1. Clonar el repositorio
+git clone https://github.com/alexiscampusano/almanatura-frontend
+cd almanatura-frontend
+
+# 2. Instalar dependencias
 npm install
 npm run dev
 ```

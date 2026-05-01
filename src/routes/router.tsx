@@ -1,9 +1,11 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AdminLayout } from "@/layouts/AdminLayout";
+import { AdminAccountsPage } from "@/pages/AdminAccountsPage";
 import { PublicLayout } from "@/layouts/PublicLayout";
-import { AdminDashboardPage } from "@/pages/AdminDashboardPage";
+import { AdminEventsPage } from "@/pages/AdminEventsPage";
 import { AdminLoginPage } from "@/pages/AdminLoginPage";
+import { AdminReportsPage } from "@/pages/AdminReportsPage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
@@ -24,6 +26,11 @@ export const appRouter = createBrowserRouter([
         <AdminLayout />
       </ProtectedRoute>
     ),
-    children: [{ index: true, element: <AdminDashboardPage /> }],
+    children: [
+      { index: true, element: <Navigate to="eventos" replace /> },
+      { path: "eventos", element: <AdminEventsPage /> },
+      { path: "reportes", element: <AdminReportsPage /> },
+      { path: "cuentas", element: <AdminAccountsPage /> },
+    ],
   },
 ]);

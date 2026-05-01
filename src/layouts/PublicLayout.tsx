@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 
+import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -10,26 +11,30 @@ export function PublicLayout() {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
       >
-        Skip to main content
+        Saltar al contenido principal
       </a>
 
-      <header className="border-b border-border bg-card/80">
+      <header className="border-b border-primary/40 bg-primary text-primary-foreground">
         <div className="mx-auto flex min-h-16 w-full max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <Link
             to="/"
-            aria-label="Go to public home"
-            className="text-xl font-semibold tracking-tight"
+            aria-label="Ir al inicio público"
+            className="inline-flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
           >
-            AlmaNatura
+            <img
+              src={almanaturaLogo}
+              alt="Logo AlmaNatura"
+              className="h-9 w-auto"
+            />
           </Link>
           <Link
             to="/admin/login"
             className={cn(
               buttonVariants({ variant: "outline", size: "default" }),
-              "h-11 px-4 text-sm",
+              "h-11 border-primary-foreground/60 bg-transparent px-4 text-sm text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground",
             )}
           >
-            Admin access
+            Acceso administrador
           </Link>
         </div>
       </header>
@@ -47,7 +52,7 @@ export function PublicLayout() {
             Reactivamos lo rural.
           </p>
           <p className="text-sm text-muted-foreground">
-            Public cultural agenda for rural communities.
+            Agenda cultural publica para comunidades rurales.
           </p>
         </div>
       </footer>

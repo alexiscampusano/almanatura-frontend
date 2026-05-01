@@ -20,8 +20,8 @@ Frontend del proyecto Alma Natura, construido con **React 19**, **TypeScript**, 
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/alexiscampusano/alma-natura-frontend
-cd alma-natura-frontend
+git clone https://github.com/alexiscampusano/almanatura-frontend
+cd almanatura-frontend
 
 # 2. Instalar dependencias
 npm install

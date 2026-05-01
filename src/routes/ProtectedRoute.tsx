@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
 import { useAuthStore } from "@/stores/auth.store";
@@ -9,22 +8,14 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { accessToken, isSessionExpired, validateSession, clearSession } =
-    useAuthStore((state) => ({
-      accessToken: state.accessToken,
-      isSessionExpired: state.isSessionExpired,
-      validateSession: state.validateSession,
-      clearSession: state.clearSession,
-    }));
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const expiresAt = useAuthStore((state) => state.expiresAt);
 
-  useEffect(() => {
-    validateSession();
-  }, [validateSession]);
+  const hasToken = Boolean(accessToken);
+  const hasExpiry = typeof expiresAt === "number";
+  const canAccess = hasToken && hasExpiry;
 
-  if (!accessToken || isSessionExpired) {
-    if (isSessionExpired) {
-      clearSession();
-    }
+  if (!canAccess) {
     return <Navigate to="/admin/login" replace />;
   }
 

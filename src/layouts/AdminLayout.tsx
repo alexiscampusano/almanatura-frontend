@@ -1,5 +1,6 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
+import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { cn } from "@/lib/utils";
 
 const adminNavigation = [
@@ -12,7 +13,21 @@ export function AdminLayout() {
   return (
     <div className="min-h-svh bg-background text-foreground">
       <header className="border-b border-border px-4 py-4 md:px-6">
-        <h1 className="text-lg font-semibold">Panel administrativo</h1>
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3">
+          <h1 className="text-lg font-semibold">Panel administrativo</h1>
+          <Link
+            to="/"
+            aria-label="Volver al inicio público"
+            className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          >
+            <img
+              src={almanaturaLogo}
+              alt="Logo AlmaNatura"
+              className="h-6 w-auto"
+            />
+            <span>Ir al inicio</span>
+          </Link>
+        </div>
       </header>
 
       <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row">

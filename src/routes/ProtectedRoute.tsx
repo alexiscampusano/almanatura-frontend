@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -8,6 +8,7 @@ type ProtectedRouteProps = {
 };
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const location = useLocation();
   const accessToken = useAuthStore((state) => state.accessToken);
   const expiresAt = useAuthStore((state) => state.expiresAt);
 
@@ -16,7 +17,13 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const canAccess = hasToken && hasExpiry;
 
   if (!canAccess) {
-    return <Navigate to="/admin/login" replace />;
+    return (
+      <Navigate
+        to="/admin/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}` }}
+      />
+    );
   }
 
   return <>{children}</>;

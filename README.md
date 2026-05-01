@@ -1,190 +1,254 @@
-# Alma Natura - Frontend
+# Alma Natura Frontend
 
-Frontend del proyecto Alma Natura, construido con **React 19**, **TypeScript**, **Vite** y **Tailwind CSS v4**.
+Frontend application for Alma Natura, built with React 19, TypeScript, Vite, Tailwind CSS v4, and shadcn-based UI primitives.
 
----
+## Tech Stack
 
-## Requisitos previos
+- React 19 + TypeScript
+- Vite 8
+- Tailwind CSS v4 + shadcn styles
+- Zustand (global client state)
+- Axios (HTTP client + interceptors)
+- TanStack Query (server state)
+- React Router
 
-- **Node.js** >= 22 (ver `.nvmrc`). Se recomienda usar [nvm](https://github.com/nvm-sh/nvm) para gestionar versiones:
-  ```bash
-  nvm install
-  nvm use
-  ```
-- **npm** (viene incluido con Node)
-- **Git**
+## Requirements
 
----
+- Node.js >= 22 (see `.nvmrc`)
+- npm
+- Git
 
-## Instalacion
+Recommended:
 
 ```bash
+nvm install
+nvm use
+```
+
+## Setup
+
+```bash
+# 1. Clonar el repositorio
 # 1. Clonar el repositorio
 git clone https://github.com/alexiscampusano/almanatura-frontend
 cd almanatura-frontend
 
 # 2. Instalar dependencias
 npm install
-
-# 3. Levantar el servidor de desarrollo
 npm run dev
 ```
 
-La app estara disponible en `http://localhost:5173`.
+The app runs at `http://localhost:5173`.
 
----
+## Scripts
 
-## Scripts disponibles
+| Script                 | Command                | Purpose                       |
+| ---------------------- | ---------------------- | ----------------------------- |
+| `npm run dev`          | `vite`                 | Run local dev server with HMR |
+| `npm run build`        | `tsc -b && vite build` | Type check + production build |
+| `npm run preview`      | `vite preview`         | Preview built app locally     |
+| `npm run lint`         | `eslint .`             | Run lint checks               |
+| `npm run lint:fix`     | `eslint . --fix`       | Fix lint issues when possible |
+| `npm run format`       | `prettier --write .`   | Format repository files       |
+| `npm run format:check` | `prettier --check .`   | Validate formatting (CI)      |
+| `npm run typecheck`    | `tsc -b --noEmit`      | Run TypeScript checks only    |
 
-| Script                 | Comando                | Descripcion                                                     |
-| ---------------------- | ---------------------- | --------------------------------------------------------------- |
-| `npm run dev`          | `vite`                 | Levanta el servidor de desarrollo con HMR                       |
-| `npm run build`        | `tsc -b && vite build` | Compila TypeScript y genera el bundle de produccion             |
-| `npm run preview`      | `vite preview`         | Previsualiza el build de produccion localmente                  |
-| `npm run lint`         | `eslint .`             | Ejecuta ESLint para detectar errores de codigo                  |
-| `npm run lint:fix`     | `eslint . --fix`       | Ejecuta ESLint y corrige automaticamente lo que pueda           |
-| `npm run format`       | `prettier --write .`   | Formatea todos los archivos con Prettier                        |
-| `npm run format:check` | `prettier --check .`   | Verifica que todos los archivos esten formateados (usado en CI) |
-| `npm run typecheck`    | `tsc -b --noEmit`      | Verifica tipos de TypeScript sin generar archivos               |
+Useful combinations:
 
-### Cuando usar cada script
+- Before opening PR: `npm run format:check && npm run lint && npm run typecheck && npm run build`
+- Local auto-fix pass: `npm run format && npm run lint:fix`
 
-- **Antes de commitear**: no necesitas ejecutar nada manualmente, Husky + lint-staged lo hacen por ti en cada commit.
-- **Para verificar todo manualmente**: `npm run format:check && npm run lint && npm run typecheck`.
-- **Para corregir formato y lint de una vez**: `npm run format && npm run lint:fix`.
+## Git Workflow
 
----
+### Main branches
 
-## Flujo de trabajo con Git
+| Branch | Purpose                                    |
+| ------ | ------------------------------------------ |
+| `main` | Production-ready branch                    |
+| `dev`  | Integration branch (base for feature work) |
 
-### Ramas principales
+### Working branch naming
 
-| Rama   | Proposito                                                              |
-| ------ | ---------------------------------------------------------------------- |
-| `main` | **Produccion**. Codigo estable y listo para desplegar. Rama protegida. |
-| `dev`  | **Integracion**. Aqui se mergean las features. Base para nuevas ramas. |
+Create working branches from `dev`:
 
-### Tipos de ramas de trabajo
+| Prefix      | Usage                     | Example                         |
+| ----------- | ------------------------- | ------------------------------- |
+| `feat/`     | New features              | `feat/frontend-event-form`      |
+| `fix/`      | Bug fixes                 | `fix/auth-token-expiration`     |
+| `refactor/` | Internal restructuring    | `refactor/service-layer`        |
+| `docs/`     | Documentation changes     | `docs/readme-core-architecture` |
+| `chore/`    | Tooling/maintenance tasks | `chore/frontend-router-state`   |
 
-Las ramas se crean **siempre desde `dev`** y se nombran segun la tarea asignada en ClickUp:
+### Commit convention
 
-| Prefijo     | Uso                       | Ejemplo                                |
-| ----------- | ------------------------- | -------------------------------------- |
-| `feat/`     | Nueva funcionalidad       | `feat/frontend-statistics-integration` |
-| `fix/`      | Correccion de bugs        | `fix/navbar-responsive-issue`          |
-| `refactor/` | Refactorizacion de codigo | `refactor/api-service-structure`       |
-| `docs/`     | Documentacion             | `docs/update-readme`                   |
-| `chore/`    | Tareas de mantenimiento   | `chore/update-dependencies`            |
+Use [Conventional Commits](https://www.conventionalcommits.org/):
 
-### Commits (Conventional Commits)
-
-Los mensajes de commit siguen el formato [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-tipo(alcance): descripcion corta
+```text
+type(scope): short description
 ```
 
-Ejemplos:
+Examples:
 
+```text
+feat(frontend): add reports dashboard filters
+fix(auth): clear stale session after token expiration
+chore(frontend): configure base api service and jwt interceptors
+docs(readme): document core frontend architecture
 ```
-feat(frontend): fetch and display dynamic statistics
-fix(auth): handle expired token redirect
-refactor(api): extract http client to shared module
-docs(readme): add deployment instructions
-chore(deps): update tailwindcss to v4.3
-```
 
----
-
-## Flujo diario de trabajo
-
-**IMPORTANTE**: Antes de empezar a programar, siempre actualiza tu rama local.
-
-### 1. Actualizar `dev`
+### Daily flow
 
 ```bash
+# 1) Sync integration branch
 git checkout dev
 git pull origin dev
-```
 
-### 2. Crear tu rama de trabajo
+# 2) Create task branch
+git checkout -b feat/your-task-name
 
-Segun la tarea asignada en ClickUp:
-
-```bash
-git checkout -b feat/nombre-de-la-tarea
-```
-
-### 3. Desarrollar y commitear
-
-Trabaja en tu tarea. Al hacer commit, Husky ejecuta automaticamente lint y format sobre los archivos modificados:
-
-```bash
+# 3) Work and commit
 git add .
-git commit -m "feat(frontend): descripcion de lo que hiciste"
+git commit -m "feat(frontend): your change"
+
+# 4) Push and open PR to dev
+git push -u origin feat/your-task-name
 ```
 
-Si el commit falla por errores de lint o formato, revisa los mensajes de error, corrige y vuelve a commitear.
-
-### 4. Subir tu rama
-
-```bash
-git push origin feat/nombre-de-la-tarea
-```
-
-### 5. Crear un Pull Request (PR)
-
-1. Ve a GitHub y crea un **Pull Request** desde tu rama hacia `dev`.
-2. En la descripcion del PR incluye:
-   - Que hace el cambio
-   - Número de la tarea de ClickUp (si aplica)
-   - Capturas de pantalla si es un cambio visual
-3. El **CI se ejecuta automaticamente** y verifica: formato, lint, tipos y build.
-4. Si el CI falla, revisa los logs en la pestana "Actions" del PR y corrige.
-5. Espera la revision de un companero (si aplica) y luego mergea.
-
-### 6. Despues del merge
+After merge:
 
 ```bash
 git checkout dev
 git pull origin dev
-# Tu rama ya fue mergeada, puedes eliminarla localmente:
-git branch -d feat/nombre-de-la-tarea
+git branch -d feat/your-task-name
 ```
 
----
+## Current Project Structure
 
-## Estructura del proyecto
-
-```
+```text
 alma-natura-frontend/
-├── .github/workflows/   # CI con GitHub Actions
-├── .husky/              # Hooks de Git (pre-commit)
-├── .vscode/             # Configuracion compartida del editor
-├── public/              # Archivos estaticos
+├── .github/
+│   └── workflows/
+│       └── ci.yml                    # CI pipeline: format, lint, typecheck, build
+├── .husky/                           # Git hooks (pre-commit checks through lint-staged)
+├── .vscode/                          # Shared editor settings and recommended extensions
+├── public/                           # Static public assets served as-is
 ├── src/
-│   ├── App.tsx          # Componente raiz
-│   ├── App.css          # Estilos del componente raiz
-│   ├── index.css        # Estilos globales + Tailwind
-│   ├── main.tsx         # Entry point de React
-│   └── assets/          # Imagenes, iconos, etc.
-├── .editorconfig        # Reglas de formato del editor
-├── .eslintrc            # (no existe, se usa eslint.config.js)
-├── .nvmrc               # Version de Node
-├── .prettierrc          # Configuracion de Prettier
-├── eslint.config.js     # Configuracion de ESLint (flat config)
-├── package.json         # Dependencias y scripts
-├── tsconfig.json        # Configuracion de TypeScript
-└── vite.config.ts       # Configuracion de Vite
+│   ├── components/
+│   │   └── ui/
+│   │       └── button.tsx            # Shared UI primitive (variant-based button)
+│   ├── layouts/
+│   │   ├── AdminLayout.tsx           # Shell for internal admin pages
+│   │   └── PublicLayout.tsx          # Shell for public pages
+│   ├── lib/
+│   │   └── utils.ts                  # Shared utilities (`cn` helper)
+│   ├── pages/
+│   │   ├── AdminDashboardPage.tsx    # Admin dashboard placeholder page
+│   │   ├── AdminLoginPage.tsx        # Admin login page + submit flow
+│   │   └── PublicHomePage.tsx        # Public home placeholder (events entry point)
+│   ├── routes/
+│   │   ├── ProtectedRoute.tsx        # Route guard for authenticated admin routes
+│   │   └── router.tsx                # Central route definitions
+│   ├── services/
+│   │   ├── api.client.ts             # Axios base client + interceptors
+│   │   └── auth.service.ts           # Auth API calls (`/auth/login`)
+│   ├── stores/
+│   │   ├── accessibility.store.ts    # Global accessibility state (font scale)
+│   │   └── auth.store.ts             # Global auth/session state
+│   ├── App.tsx                       # App composition (providers + router + font sync)
+│   ├── index.css                     # Global styles, tokens, typography, Tailwind layers
+│   └── main.tsx                      # React entry point
+├── components.json                   # shadcn/base-ui component config
+├── eslint.config.js                  # ESLint flat config
+├── package.json                      # Dependencies and npm scripts
+├── tsconfig.json                     # Root TypeScript project references
+├── tsconfig.app.json                 # TS config for browser app code
+├── tsconfig.node.json                # TS config for Node/Vite tooling files
+└── vite.config.ts                    # Vite config (React compiler, Tailwind plugin, aliases)
 ```
 
----
+## Core Architecture: Folder and File Responsibilities
 
-## Herramientas configuradas
+### App bootstrap
 
-- **ESLint**: analisis estatico de codigo con reglas para TypeScript, React Hooks y React Refresh.
-- **Prettier**: formateo automatico de codigo.
-- **Husky + lint-staged**: ejecuta lint y format automaticamente en cada commit (solo sobre archivos modificados).
-- **GitHub Actions CI**: valida formato, lint, tipos y build en cada push y PR a `main` y `dev`.
-- **EditorConfig**: consistencia de indentacion y finales de linea entre editores.
-- **VS Code settings**: format on save y extensiones recomendadas incluidas en el repo.
+- `src/main.tsx`: React entry point, mounts `App` inside `StrictMode`.
+- `src/App.tsx`: application shell wiring:
+  - `QueryClientProvider` for server-state operations.
+  - global `RouterProvider`.
+  - font-size synchronization from accessibility store to root `html`.
+- `src/index.css`: global styles, Tailwind imports, design tokens, and brand typography setup.
+
+### Routing
+
+- `src/routes/router.tsx`: central route table for public and admin areas.
+- `src/routes/ProtectedRoute.tsx`: admin route guard that validates auth session and redirects to `/admin/login` when unauthorized or expired.
+
+### Global state
+
+- `src/stores/accessibility.store.ts`: accessibility state (`fontSizeScale`) with persisted value in `localStorage`.
+- `src/stores/auth.store.ts`: auth session state (`accessToken`, `tokenType`, `expiresAt`, `user`) persisted in `sessionStorage`.
+
+### API layer
+
+- `src/services/api.client.ts`: shared Axios instance:
+  - reads `VITE_API_BASE_URL`.
+  - injects JWT from auth store in request interceptor.
+  - handles global `401` by clearing session and redirecting to login.
+- `src/services/auth.service.ts`: auth-specific API calls (`/auth/login`).
+
+### Layouts and pages
+
+- `src/layouts/PublicLayout.tsx`: public shell (header/main/footer).
+- `src/layouts/AdminLayout.tsx`: internal admin shell and top navigation placeholders.
+- `src/pages/PublicHomePage.tsx`: public home placeholder for active events list integration.
+- `src/pages/AdminLoginPage.tsx`: admin login UI and API integration.
+- `src/pages/AdminDashboardPage.tsx`: initial admin dashboard placeholder.
+
+### Shared utilities and UI primitives
+
+- `src/lib/utils.ts`: shared utility helpers (`cn` class merging helper).
+- `src/components/ui/button.tsx`: reusable button primitive and variants.
+
+## Data Flows
+
+### Authentication/session flow
+
+1. `AdminLoginPage` submits credentials via `auth.service`.
+2. `auth.service` calls `/auth/login` using `api.client`.
+3. Login response is saved in `auth.store` (`sessionStorage` persistence).
+4. `api.client` attaches `Authorization` header automatically to next requests.
+5. `ProtectedRoute` validates session before rendering admin area.
+6. On `401`, session is cleared and the user is redirected to `/admin/login`.
+
+### Accessibility font-size flow
+
+1. `accessibility.store` stores `fontSizeScale` and persists it in `localStorage`.
+2. `App.tsx` subscribes to `fontSizeScale`.
+3. App updates `document.documentElement.style.fontSize` so the whole UI scales consistently.
+
+## How to Extend the Project
+
+- Add a new public/admin page:
+  1. Create component in `src/pages/`.
+  2. If needed, mount it inside `PublicLayout` or `AdminLayout`.
+  3. Register route in `src/routes/router.tsx`.
+- Add a new API integration:
+  1. Create service module in `src/services/`.
+  2. Use `api.client` (do not create ad-hoc fetch clients).
+  3. Add React Query hooks near the consuming feature when appropriate.
+- Add new global state:
+  1. Create focused store in `src/stores/`.
+  2. Persist only when needed (`localStorage`/`sessionStorage`).
+  3. Keep stores small and feature-oriented.
+
+## CI and Code Quality
+
+- CI workflow (`.github/workflows/ci.yml`) runs on pushes/PRs to `main` and `dev`.
+- CI checks: formatting, lint, typecheck, and build.
+- Husky + lint-staged run formatting/linting over staged files during commit.
+
+## Contribution Checklist
+
+- Branch created from `dev`.
+- Conventional Commit message used.
+- `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run build` pass.
+- PR targets `dev` and includes clear scope + test notes.

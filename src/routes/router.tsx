@@ -5,6 +5,7 @@ import { PublicLayout } from "@/layouts/PublicLayout";
 import { AdminDashboardPage } from "@/pages/AdminDashboardPage";
 import { AdminLoginPage } from "@/pages/AdminLoginPage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
+import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
 export const appRouter = createBrowserRouter([
   {
@@ -18,7 +19,11 @@ export const appRouter = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <ProtectedRoute>
+        <AdminLayout />
+      </ProtectedRoute>
+    ),
     children: [{ index: true, element: <AdminDashboardPage /> }],
   },
 ]);

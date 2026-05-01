@@ -29,16 +29,26 @@ nvm use
 
 ```bash
 # 1. Clonar el repositorio
-# 1. Clonar el repositorio
 git clone https://github.com/alexiscampusano/almanatura-frontend
 cd almanatura-frontend
 
 # 2. Instalar dependencias
 npm install
+
+# 3. Configurar variables de entorno
+cp .env.example .env.local
+
+# 4. Levantar servidor de desarrollo
 npm run dev
 ```
 
 The app runs at `http://localhost:5173`.
+
+### Environment variables
+
+- `VITE_API_BASE_URL`: backend base URL used by the frontend API client.
+- Local development file: `.env.local` (ignored by git).
+- Template file tracked in repo: `.env.example`.
 
 ## Scripts
 

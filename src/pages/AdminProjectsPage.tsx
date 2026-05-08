@@ -1,10 +1,507 @@
+import { useState } from "react";
+import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  useAdminProjects,
+  useCreateProject,
+  useDeleteProject,
+  useUpdateProject,
+} from "@/hooks/use-admin-projects";
+import type {
+  AdminProjectResponse,
+  CreateProjectPayload,
+  ProjectPillar,
+  ProjectStatus,
+  UpdateProjectPayload,
+} from "@/types/project";
+
+const PILLAR_LABELS: Record<ProjectPillar, string> = {
+  TECHNOLOGY: "Tecnología",
+  EDUCATION: "Educación",
+  HEALTH: "Salud",
+  ENTREPRENEURSHIP: "Emprendimiento",
+  CULTURE: "Cultura",
+};
+
+const STATUS_LABELS: Record<ProjectStatus, string> = {
+  DRAFT: "Borrador",
+  PUBLISHED: "Publicado",
+  CANCELLED: "Cancelado",
+};
+
+const STATUS_VARIANT: Record<
+  ProjectStatus,
+  "default" | "secondary" | "destructive"
+> = {
+  DRAFT: "secondary",
+  PUBLISHED: "default",
+  CANCELLED: "destructive",
+};
+
+function formatDate(iso: string | null): string {
+  if (!iso) return "—";
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("es-CL", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+type FormData = {
+  title: string;
+  description: string;
+  pillar: ProjectPillar;
+  status: ProjectStatus;
+  startsAt: string;
+  endsAt: string;
+  location: string;
+  imageUrl: string;
+};
+
+const EMPTY_FORM: FormData = {
+  title: "",
+  description: "",
+  pillar: "TECHNOLOGY",
+  status: "DRAFT",
+  startsAt: "",
+  endsAt: "",
+  location: "",
+  imageUrl: "",
+};
+
+function toLocalDatetime(iso: string | null): string {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 16);
+}
+
 export function AdminProjectsPage() {
+  const { data: projects, isLoading, isError } = useAdminProjects();
+  const createMutation = useCreateProject();
+  const updateMutation = useUpdateProject();
+  const deleteMutation = useDeleteProject();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingProject, setEditingProject] =
+    useState<AdminProjectResponse | null>(null);
+  const [form, setForm] = useState<FormData>(EMPTY_FORM);
+  const [deleteTarget, setDeleteTarget] = useState<AdminProjectResponse | null>(
+    null,
+  );
+
+  function openCreate() {
+    setEditingProject(null);
+    setForm(EMPTY_FORM);
+    setDialogOpen(true);
+  }
+
+  function openEdit(project: AdminProjectResponse) {
+    setEditingProject(project);
+    setForm({
+      title: project.title,
+      description: project.description ?? "",
+      pillar: project.pillar,
+      status: project.status,
+      startsAt: toLocalDatetime(project.startsAt),
+      endsAt: toLocalDatetime(project.endsAt),
+      location: project.location ?? "",
+      imageUrl: project.imageUrl ?? "",
+    });
+    setDialogOpen(true);
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (editingProject) {
+      const payload: UpdateProjectPayload = {
+        title: form.title,
+        description: form.description || undefined,
+        pillar: form.pillar,
+        status: form.status,
+        startsAt: form.startsAt
+          ? new Date(form.startsAt).toISOString()
+          : undefined,
+        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        location: form.location || undefined,
+        imageUrl: form.imageUrl || undefined,
+      };
+      updateMutation.mutate(
+        { id: editingProject.id, data: payload },
+        { onSuccess: () => setDialogOpen(false) },
+      );
+    } else {
+      const payload: CreateProjectPayload = {
+        title: form.title,
+        description: form.description || undefined,
+        pillar: form.pillar,
+        startsAt: form.startsAt
+          ? new Date(form.startsAt).toISOString()
+          : undefined,
+        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        location: form.location || undefined,
+        imageUrl: form.imageUrl || undefined,
+      };
+      createMutation.mutate(payload, {
+        onSuccess: () => setDialogOpen(false),
+      });
+    }
+  }
+
+  function handleDelete() {
+    if (!deleteTarget) return;
+    deleteMutation.mutate(deleteTarget.id, {
+      onSuccess: () => setDeleteTarget(null),
+    });
+  }
+
+  const isMutating = createMutation.isPending || updateMutation.isPending;
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto w-full max-w-5xl">
+        <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
+        <div className="mt-6 space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="mx-auto w-full max-w-5xl">
+        <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
+        <p className="mt-4 text-destructive">
+          No se pudieron cargar los proyectos. Inténtalo nuevamente.
+        </p>
+      </section>
+    );
+  }
+
   return (
-    <section className="mx-auto w-full max-w-4xl">
-      <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-      <p className="mt-2 text-muted-foreground">
-        Aquí podrás crear, editar y administrar proyectos en próximas tareas.
-      </p>
+    <section className="mx-auto w-full max-w-5xl">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {projects?.length ?? 0} proyectos registrados
+          </p>
+        </div>
+        <Button onClick={openCreate} className="gap-2">
+          <Plus size={18} weight="bold" />
+          Nuevo proyecto
+        </Button>
+      </div>
+
+      {projects && projects.length === 0 && (
+        <p className="mt-8 text-center text-muted-foreground">
+          Aún no hay proyectos creados.
+        </p>
+      )}
+
+      {projects && projects.length > 0 && (
+        <>
+          {/* Desktop table */}
+          <div className="mt-6 hidden overflow-hidden rounded-lg border md:block">
+            <table className="w-full text-sm">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-medium">Título</th>
+                  <th className="px-4 py-3 text-left font-medium">Pilar</th>
+                  <th className="px-4 py-3 text-left font-medium">Estado</th>
+                  <th className="px-4 py-3 text-left font-medium">Inicio</th>
+                  <th className="px-4 py-3 text-right font-medium">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {projects.map((project) => (
+                  <tr key={project.id} className="hover:bg-muted/30">
+                    <td className="max-w-[200px] truncate px-4 py-3 font-medium">
+                      {project.title}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {PILLAR_LABELS[project.pillar]}
+                    </td>
+                    <td className="px-4 py-3">
+                      <Badge variant={STATUS_VARIANT[project.status]}>
+                        {STATUS_LABELS[project.status]}
+                      </Badge>
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      {formatDate(project.startsAt)}
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEdit(project)}
+                          aria-label="Editar proyecto"
+                        >
+                          <PencilSimple size={18} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setDeleteTarget(project)}
+                          aria-label="Eliminar proyecto"
+                        >
+                          <Trash size={18} />
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="mt-6 space-y-3 md:hidden">
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="flex items-center justify-between gap-3 rounded-lg border p-4"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium">{project.title}</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Badge
+                      variant={STATUS_VARIANT[project.status]}
+                      className="text-xs"
+                    >
+                      {STATUS_LABELS[project.status]}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {PILLAR_LABELS[project.pillar]}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex shrink-0 gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => openEdit(project)}
+                    aria-label="Editar proyecto"
+                  >
+                    <PencilSimple size={18} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setDeleteTarget(project)}
+                    aria-label="Eliminar proyecto"
+                  >
+                    <Trash size={18} />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Create/Edit Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {editingProject ? "Editar proyecto" : "Nuevo proyecto"}
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Título *</Label>
+              <Input
+                id="title"
+                required
+                maxLength={255}
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description">Descripción</Label>
+              <Textarea
+                id="description"
+                rows={3}
+                maxLength={10000}
+                value={form.description}
+                onChange={(e) =>
+                  setForm({ ...form, description: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Pilar *</Label>
+                <Select
+                  value={form.pillar}
+                  onValueChange={(v) =>
+                    setForm({ ...form, pillar: v as ProjectPillar })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(PILLAR_LABELS).map(([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {editingProject && (
+                <div className="space-y-2">
+                  <Label>Estado *</Label>
+                  <Select
+                    value={form.status}
+                    onValueChange={(v) =>
+                      setForm({ ...form, status: v as ProjectStatus })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="startsAt">Fecha inicio</Label>
+                <Input
+                  id="startsAt"
+                  type="datetime-local"
+                  value={form.startsAt}
+                  onChange={(e) =>
+                    setForm({ ...form, startsAt: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="endsAt">Fecha fin</Label>
+                <Input
+                  id="endsAt"
+                  type="datetime-local"
+                  value={form.endsAt}
+                  onChange={(e) => setForm({ ...form, endsAt: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="location">Ubicación</Label>
+              <Input
+                id="location"
+                maxLength={255}
+                value={form.location}
+                onChange={(e) => setForm({ ...form, location: e.target.value })}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="imageUrl">URL de imagen</Label>
+              <Input
+                id="imageUrl"
+                type="url"
+                maxLength={512}
+                placeholder="https://..."
+                value={form.imageUrl}
+                onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDialogOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isMutating}>
+                {isMutating
+                  ? "Guardando..."
+                  : editingProject
+                    ? "Guardar cambios"
+                    : "Crear proyecto"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation */}
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar proyecto?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminará permanentemente &quot;{deleteTarget?.title}&quot;.
+              Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? "Eliminando..." : "Eliminar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 }

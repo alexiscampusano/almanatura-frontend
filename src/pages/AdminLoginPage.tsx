@@ -16,11 +16,11 @@ export function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const redirectTarget =
-    (location.state as { from?: string } | null)?.from ?? "/admin/eventos";
+    (location.state as { from?: string } | null)?.from ?? "/admin/projects";
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/admin/eventos", { replace: true });
+      navigate("/admin/projects", { replace: true });
     }
   }, [accessToken, navigate]);
 

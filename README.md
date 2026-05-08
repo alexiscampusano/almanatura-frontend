@@ -135,7 +135,7 @@ git branch -d feat/your-task-name
 ## Current Project Structure
 
 ```text
-alma-natura-frontend/
+almanatura-frontend/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                    # CI pipeline: format, lint, typecheck, build
@@ -143,18 +143,24 @@ alma-natura-frontend/
 ├── .vscode/                          # Shared editor settings and recommended extensions
 ├── public/                           # Static public assets served as-is
 ├── src/
+│   ├── assets/
+│   │   └── almanatura-logo.svg      # Brand logo
 │   ├── components/
 │   │   └── ui/
 │   │       └── button.tsx            # Shared UI primitive (variant-based button)
 │   ├── layouts/
-│   │   ├── AdminLayout.tsx           # Shell for internal admin pages
-│   │   └── PublicLayout.tsx          # Shell for public pages
+│   │   ├── AdminLayout.tsx           # Shell for internal admin pages (sidebar nav)
+│   │   └── PublicLayout.tsx          # Shell for public pages (header + footer)
 │   ├── lib/
 │   │   └── utils.ts                  # Shared utilities (`cn` helper)
 │   ├── pages/
-│   │   ├── AdminDashboardPage.tsx    # Admin dashboard placeholder page
+│   │   ├── AdminActorsPage.tsx       # Admin actors directory (placeholder)
+│   │   ├── AdminApplicationsPage.tsx # Admin applications management (placeholder)
 │   │   ├── AdminLoginPage.tsx        # Admin login page + submit flow
-│   │   └── PublicHomePage.tsx        # Public home placeholder (events entry point)
+│   │   ├── AdminProjectsPage.tsx     # Admin projects management (placeholder)
+│   │   ├── AdminReportsPage.tsx      # Admin reports dashboard (placeholder)
+│   │   ├── AdminUsersPage.tsx        # Admin user management (placeholder)
+│   │   └── PublicHomePage.tsx         # Public home (projects list entry point)
 │   ├── routes/
 │   │   ├── ProtectedRoute.tsx        # Route guard for authenticated admin routes
 │   │   └── router.tsx                # Central route definitions
@@ -192,6 +198,22 @@ alma-natura-frontend/
 - `src/routes/router.tsx`: central route table for public and admin areas.
 - `src/routes/ProtectedRoute.tsx`: admin route guard that validates auth session and redirects to `/admin/login` when unauthorized or expired.
 
+Admin routes (all under `/admin`, protected):
+
+| Path                  | Page                    | Backend resource      |
+| --------------------- | ----------------------- | --------------------- |
+| `/admin/projects`     | `AdminProjectsPage`     | `/admin/projects`     |
+| `/admin/applications` | `AdminApplicationsPage` | `/admin/applications` |
+| `/admin/actors`       | `AdminActorsPage`       | `/admin/actors`       |
+| `/admin/reports`      | `AdminReportsPage`      | `/admin/reports/*`    |
+| `/admin/users`        | `AdminUsersPage`        | `/admin/users`        |
+
+Public routes:
+
+| Path | Page             | Backend resource |
+| ---- | ---------------- | ---------------- |
+| `/`  | `PublicHomePage` | `GET /projects`  |
+
 ### Global state
 
 - `src/stores/accessibility.store.ts`: accessibility state (`fontSizeScale`) with persisted value in `localStorage`.
@@ -208,10 +230,14 @@ alma-natura-frontend/
 ### Layouts and pages
 
 - `src/layouts/PublicLayout.tsx`: public shell (header/main/footer).
-- `src/layouts/AdminLayout.tsx`: internal admin shell and top navigation placeholders.
-- `src/pages/PublicHomePage.tsx`: public home placeholder for active events list integration.
+- `src/layouts/AdminLayout.tsx`: internal admin shell with sidebar navigation.
+- `src/pages/PublicHomePage.tsx`: public home placeholder for published projects list.
 - `src/pages/AdminLoginPage.tsx`: admin login UI and API integration.
-- `src/pages/AdminDashboardPage.tsx`: initial admin dashboard placeholder.
+- `src/pages/AdminProjectsPage.tsx`: project management (placeholder).
+- `src/pages/AdminApplicationsPage.tsx`: applications management (placeholder).
+- `src/pages/AdminActorsPage.tsx`: actors directory (placeholder).
+- `src/pages/AdminReportsPage.tsx`: reports dashboard (placeholder).
+- `src/pages/AdminUsersPage.tsx`: internal user management (placeholder).
 
 ### Shared utilities and UI primitives
 

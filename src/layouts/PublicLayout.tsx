@@ -14,8 +14,8 @@ export function PublicLayout() {
         Saltar al contenido principal
       </a>
 
-      <header className="border-b border-primary/40 bg-primary text-primary-foreground">
-        <div className="mx-auto flex min-h-16 w-full max-w-5xl items-center justify-between gap-3 px-4 py-3">
+      <header className="sticky top-0 z-40 border-b border-primary/40 bg-primary text-primary-foreground">
+        <div className="mx-auto flex min-h-[4rem] w-full max-w-5xl items-center justify-between gap-3 px-5 py-3 md:px-6">
           <Link
             to="/"
             aria-label="Ir al inicio público"
@@ -24,14 +24,14 @@ export function PublicLayout() {
             <img
               src={almanaturaLogo}
               alt="Logo AlmaNatura"
-              className="h-9 w-auto"
+              className="h-10 w-auto md:h-9"
             />
           </Link>
           <Link
             to="/admin/login"
             className={cn(
               buttonVariants({ variant: "outline", size: "default" }),
-              "h-11 border-primary-foreground/60 bg-transparent px-4 text-sm text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground",
+              "h-12 border-primary-foreground/60 bg-transparent px-5 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground md:h-11 md:px-4",
             )}
           >
             Acceso administrador
@@ -41,18 +41,16 @@ export function PublicLayout() {
 
       <main
         id="main-content"
-        className="mx-auto w-full max-w-5xl flex-1 px-4 py-8"
+        className="mx-auto w-full max-w-5xl flex-1 px-5 py-6 md:px-6 md:py-8"
       >
         <Outlet />
       </main>
 
-      <footer className="border-t border-border bg-card/80">
-        <div className="mx-auto grid w-full max-w-5xl gap-1 px-4 py-5">
-          <p className="text-sm font-medium text-foreground">
-            Reactivamos lo rural.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Agenda cultural publica para comunidades rurales.
+      <footer className="border-t border-border bg-primary text-primary-foreground">
+        <div className="mx-auto grid w-full max-w-5xl gap-1 px-5 py-6 md:px-6">
+          <p className="text-base font-medium">Reactivamos lo rural.</p>
+          <p className="text-sm opacity-80">
+            Cuatro ejes de intervención: empleo, educación, salud y tecnología.
           </p>
         </div>
       </footer>

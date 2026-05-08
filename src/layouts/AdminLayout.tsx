@@ -4,9 +4,11 @@ import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { cn } from "@/lib/utils";
 
 const adminNavigation = [
-  { to: "/admin/eventos", label: "Eventos" },
-  { to: "/admin/reportes", label: "Reportes" },
-  { to: "/admin/cuentas", label: "Gestión de cuentas" },
+  { to: "/admin/projects", label: "Proyectos" },
+  { to: "/admin/applications", label: "Solicitudes" },
+  { to: "/admin/actors", label: "Actores" },
+  { to: "/admin/reports", label: "Reportes" },
+  { to: "/admin/users", label: "Usuarios" },
 ];
 
 export function AdminLayout() {

@@ -1,11 +1,13 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AdminLayout } from "@/layouts/AdminLayout";
-import { AdminAccountsPage } from "@/pages/AdminAccountsPage";
-import { PublicLayout } from "@/layouts/PublicLayout";
-import { AdminEventsPage } from "@/pages/AdminEventsPage";
+import { AdminActorsPage } from "@/pages/AdminActorsPage";
+import { AdminApplicationsPage } from "@/pages/AdminApplicationsPage";
 import { AdminLoginPage } from "@/pages/AdminLoginPage";
+import { AdminProjectsPage } from "@/pages/AdminProjectsPage";
 import { AdminReportsPage } from "@/pages/AdminReportsPage";
+import { AdminUsersPage } from "@/pages/AdminUsersPage";
+import { PublicLayout } from "@/layouts/PublicLayout";
 import { PublicHomePage } from "@/pages/PublicHomePage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
@@ -27,10 +29,12 @@ export const appRouter = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Navigate to="eventos" replace /> },
-      { path: "eventos", element: <AdminEventsPage /> },
-      { path: "reportes", element: <AdminReportsPage /> },
-      { path: "cuentas", element: <AdminAccountsPage /> },
+      { index: true, element: <Navigate to="projects" replace /> },
+      { path: "projects", element: <AdminProjectsPage /> },
+      { path: "applications", element: <AdminApplicationsPage /> },
+      { path: "actors", element: <AdminActorsPage /> },
+      { path: "reports", element: <AdminReportsPage /> },
+      { path: "users", element: <AdminUsersPage /> },
     ],
   },
 ]);

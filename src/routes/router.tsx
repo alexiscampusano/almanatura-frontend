@@ -11,6 +11,7 @@ import { AdminReportsPage } from "@/pages/AdminReportsPage";
 import { AdminUsersPage } from "@/pages/AdminUsersPage";
 import { PublicLayout } from "@/layouts/PublicLayout";
 import { AdminLoginPage } from "@/pages/AdminLoginPage";
+import { AdminMePage } from "@/pages/AdminMePage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
 import { PublicProjectDetailPage } from "@/pages/PublicProjectDetailPage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
@@ -54,6 +55,7 @@ export const appRouter = createBrowserRouter([
       { path: "reports", element: <AdminReportsPage /> },
       { path: "notifications", element: <AdminNotificationsPage /> },
       { path: "users", element: <AdminUsersPage /> },
+      { path: "me", element: <AdminMePage /> },
     ],
   },
 ]);

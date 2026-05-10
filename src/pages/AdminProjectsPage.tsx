@@ -377,7 +377,9 @@ export function AdminProjectsPage() {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Seleccionar pilar">
+                      {PILLAR_LABELS[form.pillar]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(PILLAR_LABELS).map(([value, label]) => (
@@ -399,7 +401,9 @@ export function AdminProjectsPage() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Seleccionar estado">
+                        {STATUS_LABELS[form.status]}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {Object.entries(STATUS_LABELS).map(([value, label]) => (

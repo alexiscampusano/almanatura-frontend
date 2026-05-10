@@ -1,12 +1,14 @@
 import { Link, Outlet } from "react-router-dom";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function PublicLayout() {
   return (
     <div className="flex min-h-svh flex-col bg-background text-foreground">
+      <NavigationProgress />
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
@@ -28,7 +30,7 @@ export function PublicLayout() {
             />
           </Link>
           <Link
-            to="/admin/login"
+            to="/admin"
             className={cn(
               buttonVariants({ variant: "outline", size: "default" }),
               "h-12 border-primary-foreground/60 bg-transparent px-5 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground md:h-11 md:px-4",

@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ export function AdminLayout() {
 
   return (
     <div className="min-h-svh bg-background text-foreground">
+      <NavigationProgress />
       <header className="border-b border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3">
           <h1 className="text-lg font-semibold">Panel administrativo</h1>

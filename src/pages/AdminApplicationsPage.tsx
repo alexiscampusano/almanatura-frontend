@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 
 import {
   useAdminApplications,
@@ -90,14 +91,21 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
       </Select>
       <Button
         size="sm"
-        className="h-10"
+        className="h-10 gap-2"
         disabled={!target || patchMutation.isPending}
         onClick={() => {
           if (!target) return;
           patchMutation.mutate({ id: app.id, status: target });
         }}
       >
-        {patchMutation.isPending ? "…" : "Aplicar"}
+        {patchMutation.isPending ? (
+          <>
+            <Spinner size="sm" className="text-primary-foreground" />
+            Aplicando
+          </>
+        ) : (
+          "Aplicar"
+        )}
       </Button>
     </div>
   );

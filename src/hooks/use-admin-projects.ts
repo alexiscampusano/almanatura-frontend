@@ -33,7 +33,12 @@ export function useUpdateProject() {
   return useMutation({
     mutationFn: ({ id, data }: { id: number; data: UpdateProjectPayload }) =>
       updateProject(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-projects", variables.id],
+      });
+    },
   });
 }
 
@@ -41,6 +46,9 @@ export function useDeleteProject() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: number) => deleteProject(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+    onSuccess: (_void, id) => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+      queryClient.removeQueries({ queryKey: ["admin-projects", id] });
+    },
   });
 }

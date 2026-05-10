@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 
 import {
   useCreateInternalUser,
@@ -165,8 +166,19 @@ export function AdminUsersPage() {
               </Select>
             </div>
           </div>
-          <Button type="submit" disabled={createMutation.isPending}>
-            {createMutation.isPending ? "Creando…" : "Crear usuario"}
+          <Button
+            type="submit"
+            className="gap-2"
+            disabled={createMutation.isPending}
+          >
+            {createMutation.isPending ? (
+              <>
+                <Spinner size="sm" className="text-primary-foreground" />
+                Creando…
+              </>
+            ) : (
+              "Crear usuario"
+            )}
           </Button>
         </form>
       )}

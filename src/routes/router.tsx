@@ -1,9 +1,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AdminLayout } from "@/layouts/AdminLayout";
+import { AdminActorDetailPage } from "@/pages/AdminActorDetailPage";
 import { AdminActorsPage } from "@/pages/AdminActorsPage";
 import { AdminApplicationsPage } from "@/pages/AdminApplicationsPage";
 import { AdminNotificationsPage } from "@/pages/AdminNotificationsPage";
+import { AdminProjectDetailPage } from "@/pages/AdminProjectDetailPage";
 import { AdminProjectsPage } from "@/pages/AdminProjectsPage";
 import { AdminReportsPage } from "@/pages/AdminReportsPage";
 import { AdminUsersPage } from "@/pages/AdminUsersPage";
@@ -38,8 +40,16 @@ export const appRouter = createBrowserRouter([
     ),
     children: [
       { index: true, element: <Navigate to="projects" replace /> },
+      {
+        path: "projects/:projectId",
+        element: <AdminProjectDetailPage />,
+      },
       { path: "projects", element: <AdminProjectsPage /> },
       { path: "applications", element: <AdminApplicationsPage /> },
+      {
+        path: "actors/:actorId",
+        element: <AdminActorDetailPage />,
+      },
       { path: "actors", element: <AdminActorsPage /> },
       { path: "reports", element: <AdminReportsPage /> },
       { path: "notifications", element: <AdminNotificationsPage /> },

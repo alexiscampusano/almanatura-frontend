@@ -12,6 +12,15 @@ export async function getAdminProjects(): Promise<AdminProjectResponse[]> {
   return response.data;
 }
 
+export async function getAdminProjectById(
+  id: number,
+): Promise<AdminProjectResponse> {
+  const response = await apiClient.get<AdminProjectResponse>(
+    `/admin/projects/${id}`,
+  );
+  return response.data;
+}
+
 export async function createProject(
   data: CreateProjectPayload,
 ): Promise<AdminProjectResponse> {

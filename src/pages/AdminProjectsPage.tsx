@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { Eye, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   AlertDialog,
@@ -12,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,7 @@ import {
   useDeleteProject,
   useUpdateProject,
 } from "@/hooks/use-admin-projects";
+import { cn } from "@/lib/utils";
 import type {
   AdminProjectResponse,
   CreateProjectPayload,
@@ -112,6 +114,8 @@ export function AdminProjectsPage() {
   const createMutation = useCreateProject();
   const updateMutation = useUpdateProject();
   const deleteMutation = useDeleteProject();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] =
@@ -141,6 +145,30 @@ export function AdminProjectsPage() {
     });
     setDialogOpen(true);
   }
+
+  useEffect(() => {
+    const openId = (location.state as { openEditForId?: number } | null)
+      ?.openEditForId;
+    if (openId == null || !projects) return;
+    const p = projects.find((x) => x.id === openId);
+    navigate(".", { replace: true, state: {} });
+    if (p) {
+      queueMicrotask(() => {
+        setEditingProject(p);
+        setForm({
+          title: p.title,
+          description: p.description ?? "",
+          pillar: p.pillar,
+          status: p.status,
+          startsAt: toLocalDatetime(p.startsAt),
+          endsAt: toLocalDatetime(p.endsAt),
+          location: p.location ?? "",
+          imageUrl: p.imageUrl ?? "",
+        });
+        setDialogOpen(true);
+      });
+    }
+  }, [location.state, projects, navigate]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -266,6 +294,18 @@ export function AdminProjectsPage() {
                     </td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-1">
+                        <Link
+                          to={`/admin/projects/${project.id}`}
+                          className={cn(
+                            buttonVariants({
+                              variant: "ghost",
+                              size: "icon",
+                            }),
+                          )}
+                          aria-label="Ver detalle"
+                        >
+                          <Eye size={18} />
+                        </Link>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -312,6 +352,15 @@ export function AdminProjectsPage() {
                   </div>
                 </div>
                 <div className="flex shrink-0 gap-1">
+                  <Link
+                    to={`/admin/projects/${project.id}`}
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "icon" }),
+                    )}
+                    aria-label="Ver detalle"
+                  >
+                    <Eye size={18} />
+                  </Link>
                   <Button
                     variant="ghost"
                     size="icon"

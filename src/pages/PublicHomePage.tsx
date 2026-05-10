@@ -8,10 +8,9 @@ import {
   MusicNotes,
   Rocket,
 } from "@phosphor-icons/react";
-import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,7 +21,6 @@ import {
 import { PublicApplicationDialog } from "@/components/PublicApplicationForm";
 
 import { usePublicProjects } from "@/hooks/use-public-projects";
-import { cn } from "@/lib/utils";
 import type { ProjectPillar } from "@/types/project";
 
 const PILLAR_CONFIG: Record<
@@ -214,16 +212,7 @@ export function PublicHomePage() {
                   </div>
                 </CardContent>
 
-                <CardFooter className="flex flex-col gap-3 border-t border-border/60 px-5 pb-5 pt-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
-                  <Link
-                    to={`/projects/${project.id}`}
-                    className={cn(
-                      buttonVariants({ variant: "outline", size: "sm" }),
-                      "w-full justify-center sm:w-auto",
-                    )}
-                  >
-                    Ver detalle
-                  </Link>
+                <CardFooter className="border-t border-border/60 px-5 pb-5 pt-4 md:px-6">
                   <PublicApplicationDialog
                     projectId={project.id}
                     projectTitle={project.title}

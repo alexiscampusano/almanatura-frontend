@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { Link } from "react-router-dom";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useActors } from "@/hooks/use-actors";
@@ -96,23 +98,31 @@ export function AdminActorsPage() {
       {filtered && filtered.length > 0 ? (
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((actor) => (
-            <Card key={actor.id}>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
-                  >
-                    {getInitials(actor.fullName)}
-                  </span>
-                  <div className="min-w-0">
-                    <CardTitle className="truncate">{actor.fullName}</CardTitle>
-                    <CardContent className="p-0 text-xs text-muted-foreground">
-                      {actor.region}
-                    </CardContent>
+            <Link
+              key={actor.id}
+              to={`/admin/actors/${actor.id}`}
+              className="block transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              <Card className="h-full">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
+                    >
+                      {getInitials(actor.fullName)}
+                    </span>
+                    <div className="min-w-0">
+                      <CardTitle className="truncate">
+                        {actor.fullName}
+                      </CardTitle>
+                      <CardContent className="p-0 text-xs text-muted-foreground">
+                        {actor.region}
+                      </CardContent>
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
-            </Card>
+                </CardHeader>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (

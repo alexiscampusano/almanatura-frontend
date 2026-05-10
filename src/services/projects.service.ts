@@ -10,12 +10,3 @@ export async function getPublicProjects(
   });
   return response.data;
 }
-
-export async function getPublicProjectById(
-  id: number,
-): Promise<PublicProjectResponse> {
-  const response = await apiClient.get<PublicProjectResponse>(
-    `/projects/${id}`,
-  );
-  return response.data;
-}

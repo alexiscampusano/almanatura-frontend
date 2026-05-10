@@ -29,6 +29,9 @@ export function useCreateProjectImpactEntry(projectId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: impactEntriesKey(projectId) });
       queryClient.invalidateQueries({ queryKey: ["admin-reports", "summary"] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-projects", projectId],
+      });
     },
   });
 }

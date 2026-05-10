@@ -26,3 +26,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent / IDE local tooling (no subir al repositorio)
+.agents/
+skills-lock.json

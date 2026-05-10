@@ -18,14 +18,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { PublicApplicationDialog } from "@/components/PublicApplicationForm";
+
 import { usePublicProjects } from "@/hooks/use-public-projects";
 import type { ProjectPillar } from "@/types/project";
 
@@ -219,30 +213,10 @@ export function PublicHomePage() {
                 </CardContent>
 
                 <CardFooter className="px-5 pb-5 pt-4 md:px-6">
-                  <Dialog>
-                    <DialogTrigger
-                      render={
-                        <Button className="h-13 w-full rounded-lg text-base font-semibold md:h-12" />
-                      }
-                    >
-                      Quiero participar
-                    </DialogTrigger>
-                    <DialogContent className="mx-4 max-w-md">
-                      <DialogHeader>
-                        <DialogTitle className="text-lg">
-                          Postulación
-                        </DialogTitle>
-                        <DialogDescription className="text-base">
-                          Formulario de postulación para:{" "}
-                          <strong>{project.title}</strong>
-                        </DialogDescription>
-                      </DialogHeader>
-                      <p className="text-sm text-muted-foreground">
-                        Esta funcionalidad se conectará con la API en próximas
-                        tareas.
-                      </p>
-                    </DialogContent>
-                  </Dialog>
+                  <PublicApplicationDialog
+                    projectId={project.id}
+                    projectTitle={project.title}
+                  />
                 </CardFooter>
               </Card>
             );

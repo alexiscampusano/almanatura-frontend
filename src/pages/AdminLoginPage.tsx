@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState, type FormEvent } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
@@ -143,6 +143,14 @@ export function AdminLoginPage() {
               )}
             </Button>
           </form>
+          <p className="mt-6 text-center text-sm">
+            <Link
+              to="/"
+              className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              Volver al inicio
+            </Link>
+          </p>
         </section>
       </main>
     </>

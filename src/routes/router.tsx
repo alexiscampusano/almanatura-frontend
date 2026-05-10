@@ -3,19 +3,27 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { AdminLayout } from "@/layouts/AdminLayout";
 import { AdminActorsPage } from "@/pages/AdminActorsPage";
 import { AdminApplicationsPage } from "@/pages/AdminApplicationsPage";
-import { AdminLoginPage } from "@/pages/AdminLoginPage";
+import { AdminNotificationsPage } from "@/pages/AdminNotificationsPage";
 import { AdminProjectsPage } from "@/pages/AdminProjectsPage";
 import { AdminReportsPage } from "@/pages/AdminReportsPage";
 import { AdminUsersPage } from "@/pages/AdminUsersPage";
 import { PublicLayout } from "@/layouts/PublicLayout";
+import { AdminLoginPage } from "@/pages/AdminLoginPage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
+import { PublicProjectDetailPage } from "@/pages/PublicProjectDetailPage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
 export const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <PublicLayout />,
-    children: [{ index: true, element: <PublicHomePage /> }],
+    children: [
+      { index: true, element: <PublicHomePage /> },
+      {
+        path: "projects/:projectId",
+        element: <PublicProjectDetailPage />,
+      },
+    ],
   },
   {
     path: "/admin/login",
@@ -34,6 +42,7 @@ export const appRouter = createBrowserRouter([
       { path: "applications", element: <AdminApplicationsPage /> },
       { path: "actors", element: <AdminActorsPage /> },
       { path: "reports", element: <AdminReportsPage /> },
+      { path: "notifications", element: <AdminNotificationsPage /> },
       { path: "users", element: <AdminUsersPage /> },
     ],
   },

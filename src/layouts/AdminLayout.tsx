@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
+import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 
 const adminNavigation = [
@@ -8,10 +9,13 @@ const adminNavigation = [
   { to: "/admin/applications", label: "Solicitudes" },
   { to: "/admin/actors", label: "Actores" },
   { to: "/admin/reports", label: "Reportes" },
+  { to: "/admin/notifications", label: "Notificaciones" },
   { to: "/admin/users", label: "Usuarios" },
 ];
 
 export function AdminLayout() {
+  useSyncCurrentUser();
+
   return (
     <div className="min-h-svh bg-background text-foreground">
       <header className="border-b border-border px-4 py-4 md:px-6">

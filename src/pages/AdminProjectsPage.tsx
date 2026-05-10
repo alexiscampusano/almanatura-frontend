@@ -29,6 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { ProjectImpactSection } from "@/components/admin/ProjectImpactSection";
 import {
   useAdminProjects,
   useCreateProject,
@@ -336,7 +337,13 @@ export function AdminProjectsPage() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+        <DialogContent
+          className={
+            editingProject
+              ? "max-h-[90vh] overflow-y-auto sm:max-w-2xl"
+              : "max-h-[90vh] overflow-y-auto sm:max-w-lg"
+          }
+        >
           <DialogHeader>
             <DialogTitle>
               {editingProject ? "Editar proyecto" : "Nuevo proyecto"}
@@ -461,6 +468,10 @@ export function AdminProjectsPage() {
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
               />
             </div>
+
+            {editingProject && (
+              <ProjectImpactSection projectId={editingProject.id} />
+            )}
 
             <div className="flex justify-end gap-2 pt-2">
               <Button

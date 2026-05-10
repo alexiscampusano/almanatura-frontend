@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-type AuthUser = {
+export type AuthUser = {
   id: number;
   email: string;
   name: string;
@@ -22,6 +22,7 @@ type AuthState = {
   user: AuthUser | null;
   isSessionExpired: boolean;
   setSession: (session: AuthLoginResponse) => void;
+  updateUser: (user: AuthUser) => void;
   validateSession: () => void;
   clearSession: () => void;
 };
@@ -44,6 +45,7 @@ export const useAuthStore = create<AuthState>()(
           user,
           isSessionExpired: false,
         }),
+      updateUser: (user) => set({ user }),
       validateSession: () =>
         set((state) => {
           if (state.expiresAt === null) {

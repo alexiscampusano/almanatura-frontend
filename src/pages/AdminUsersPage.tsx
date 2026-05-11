@@ -203,29 +203,31 @@ export function AdminUsersPage() {
           <p className="text-sm text-muted-foreground">No hay usuarios.</p>
         )}
         {!isLoading && users && users.length > 0 && (
-          <div className="hidden overflow-hidden rounded-lg border md:block">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium">Nombre</th>
-                  <th className="px-4 py-3 text-left font-medium">Correo</th>
-                  <th className="px-4 py-3 text-left font-medium">Rol</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {users.map((u) => (
-                  <tr key={u.id}>
-                    <td className="px-4 py-3">{u.name}</td>
-                    <td className="px-4 py-3">{u.email}</td>
-                    <td className="px-4 py-3">
-                      <Badge variant={roleBadgeVariant(u.role)}>
-                        {ROLE_LABELS[u.role]}
-                      </Badge>
-                    </td>
+          <div className="hidden rounded-lg border md:block">
+            <div className="overflow-x-auto">
+              <table className="min-w-[520px] w-full text-sm">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-medium">Nombre</th>
+                    <th className="px-4 py-3 text-left font-medium">Correo</th>
+                    <th className="px-4 py-3 text-left font-medium">Rol</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y">
+                  {users.map((u) => (
+                    <tr key={u.id}>
+                      <td className="px-4 py-3">{u.name}</td>
+                      <td className="px-4 py-3">{u.email}</td>
+                      <td className="px-4 py-3">
+                        <Badge variant={roleBadgeVariant(u.role)}>
+                          {ROLE_LABELS[u.role]}
+                        </Badge>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
         {!isLoading && users && users.length > 0 && (

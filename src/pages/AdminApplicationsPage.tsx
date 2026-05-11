@@ -240,61 +240,65 @@ export function AdminApplicationsPage() {
 
       {!isLoading && filtered.length > 0 && (
         <>
-          <div className="hidden overflow-hidden rounded-lg border md:block">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
-                <tr>
-                  <th className="px-3 py-3 text-left font-medium">
-                    Solicitante
-                  </th>
-                  <th className="px-3 py-3 text-left font-medium">Proyecto</th>
-                  <th className="px-3 py-3 text-left font-medium">Estado</th>
-                  <th className="px-3 py-3 text-left font-medium">DNI</th>
-                  <th className="px-3 py-3 text-left font-medium">Creada</th>
-                  <th className="px-3 py-3 text-left font-medium">Acción</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {filtered.map((app) => (
-                  <tr key={app.id} className="hover:bg-muted/30">
-                    <td className="px-3 py-3">
-                      <div className="font-medium">{app.fullName}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {app.email}
-                      </div>
-                      {app.phone && (
-                        <div className="text-xs text-muted-foreground">
-                          {app.phone}
-                        </div>
-                      )}
-                    </td>
-                    <td className="max-w-[180px] px-3 py-3 align-top">
-                      <span className="line-clamp-2">
-                        {projectTitleById.get(app.projectId) ??
-                          `#${app.projectId}`}
-                      </span>
-                    </td>
-                    <td className="px-3 py-3 align-top">
-                      <Badge variant={statusBadgeVariant(app.status)}>
-                        {APPLICATION_STATUS_LABELS[app.status]}
-                      </Badge>
-                    </td>
-                    <td className="px-3 py-3 align-top font-mono text-xs">
-                      {app.nationalId}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
-                      {formatDate(app.createdAt)}
-                    </td>
-                    <td className="px-3 py-3 align-top">
-                      <TransitionControls
-                        key={`${app.id}-${app.status}`}
-                        app={app}
-                      />
-                    </td>
+          <div className="hidden rounded-lg border md:block">
+            <div className="overflow-x-auto">
+              <table className="min-w-[900px] w-full text-sm">
+                <thead className="border-b bg-muted/50">
+                  <tr>
+                    <th className="px-3 py-3 text-left font-medium">
+                      Solicitante
+                    </th>
+                    <th className="px-3 py-3 text-left font-medium">
+                      Proyecto
+                    </th>
+                    <th className="px-3 py-3 text-left font-medium">Estado</th>
+                    <th className="px-3 py-3 text-left font-medium">DNI</th>
+                    <th className="px-3 py-3 text-left font-medium">Creada</th>
+                    <th className="px-3 py-3 text-left font-medium">Acción</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y">
+                  {filtered.map((app) => (
+                    <tr key={app.id} className="hover:bg-muted/30">
+                      <td className="px-3 py-3">
+                        <div className="font-medium">{app.fullName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {app.email}
+                        </div>
+                        {app.phone && (
+                          <div className="text-xs text-muted-foreground">
+                            {app.phone}
+                          </div>
+                        )}
+                      </td>
+                      <td className="max-w-[180px] px-3 py-3 align-top">
+                        <span className="line-clamp-2">
+                          {projectTitleById.get(app.projectId) ??
+                            `#${app.projectId}`}
+                        </span>
+                      </td>
+                      <td className="px-3 py-3 align-top">
+                        <Badge variant={statusBadgeVariant(app.status)}>
+                          {APPLICATION_STATUS_LABELS[app.status]}
+                        </Badge>
+                      </td>
+                      <td className="px-3 py-3 align-top font-mono text-xs">
+                        {app.nationalId}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
+                        {formatDate(app.createdAt)}
+                      </td>
+                      <td className="px-3 py-3 align-top">
+                        <TransitionControls
+                          key={`${app.id}-${app.status}`}
+                          app={app}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="space-y-3 md:hidden">

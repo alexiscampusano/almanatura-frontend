@@ -1,5 +1,6 @@
-import { Loader2 } from "lucide-react";
+import { CircleNotch } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
+import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -19,10 +20,11 @@ const spinnerVariants = cva("animate-spin text-primary", {
 type SpinnerProps = React.ComponentProps<"svg"> &
   VariantProps<typeof spinnerVariants>;
 
-/** Indicador de carga alineado con los tokens de tema (patrón shadcn: cva + Lucide). */
+/** Indicador de carga (Phosphor + cva), alineado con `components.json` iconLibrary. */
 export function Spinner({ className, size, ...props }: SpinnerProps) {
   return (
-    <Loader2
+    <CircleNotch
+      weight="bold"
       role="status"
       aria-label="Cargando"
       className={cn(spinnerVariants({ size }), className)}

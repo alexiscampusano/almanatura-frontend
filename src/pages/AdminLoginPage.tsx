@@ -2,8 +2,10 @@ import { useLayoutEffect, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { Button } from "@/components/ui/button";
 import { NavigationProgress } from "@/components/navigation-progress";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthHydrated } from "@/hooks/use-auth-hydrated";
 import { login } from "@/services/auth.service";
@@ -99,30 +101,32 @@ export function AdminLoginPage() {
             Solo usuarios internos autorizados pueden acceder.
           </p>
           <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
-            <label className="grid gap-2 text-sm font-medium">
-              Correo
-              <input
+            <div className="grid gap-2">
+              <Label htmlFor="admin-login-email">Correo</Label>
+              <Input
+                id="admin-login-email"
                 required
                 type="email"
                 autoComplete="email"
                 disabled={isLoading}
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="h-11 border border-input bg-background px-3 outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                className="h-11 px-3 text-base md:text-xs"
               />
-            </label>
-            <label className="grid gap-2 text-sm font-medium">
-              Contrasena
-              <input
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="admin-login-password">Contraseña</Label>
+              <Input
+                id="admin-login-password"
                 required
                 type="password"
                 autoComplete="current-password"
                 disabled={isLoading}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="h-11 border border-input bg-background px-3 outline-none focus:border-ring focus:ring-1 focus:ring-ring/50"
+                className="h-11 px-3 text-base md:text-xs"
               />
-            </label>
+            </div>
             {errorMessage && (
               <p className="text-sm text-destructive" role="alert">
                 {errorMessage}

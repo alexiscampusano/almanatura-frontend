@@ -2,6 +2,7 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -200,12 +201,12 @@ export function PublicApplicationDialog({
                 />
               </div>
               <div className="flex items-start gap-3">
-                <input
+                <Checkbox
                   id={`policy-${projectId}`}
-                  type="checkbox"
                   checked={acceptPolicy}
-                  onChange={(e) => setAcceptPolicy(e.target.checked)}
-                  className="mt-1 size-5 shrink-0 rounded border border-input"
+                  onCheckedChange={setAcceptPolicy}
+                  required
+                  className="mt-1 size-5"
                 />
                 <Label
                   htmlFor={`policy-${projectId}`}

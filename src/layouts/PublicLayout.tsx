@@ -21,7 +21,7 @@ export function PublicLayout() {
           <Link
             to="/"
             aria-label="Ir al inicio público"
-            className="inline-flex items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+            className="inline-flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
           >
             <img
               src={almanaturaLogo}
@@ -31,12 +31,14 @@ export function PublicLayout() {
           </Link>
           <Link
             to="/admin"
+            aria-label="Acceso administrador al panel interno"
             className={cn(
               buttonVariants({ variant: "outline", size: "default" }),
-              "h-12 border-primary-foreground/60 bg-transparent px-5 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground md:h-11 md:px-4",
+              "h-11 min-w-0 shrink border-primary-foreground/60 bg-transparent px-4 text-xs font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-12 sm:text-sm md:h-11",
             )}
           >
-            Acceso administrador
+            <span className="sm:hidden">Admin</span>
+            <span className="hidden sm:inline">Acceso administrador</span>
           </Link>
         </div>
       </header>

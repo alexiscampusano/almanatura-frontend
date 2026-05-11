@@ -131,49 +131,53 @@ export function AdminReportsPage() {
               <h3 className="mb-3 text-lg font-medium">
                 Proyectos con más solicitudes
               </h3>
-              <div className="hidden overflow-hidden rounded-lg border md:block">
-                <table className="w-full text-sm">
-                  <thead className="border-b bg-muted/50">
-                    <tr>
-                      <th className="px-3 py-3 text-left font-medium">
-                        Proyecto
-                      </th>
-                      <th className="px-3 py-3 text-left font-medium">Pilar</th>
-                      <th className="px-3 py-3 text-left font-medium">
-                        Estado
-                      </th>
-                      <th className="px-3 py-3 text-right font-medium">
-                        Solicitudes
-                      </th>
-                      <th className="px-3 py-3 text-left font-medium">
-                        Inicio
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {ranking.data.map((row) => (
-                      <tr key={row.id}>
-                        <td className="max-w-[200px] px-3 py-3 font-medium">
-                          {row.title}
-                        </td>
-                        <td className="px-3 py-3 text-muted-foreground">
-                          {PILLAR_LABELS[row.pillar]}
-                        </td>
-                        <td className="px-3 py-3">
-                          <Badge variant="outline">
-                            {PROJECT_STATUS_LABELS[row.status]}
-                          </Badge>
-                        </td>
-                        <td className="px-3 py-3 text-right tabular-nums">
-                          {row.applicationCount}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-3 text-muted-foreground">
-                          {formatDate(row.startsAt)}
-                        </td>
+              <div className="hidden rounded-lg border md:block">
+                <div className="overflow-x-auto">
+                  <table className="min-w-[720px] w-full text-sm">
+                    <thead className="border-b bg-muted/50">
+                      <tr>
+                        <th className="px-3 py-3 text-left font-medium">
+                          Proyecto
+                        </th>
+                        <th className="px-3 py-3 text-left font-medium">
+                          Pilar
+                        </th>
+                        <th className="px-3 py-3 text-left font-medium">
+                          Estado
+                        </th>
+                        <th className="px-3 py-3 text-right font-medium">
+                          Solicitudes
+                        </th>
+                        <th className="px-3 py-3 text-left font-medium">
+                          Inicio
+                        </th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y">
+                      {ranking.data.map((row) => (
+                        <tr key={row.id}>
+                          <td className="max-w-[200px] px-3 py-3 font-medium">
+                            {row.title}
+                          </td>
+                          <td className="px-3 py-3 text-muted-foreground">
+                            {PILLAR_LABELS[row.pillar]}
+                          </td>
+                          <td className="px-3 py-3">
+                            <Badge variant="outline">
+                              {PROJECT_STATUS_LABELS[row.status]}
+                            </Badge>
+                          </td>
+                          <td className="px-3 py-3 text-right tabular-nums">
+                            {row.applicationCount}
+                          </td>
+                          <td className="whitespace-nowrap px-3 py-3 text-muted-foreground">
+                            {formatDate(row.startsAt)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <ul className="space-y-2 md:hidden">
                 {ranking.data.map((row) => (

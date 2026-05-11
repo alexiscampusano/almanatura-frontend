@@ -41,10 +41,10 @@ export function AdminLayout() {
       <NavigationProgress />
       <header className="border-b border-border px-4 py-4 md:px-6">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-3">
-          <h1 className="min-w-0 flex-1 text-lg font-semibold">
+          <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
             Panel administrativo
           </h1>
-          <div className="ml-auto flex shrink-0 flex-wrap items-center justify-end gap-2">
+          <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:ml-auto sm:w-auto">
             <Link
               to="/"
               aria-label="Volver al inicio público"

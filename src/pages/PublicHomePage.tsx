@@ -214,12 +214,12 @@ export function PublicHomePage() {
                   </div>
                 </CardContent>
 
-                <CardFooter className="flex flex-col gap-3 border-t border-border/60 px-5 pb-5 pt-4 sm:flex-row sm:items-center sm:justify-between md:px-6">
+                <CardFooter className="grid w-full min-w-0 gap-3 border-t border-border/60 bg-muted/20 px-4 py-4 sm:grid-cols-2 md:px-6">
                   <Link
                     to={`/projects/${project.id}`}
                     className={cn(
-                      buttonVariants({ variant: "outline", size: "sm" }),
-                      "w-full justify-center sm:w-auto",
+                      buttonVariants({ variant: "outline", size: "default" }),
+                      "min-w-0 w-full justify-center",
                     )}
                   >
                     Ver detalle
@@ -227,6 +227,7 @@ export function PublicHomePage() {
                   <PublicApplicationDialog
                     projectId={project.id}
                     projectTitle={project.title}
+                    triggerClassName="min-w-0 w-full justify-center"
                   />
                 </CardFooter>
               </Card>

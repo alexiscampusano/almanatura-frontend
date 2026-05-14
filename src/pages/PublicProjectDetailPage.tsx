@@ -180,10 +180,11 @@ export function PublicProjectDetailPage() {
           </div>
         </CardContent>
 
-        <CardFooter className="flex flex-col gap-3 border-t px-5 py-6 md:px-8 sm:flex-row sm:items-center sm:justify-between">
+        <CardFooter className="flex flex-col gap-3 border-t border-border/60 bg-muted/15 px-5 py-5 md:px-8 sm:flex-row sm:items-center sm:justify-end">
           <PublicApplicationDialog
             projectId={project.id}
             projectTitle={project.title}
+            triggerClassName="w-full justify-center sm:w-auto"
           />
         </CardFooter>
       </Card>

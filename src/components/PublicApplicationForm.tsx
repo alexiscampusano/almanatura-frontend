@@ -15,12 +15,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { isAxiosError } from "axios";
 
+import { cn } from "@/lib/utils";
 import { submitApplication } from "@/services/applications.service";
 import type { SubmitApplicationPayload } from "@/types/application";
 
 type PublicApplicationDialogProps = {
   projectId: number;
   projectTitle: string;
+  triggerClassName?: string;
 };
 
 function parseSubmitError(error: unknown): string {
@@ -48,6 +50,7 @@ function parseSubmitError(error: unknown): string {
 export function PublicApplicationDialog({
   projectId,
   projectTitle,
+  triggerClassName,
 }: PublicApplicationDialogProps) {
   const [open, setOpen] = useState(false);
   const [fullName, setFullName] = useState("");
@@ -105,7 +108,11 @@ export function PublicApplicationDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={
-          <Button className="h-12 w-full rounded-lg text-base font-semibold md:h-12" />
+          <Button
+            variant="default"
+            size="default"
+            className={cn("text-sm font-medium", triggerClassName)}
+          />
         }
       >
         Quiero participar

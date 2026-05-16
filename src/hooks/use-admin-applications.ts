@@ -23,7 +23,24 @@ export function usePatchApplicationStatus() {
   return useMutation({
     mutationFn: ({ id, status }: { id: number; status: ApplicationStatus }) =>
       patchApplicationStatus(id, status),
-    onSuccess: () => {
+    onMutate: async ({ id, status }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-applications"] });
+      const previous = queryClient.getQueryData(["admin-applications"]);
+
+      queryClient.setQueryData(["admin-applications"], (old: unknown[]) =>
+        old?.map((app: { id: number; status: ApplicationStatus }) =>
+          app.id === id ? { ...app, status } : app,
+        ),
+      );
+
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["admin-applications"], context.previous);
+      }
+    },
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ["admin-applications"] });
     },
   });

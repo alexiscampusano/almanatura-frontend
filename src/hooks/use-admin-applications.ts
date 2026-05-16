@@ -5,7 +5,10 @@ import {
   patchApplicationStatus,
   searchApplications,
 } from "@/services/admin-applications.service";
-import type { ApplicationStatus } from "@/types/application";
+import type {
+  AdminApplicationResponse,
+  ApplicationStatus,
+} from "@/types/application";
 
 export function applicationQueryKey(params: SearchApplicationsParams) {
   return ["admin-applications", params] as const;
@@ -27,10 +30,10 @@ export function usePatchApplicationStatus() {
       await queryClient.cancelQueries({ queryKey: ["admin-applications"] });
       const previous = queryClient.getQueryData(["admin-applications"]);
 
-      queryClient.setQueryData(["admin-applications"], (old: unknown[]) =>
-        old?.map((app: { id: number; status: ApplicationStatus }) =>
-          app.id === id ? { ...app, status } : app,
-        ),
+      queryClient.setQueryData(
+        ["admin-applications"],
+        (old: AdminApplicationResponse[]) =>
+          old?.map((app) => (app.id === id ? { ...app, status } : app)),
       );
 
       return { previous };

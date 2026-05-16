@@ -4,7 +4,7 @@ import {
   createInternalUser,
   listInternalUsers,
 } from "@/services/admin-users.service";
-import type { CreateUserPayload } from "@/types/user";
+import type { CreateUserPayload, UserSummary } from "@/types/user";
 
 const QUERY_KEY = ["admin-users"] as const;
 
@@ -23,9 +23,9 @@ export function useCreateInternalUser() {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
       const previous = queryClient.getQueryData(QUERY_KEY);
 
-      queryClient.setQueryData(QUERY_KEY, (old: unknown[]) => [
+      queryClient.setQueryData(QUERY_KEY, (old: UserSummary[]) => [
         ...(old ?? []),
-        { ...newUser, id: Date.now() },
+        { ...newUser, id: Date.now() } satisfies Partial<UserSummary>,
       ]);
 
       return { previous };

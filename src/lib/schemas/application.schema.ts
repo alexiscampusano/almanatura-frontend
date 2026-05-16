@@ -5,8 +5,8 @@ export const applicationSchema = z.object({
   email: z.string().email("Correo inválido").max(255),
   dni: z.string().min(4, "DNI muy corto").max(64, "DNI muy largo"),
   phone: z.string().max(64).optional(),
-  acceptPolicy: z.literal(true, {
-    errorMap: () => ({ message: "Debes aceptar la política de privacidad" }),
+  acceptPolicy: z.boolean().refine((val) => val === true, {
+    message: "Debes aceptar la política de privacidad",
   }),
 });
 

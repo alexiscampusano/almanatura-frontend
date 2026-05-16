@@ -7,6 +7,7 @@ import {
   updateProject,
 } from "@/services/admin-projects.service";
 import type {
+  AdminProjectResponse,
   CreateProjectPayload,
   UpdateProjectPayload,
 } from "@/types/project";
@@ -28,9 +29,13 @@ export function useCreateProject() {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
       const previous = queryClient.getQueryData(QUERY_KEY);
 
-      queryClient.setQueryData(QUERY_KEY, (old: unknown[]) => [
+      queryClient.setQueryData(QUERY_KEY, (old: AdminProjectResponse[]) => [
         ...(old ?? []),
-        { ...newProject, id: Date.now(), status: "DRAFT" as const },
+        {
+          ...newProject,
+          id: Date.now(),
+          status: "DRAFT" as const,
+        } satisfies Partial<AdminProjectResponse>,
       ]);
 
       return { previous };
@@ -53,8 +58,8 @@ export function useUpdateProject() {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
       const previous = queryClient.getQueryData(QUERY_KEY);
 
-      queryClient.setQueryData(QUERY_KEY, (old: unknown[]) =>
-        old?.map((p: { id: number }) => (p.id === id ? { ...p, ...data } : p)),
+      queryClient.setQueryData(QUERY_KEY, (old: AdminProjectResponse[]) =>
+        old?.map((p) => (p.id === id ? { ...p, ...data } : p)),
       );
 
       return { previous, id };
@@ -81,8 +86,8 @@ export function useDeleteProject() {
       await queryClient.cancelQueries({ queryKey: QUERY_KEY });
       const previous = queryClient.getQueryData(QUERY_KEY);
 
-      queryClient.setQueryData(QUERY_KEY, (old: unknown[]) =>
-        old?.filter((p: { id: number }) => p.id !== id),
+      queryClient.setQueryData(QUERY_KEY, (old: AdminProjectResponse[]) =>
+        old?.filter((p) => p.id !== id),
       );
 
       return { previous };

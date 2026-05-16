@@ -10,22 +10,27 @@ import { AdminLoginPage } from "@/pages/AdminLoginPage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
-const AdminActorDetailPage = lazy(() => import("@/pages/AdminActorDetailPage"));
-const AdminActorsPage = lazy(() => import("@/pages/AdminActorsPage"));
-const AdminApplicationsPage = lazy(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const lazyImport = (importFn: () => Promise<any>) => lazy(importFn);
+
+const AdminActorDetailPage = lazyImport(
+  () => import("@/pages/AdminActorDetailPage"),
+);
+const AdminActorsPage = lazyImport(() => import("@/pages/AdminActorsPage"));
+const AdminApplicationsPage = lazyImport(
   () => import("@/pages/AdminApplicationsPage"),
 );
-const AdminMePage = lazy(() => import("@/pages/AdminMePage"));
-const AdminNotificationsPage = lazy(
+const AdminMePage = lazyImport(() => import("@/pages/AdminMePage"));
+const AdminNotificationsPage = lazyImport(
   () => import("@/pages/AdminNotificationsPage"),
 );
-const AdminProjectDetailPage = lazy(
+const AdminProjectDetailPage = lazyImport(
   () => import("@/pages/AdminProjectDetailPage"),
 );
-const AdminProjectsPage = lazy(() => import("@/pages/AdminProjectsPage"));
-const AdminReportsPage = lazy(() => import("@/pages/AdminReportsPage"));
-const AdminUsersPage = lazy(() => import("@/pages/AdminUsersPage"));
-const PublicProjectDetailPage = lazy(
+const AdminProjectsPage = lazyImport(() => import("@/pages/AdminProjectsPage"));
+const AdminReportsPage = lazyImport(() => import("@/pages/AdminReportsPage"));
+const AdminUsersPage = lazyImport(() => import("@/pages/AdminUsersPage"));
+const PublicProjectDetailPage = lazyImport(
   () => import("@/pages/PublicProjectDetailPage"),
 );
 

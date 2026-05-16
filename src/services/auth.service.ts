@@ -14,6 +14,15 @@ export async function login(payload: LoginPayload): Promise<AuthLoginResponse> {
   return data;
 }
 
+export async function refreshAccessToken(
+  refreshToken: string,
+): Promise<AuthLoginResponse> {
+  const { data } = await apiClient.post<AuthLoginResponse>("/auth/refresh", {
+    refreshToken,
+  });
+  return data;
+}
+
 export async function fetchCurrentUser(): Promise<AuthUser> {
   const { data } = await apiClient.get<AuthUser>("/auth/me");
   return data;

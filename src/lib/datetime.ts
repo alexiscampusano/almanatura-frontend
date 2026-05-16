@@ -45,3 +45,14 @@ export function isValidDate(iso: string | null | undefined): boolean {
   const date = new Date(iso);
   return !isNaN(date.getTime());
 }
+
+export function formatDateLong(iso: string | null | undefined): string {
+  if (!iso) return "Sin fecha";
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return "Sin fecha";
+  return date.toLocaleDateString("es-CL", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}

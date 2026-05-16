@@ -1,37 +1,11 @@
-import { isAxiosError } from "axios";
+import { isNotFoundError } from "@/lib/error-handler";
 import { ArrowLeft } from "@phosphor-icons/react";
+import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useActor } from "@/hooks/use-actors";
 import { cn } from "@/lib/utils";
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-}
-
-function getAvatarColor(name: string): string {
-  const colors = [
-    "bg-rose-600",
-    "bg-amber-600",
-    "bg-emerald-600",
-    "bg-sky-600",
-    "bg-violet-600",
-    "bg-fuchsia-600",
-    "bg-teal-600",
-    "bg-orange-600",
-  ];
-  let hash = 0;
-  for (const char of name) {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash);
-  }
-  return colors[Math.abs(hash) % colors.length];
-}
 
 export function AdminActorDetailPage() {
   const { actorId: param } = useParams<{ actorId: string }>();
@@ -41,8 +15,7 @@ export function AdminActorDetailPage() {
 
   const { data: actor, isLoading, isError, error } = useActor(valid ? id : 0);
 
-  const notFound =
-    isError && isAxiosError(error) && error.response?.status === 404;
+  const notFound = isError && isNotFoundError(error);
 
   if (!valid) {
     return (

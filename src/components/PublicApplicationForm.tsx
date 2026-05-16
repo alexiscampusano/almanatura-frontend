@@ -1,5 +1,6 @@
-import type { FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,10 +15,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getErrorMessage } from "@/lib/error-handler";
-
+import { applicationSchema, type ApplicationSchema } from "@/lib/schemas";
 import { cn } from "@/lib/utils";
 import { submitApplication } from "@/services/applications.service";
-import type { SubmitApplicationPayload } from "@/types/application";
 
 type PublicApplicationDialogProps = {
   projectId: number;
@@ -31,61 +31,55 @@ export function PublicApplicationDialog({
   triggerClassName,
 }: PublicApplicationDialogProps) {
   const [open, setOpen] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [dni, setDni] = useState("");
-  const [phone, setPhone] = useState("");
-  const [acceptPolicy, setAcceptPolicy] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  function reset() {
-    setFullName("");
-    setEmail("");
-    setDni("");
-    setPhone("");
-    setAcceptPolicy(false);
-    setError(null);
-    setSuccess(false);
-  }
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<ApplicationSchema>({
+    resolver: zodResolver(applicationSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      dni: "",
+      phone: "",
+    },
+  });
+
+  const acceptPolicy = watch("acceptPolicy");
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
     if (!next) {
-      reset();
+      resetForm();
+      setSuccess(false);
     }
   }
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError(null);
-    if (!acceptPolicy) {
-      setError("Debes aceptar la política de privacidad.");
-      return;
-    }
-    const payload: SubmitApplicationPayload = {
-      projectId,
-      fullName: fullName.trim(),
-      email: email.trim(),
-      dni: dni.trim(),
-      ...(phone.trim() ? { phone: phone.trim() } : {}),
-    };
-    setSubmitting(true);
+  const onSubmit = async (data: ApplicationSchema) => {
     try {
-      await submitApplication(payload);
+      await submitApplication({
+        projectId,
+        fullName: data.fullName.trim(),
+        email: data.email.trim(),
+        dni: data.dni.trim(),
+        ...(data.phone?.trim() ? { phone: data.phone.trim() } : {}),
+      });
       setSuccess(true);
     } catch (err) {
-      setError(
-        getErrorMessage(
+      setError("root", {
+        message: getErrorMessage(
           err,
           "No se pudo enviar la solicitud. Inténtalo nuevamente.",
         ),
-      );
-    } finally {
-      setSubmitting(false);
+      });
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -129,23 +123,34 @@ export function PublicApplicationDialog({
                 <strong>{projectTitle}</strong>
               </DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                  {error}
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="space-y-4"
+              noValidate
+            >
+              {errors.root && (
+                <p
+                  className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                  role="alert"
+                >
+                  {errors.root.message}
                 </p>
               )}
               <div className="space-y-2">
                 <Label htmlFor={`name-${projectId}`}>Nombre completo *</Label>
                 <Input
                   id={`name-${projectId}`}
-                  required
                   maxLength={255}
                   autoComplete="name"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  disabled={isSubmitting}
                   className="h-12 text-base"
+                  {...register("fullName")}
                 />
+                {errors.fullName && (
+                  <p className="text-sm text-destructive">
+                    {errors.fullName.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`email-${projectId}`}>
@@ -154,12 +159,16 @@ export function PublicApplicationDialog({
                 <Input
                   id={`email-${projectId}`}
                   type="email"
-                  required
                   autoComplete="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isSubmitting}
                   className="h-12 text-base"
+                  {...register("email")}
                 />
+                {errors.email && (
+                  <p className="text-sm text-destructive">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`dni-${projectId}`}>
@@ -167,14 +176,18 @@ export function PublicApplicationDialog({
                 </Label>
                 <Input
                   id={`dni-${projectId}`}
-                  required
                   minLength={4}
                   maxLength={64}
                   autoComplete="off"
-                  value={dni}
-                  onChange={(e) => setDni(e.target.value)}
+                  disabled={isSubmitting}
                   className="h-12 text-base"
+                  {...register("dni")}
                 />
+                {errors.dni && (
+                  <p className="text-sm text-destructive">
+                    {errors.dni.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`phone-${projectId}`}>
@@ -185,17 +198,26 @@ export function PublicApplicationDialog({
                   type="tel"
                   maxLength={64}
                   autoComplete="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  disabled={isSubmitting}
                   className="h-12 text-base"
+                  {...register("phone")}
                 />
+                {errors.phone && (
+                  <p className="text-sm text-destructive">
+                    {errors.phone.message}
+                  </p>
+                )}
               </div>
               <div className="flex items-start gap-3">
                 <Checkbox
                   id={`policy-${projectId}`}
-                  checked={acceptPolicy}
-                  onCheckedChange={setAcceptPolicy}
-                  required
+                  checked={!!acceptPolicy}
+                  onCheckedChange={(checked) =>
+                    setValue("acceptPolicy", checked === true, {
+                      shouldValidate: true,
+                    })
+                  }
+                  disabled={isSubmitting}
                   className="mt-1 size-5"
                 />
                 <Label
@@ -206,12 +228,17 @@ export function PublicApplicationDialog({
                   política de privacidad y las finalidades descritas. *
                 </Label>
               </div>
+              {errors.acceptPolicy && (
+                <p className="text-sm text-destructive">
+                  {errors.acceptPolicy.message}
+                </p>
+              )}
               <Button
                 type="submit"
                 className="h-12 w-full text-base font-semibold"
-                disabled={submitting}
+                disabled={isSubmitting}
               >
-                {submitting ? "Enviando…" : "Enviar postulación"}
+                {isSubmitting ? "Enviando…" : "Enviar postulación"}
               </Button>
             </form>
           </>

@@ -1,4 +1,5 @@
 import { SignOut } from "@phosphor-icons/react";
+import { getInitials } from "@/lib/avatar";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -10,16 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuthStore } from "@/stores/auth.store";
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-}
 
 export function AdminMePage() {
   const navigate = useNavigate();

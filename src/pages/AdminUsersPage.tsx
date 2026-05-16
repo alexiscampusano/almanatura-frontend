@@ -1,6 +1,6 @@
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { isAxiosError } from "axios";
+import { getErrorMessage } from "@/lib/error-handler";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,24 +57,7 @@ export function AdminUsersPage() {
           setRole("EVENT_MANAGER");
         },
         onError: (err) => {
-          if (!isAxiosError(err)) {
-            setFormError("No se pudo crear el usuario.");
-            return;
-          }
-          const status = err.response?.status;
-          if (status === 403) {
-            setFormError("No tienes permiso para crear usuarios.");
-            return;
-          }
-          if (status === 409) {
-            setFormError("Ya existe un usuario con ese correo.");
-            return;
-          }
-          if (status === 400) {
-            setFormError("Revisa los datos o la política de contraseña.");
-            return;
-          }
-          setFormError("No se pudo crear el usuario.");
+          setFormError(getErrorMessage(err, "No se pudo crear el usuario."));
         },
       },
     );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { isAxiosError } from "axios";
+import { getErrorMessage } from "@/lib/error-handler";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,15 +37,7 @@ export function AdminNotificationsPage() {
       setSubject("");
       setBody("");
     } catch (err) {
-      if (isAxiosError(err) && err.response?.status === 403) {
-        setError("No tienes permiso para registrar notificaciones.");
-      } else if (isAxiosError(err) && err.response?.data) {
-        setError(
-          "No se pudo registrar. Revisa los datos e inténtalo de nuevo.",
-        );
-      } else {
-        setError("Error de conexión. Inténtalo más tarde.");
-      }
+      setError(getErrorMessage(err, "No se pudo registrar la notificación."));
     } finally {
       setPending(false);
     }

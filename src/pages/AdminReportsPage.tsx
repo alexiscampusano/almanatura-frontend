@@ -2,34 +2,10 @@ import {
   useProjectApplicationReport,
   useReportsSummary,
 } from "@/hooks/use-admin-reports";
+import { formatDateShort } from "@/lib/datetime";
+import { PILLAR_LABELS, STATUS_LABELS } from "@/lib/project";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { ProjectPillar, ProjectStatus } from "@/types/project";
-
-const PILLAR_LABELS: Record<ProjectPillar, string> = {
-  TECHNOLOGY: "Tecnología",
-  EDUCATION: "Educación",
-  HEALTH: "Salud",
-  ENTREPRENEURSHIP: "Emprendimiento",
-  CULTURE: "Cultura",
-};
-
-const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicado",
-  CANCELLED: "Cancelado",
-};
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  const d = new Date(iso);
-  if (isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export function AdminReportsPage() {
   const summary = useReportsSummary();
@@ -119,7 +95,7 @@ export function AdminReportsPage() {
               <div className="flex flex-wrap gap-2">
                 {s.projectsByStatus.map((row) => (
                   <Badge key={row.status} variant="secondary" className="gap-1">
-                    {PROJECT_STATUS_LABELS[row.status]}: {row.count}
+                    {STATUS_LABELS[row.status]}: {row.count}
                   </Badge>
                 ))}
               </div>
@@ -164,14 +140,14 @@ export function AdminReportsPage() {
                           </td>
                           <td className="px-3 py-3">
                             <Badge variant="outline">
-                              {PROJECT_STATUS_LABELS[row.status]}
+                              {STATUS_LABELS[row.status]}
                             </Badge>
                           </td>
                           <td className="px-3 py-3 text-right tabular-nums">
                             {row.applicationCount}
                           </td>
                           <td className="whitespace-nowrap px-3 py-3 text-muted-foreground">
-                            {formatDate(row.startsAt)}
+                            {formatDateShort(row.startsAt)}
                           </td>
                         </tr>
                       ))}
@@ -184,8 +160,7 @@ export function AdminReportsPage() {
                   <li key={row.id} className="rounded-lg border p-3 text-sm">
                     <p className="font-medium">{row.title}</p>
                     <p className="text-muted-foreground">
-                      {PILLAR_LABELS[row.pillar]} ·{" "}
-                      {PROJECT_STATUS_LABELS[row.status]}
+                      {PILLAR_LABELS[row.pillar]} · {STATUS_LABELS[row.status]}
                     </p>
                     <p className="mt-1 font-semibold">
                       {row.applicationCount} solicitudes

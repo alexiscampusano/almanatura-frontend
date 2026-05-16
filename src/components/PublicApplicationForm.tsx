@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { isAxiosError } from "axios";
+import { getErrorMessage } from "@/lib/error-handler";
 
 import { cn } from "@/lib/utils";
 import { submitApplication } from "@/services/applications.service";
@@ -24,28 +24,6 @@ type PublicApplicationDialogProps = {
   projectTitle: string;
   triggerClassName?: string;
 };
-
-function parseSubmitError(error: unknown): string {
-  if (!isAxiosError(error)) {
-    return "No se pudo enviar la solicitud. Inténtalo nuevamente.";
-  }
-  const status = error.response?.status;
-  if (status === 409) {
-    return "Ya existe una postulación con este correo para este proyecto.";
-  }
-  if (status === 404) {
-    return "El proyecto no está disponible para postulación.";
-  }
-  if (status === 429) {
-    return "Demasiados intentos. Espera un momento e inténtalo de nuevo.";
-  }
-  if (status === 400) {
-    const body = error.response?.data as { message?: string } | undefined;
-    if (body?.message) return body.message;
-    return "Revisa los datos del formulario.";
-  }
-  return "No se pudo enviar la solicitud. Inténtalo nuevamente.";
-}
 
 export function PublicApplicationDialog({
   projectId,
@@ -98,7 +76,12 @@ export function PublicApplicationDialog({
       await submitApplication(payload);
       setSuccess(true);
     } catch (err) {
-      setError(parseSubmitError(err));
+      setError(
+        getErrorMessage(
+          err,
+          "No se pudo enviar la solicitud. Inténtalo nuevamente.",
+        ),
+      );
     } finally {
       setSubmitting(false);
     }

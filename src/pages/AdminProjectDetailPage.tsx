@@ -1,4 +1,4 @@
-import { isAxiosError } from "axios";
+import { isNotFoundError } from "@/lib/error-handler";
 import { ArrowLeft, PencilSimple } from "@phosphor-icons/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -7,41 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useAdminProject } from "@/hooks/use-admin-project";
 import { cn } from "@/lib/utils";
-import type { ProjectPillar, ProjectStatus } from "@/types/project";
-
-const PILLAR_LABELS: Record<ProjectPillar, string> = {
-  TECHNOLOGY: "Tecnología",
-  EDUCATION: "Educación",
-  HEALTH: "Salud",
-  ENTREPRENEURSHIP: "Emprendimiento",
-  CULTURE: "Cultura",
-};
-
-const STATUS_LABELS: Record<ProjectStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicado",
-  CANCELLED: "Cancelado",
-};
-
-const STATUS_VARIANT: Record<
-  ProjectStatus,
-  "default" | "secondary" | "destructive"
-> = {
-  DRAFT: "secondary",
-  PUBLISHED: "default",
-  CANCELLED: "destructive",
-};
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+import { formatDate } from "@/lib/datetime";
+import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
 
 export function AdminProjectDetailPage() {
   const { projectId: param } = useParams<{ projectId: string }>();
@@ -56,8 +23,7 @@ export function AdminProjectDetailPage() {
     error,
   } = useAdminProject(valid ? id : 0);
 
-  const notFound =
-    isError && isAxiosError(error) && error.response?.status === 404;
+  const notFound = isError && isNotFoundError(error);
 
   function handleEdit() {
     if (!valid) return;

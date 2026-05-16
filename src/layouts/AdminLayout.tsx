@@ -1,21 +1,12 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
+import { getInitials } from "@/lib/avatar";
 import { NavigationProgress } from "@/components/navigation-progress";
 import { Badge } from "@/components/ui/badge";
 import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-}
 
 function roleLabel(role: string): string {
   if (role === "SUPER_USER") return "Super usuario";

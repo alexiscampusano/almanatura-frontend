@@ -1,4 +1,4 @@
-import { isAxiosError } from "axios";
+import { isNotFoundError } from "@/lib/error-handler";
 import { ArrowLeft, CalendarDots, MapPin } from "@phosphor-icons/react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -14,28 +14,8 @@ import {
 } from "@/components/ui/card";
 import { usePublicProject } from "@/hooks/use-public-project";
 import { cn } from "@/lib/utils";
-import type { ProjectPillar } from "@/types/project";
-
-const PILLAR_CONFIG: Record<ProjectPillar, { label: string; bg: string }> = {
-  TECHNOLOGY: { label: "Tecnología", bg: "bg-sky-100" },
-  EDUCATION: { label: "Educación", bg: "bg-amber-100" },
-  HEALTH: { label: "Salud", bg: "bg-emerald-100" },
-  ENTREPRENEURSHIP: {
-    label: "Emprendimiento",
-    bg: "bg-violet-100",
-  },
-  CULTURE: { label: "Cultura", bg: "bg-rose-100" },
-};
-
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "Sin fecha";
-  return date.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
+import { formatDateLong } from "@/lib/datetime";
+import { PILLAR_CONFIG } from "@/lib/project";
 
 export function PublicProjectDetailPage() {
   const { projectId: param } = useParams<{ projectId: string }>();
@@ -50,8 +30,7 @@ export function PublicProjectDetailPage() {
     error,
   } = usePublicProject(valid ? id : 0);
 
-  const notFound =
-    isError && isAxiosError(error) && error.response?.status === 404;
+  const notFound = isError && isNotFoundError(error);
 
   if (!valid) {
     return (
@@ -163,7 +142,8 @@ export function PublicProjectDetailPage() {
                 aria-hidden
               />
               <span>
-                {formatDate(project.startsAt)} — {formatDate(project.endsAt)}
+                {formatDateLong(project.startsAt)} —{" "}
+                {formatDateLong(project.endsAt)}
               </span>
             </p>
             {project.location && (

@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  CalendarDots,
-  GraduationCap,
-  Heartbeat,
-  Laptop,
-  MapPin,
-  MusicNotes,
-  Rocket,
-} from "@phosphor-icons/react";
+import { CalendarDots, MapPin } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
@@ -22,41 +14,10 @@ import {
 import { PublicApplicationDialog } from "@/components/PublicApplicationForm";
 
 import { usePublicProjects } from "@/hooks/use-public-projects";
+import { formatDateLong } from "@/lib/datetime";
+import { ALL_PILLARS, PILLAR_CONFIG } from "@/lib/project";
 import { cn } from "@/lib/utils";
 import type { ProjectPillar } from "@/types/project";
-
-const PILLAR_CONFIG: Record<
-  ProjectPillar,
-  { label: string; icon: typeof Laptop; bg: string }
-> = {
-  TECHNOLOGY: { label: "Tecnología", icon: Laptop, bg: "bg-sky-100" },
-  EDUCATION: { label: "Educación", icon: GraduationCap, bg: "bg-amber-100" },
-  HEALTH: { label: "Salud", icon: Heartbeat, bg: "bg-emerald-100" },
-  ENTREPRENEURSHIP: {
-    label: "Emprendimiento",
-    icon: Rocket,
-    bg: "bg-violet-100",
-  },
-  CULTURE: { label: "Cultura", icon: MusicNotes, bg: "bg-rose-100" },
-};
-
-const ALL_PILLARS: ProjectPillar[] = [
-  "TECHNOLOGY",
-  "EDUCATION",
-  "HEALTH",
-  "ENTREPRENEURSHIP",
-  "CULTURE",
-];
-
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "Sin fecha";
-  return date.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 export function PublicHomePage() {
   const [activePillar, setActivePillar] = useState<ProjectPillar | undefined>(
@@ -196,8 +157,8 @@ export function PublicHomePage() {
                         aria-hidden
                       />
                       <span>
-                        {formatDate(project.startsAt)} —{" "}
-                        {formatDate(project.endsAt)}
+                        {formatDateLong(project.startsAt)} —{" "}
+                        {formatDateLong(project.endsAt)}
                       </span>
                     </p>
                     {project.location && (

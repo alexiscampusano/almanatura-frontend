@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { getErrorMessage } from "@/lib/error-handler";
 
 import { NavigationProgress } from "@/components/navigation-progress";
 import { Button } from "@/components/ui/button";
@@ -42,16 +42,12 @@ export function AdminLoginPage() {
       setSession(response);
       navigate(redirectTarget, { replace: true });
     } catch (error) {
-      if (
-        axios.isAxiosError(error) &&
-        [400, 401, 403].includes(error.response?.status ?? 0)
-      ) {
-        setErrorMessage(
-          "Credenciales inválidas. Revisa tu correo y contraseña.",
-        );
-      } else {
-        setErrorMessage("No pudimos iniciar sesión. Inténtalo nuevamente.");
-      }
+      setErrorMessage(
+        getErrorMessage(
+          error,
+          "No pudimos iniciar sesión. Inténtalo nuevamente.",
+        ),
+      );
     } finally {
       setIsLoading(false);
     }

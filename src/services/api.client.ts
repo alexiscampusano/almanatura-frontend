@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosRetry from "axios-retry";
 
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -9,6 +10,16 @@ export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
   timeout: 15_000,
+});
+
+axiosRetry(apiClient, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error) => {
+    if (!error.response) return true;
+    const status = error.response.status;
+    return status === 429 || status >= 500;
+  },
 });
 
 apiClient.interceptors.request.use((config) => {

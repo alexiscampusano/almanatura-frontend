@@ -1,6 +1,7 @@
-import { useLayoutEffect, useState, type FormEvent } from "react";
+import { useLayoutEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getErrorMessage } from "@/lib/error-handler";
 
 import { NavigationProgress } from "@/components/navigation-progress";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { useAuthHydrated } from "@/hooks/use-auth-hydrated";
+import { getErrorMessage } from "@/lib/error-handler";
+import { loginSchema, type LoginSchema } from "@/lib/schemas";
 import { login } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -17,12 +20,18 @@ export function AdminLoginPage() {
   const hasHydrated = useAuthHydrated();
   const setSession = useAuthStore((state) => state.setSession);
   const accessToken = useAuthStore((state) => state.accessToken);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const redirectTarget =
     (location.state as { from?: string } | null)?.from ?? "/admin/projects";
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
 
   useLayoutEffect(() => {
     if (!hasHydrated) return;
@@ -31,25 +40,18 @@ export function AdminLoginPage() {
     }
   }, [hasHydrated, accessToken, navigate, redirectTarget]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    if (isLoading) return;
-    event.preventDefault();
-    setErrorMessage(null);
-    setIsLoading(true);
-
+  const onSubmit = async (data: LoginSchema) => {
     try {
-      const response = await login({ email, password });
+      const response = await login(data);
       setSession(response);
       navigate(redirectTarget, { replace: true });
     } catch (error) {
-      setErrorMessage(
-        getErrorMessage(
+      setError("root", {
+        message: getErrorMessage(
           error,
           "No pudimos iniciar sesión. Inténtalo nuevamente.",
         ),
-      );
-    } finally {
-      setIsLoading(false);
+      });
     }
   };
 
@@ -96,44 +98,54 @@ export function AdminLoginPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             Solo usuarios internos autorizados pueden acceder.
           </p>
-          <form className="mt-6 grid gap-4" onSubmit={handleSubmit}>
+          <form
+            className="mt-6 grid gap-4"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+          >
             <div className="grid gap-2">
               <Label htmlFor="admin-login-email">Correo</Label>
               <Input
                 id="admin-login-email"
-                required
                 type="email"
                 autoComplete="email"
-                disabled={isLoading}
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                disabled={isSubmitting}
                 className="h-11 px-3 text-base md:text-xs"
+                {...register("email")}
               />
+              {errors.email && (
+                <p className="text-sm text-destructive" role="alert">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="admin-login-password">Contraseña</Label>
               <Input
                 id="admin-login-password"
-                required
                 type="password"
                 autoComplete="current-password"
-                disabled={isLoading}
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                disabled={isSubmitting}
                 className="h-11 px-3 text-base md:text-xs"
+                {...register("password")}
               />
+              {errors.password && (
+                <p className="text-sm text-destructive" role="alert">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            {errorMessage && (
+            {errors.root && (
               <p className="text-sm text-destructive" role="alert">
-                {errorMessage}
+                {errors.root.message}
               </p>
             )}
             <Button
               type="submit"
               className="mt-2 h-11 gap-2"
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <Spinner size="sm" className="text-primary-foreground" />
                   Ingresando…

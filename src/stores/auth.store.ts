@@ -12,16 +12,23 @@ export type AuthLoginResponse = {
   accessToken: string;
   tokenType: string;
   expiresIn: number;
+  refreshToken?: string;
   user: AuthUser;
 };
 
 type AuthState = {
   accessToken: string | null;
+  refreshToken: string | null;
   tokenType: string | null;
   expiresAt: number | null;
   user: AuthUser | null;
   isSessionExpired: boolean;
   setSession: (session: AuthLoginResponse) => void;
+  updateTokens: (tokens: {
+    accessToken: string;
+    refreshToken?: string;
+    expiresIn: number;
+  }) => void;
   updateUser: (user: AuthUser) => void;
   validateSession: () => void;
   clearSession: () => void;
@@ -33,16 +40,25 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       accessToken: null,
+      refreshToken: null,
       tokenType: null,
       expiresAt: null,
       user: null,
       isSessionExpired: false,
-      setSession: ({ accessToken, tokenType, expiresIn, user }) =>
+      setSession: ({ accessToken, refreshToken, tokenType, expiresIn, user }) =>
         set({
           accessToken,
+          refreshToken: refreshToken ?? null,
           tokenType,
           expiresAt: Date.now() + expiresIn * 1000,
           user,
+          isSessionExpired: false,
+        }),
+      updateTokens: ({ accessToken, refreshToken, expiresIn }) =>
+        set({
+          accessToken,
+          refreshToken: refreshToken ?? null,
+          expiresAt: Date.now() + expiresIn * 1000,
           isSessionExpired: false,
         }),
       updateUser: (user) => set({ user }),
@@ -57,6 +73,7 @@ export const useAuthStore = create<AuthState>()(
       clearSession: () =>
         set({
           accessToken: null,
+          refreshToken: null,
           tokenType: null,
           expiresAt: null,
           user: null,

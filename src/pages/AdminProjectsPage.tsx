@@ -38,6 +38,8 @@ import {
   useUpdateProject,
 } from "@/hooks/use-admin-projects";
 import { cn } from "@/lib/utils";
+import { formatDateShort, toLocalDatetime } from "@/lib/datetime";
+import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
 import type {
   AdminProjectResponse,
   CreateProjectPayload,
@@ -45,40 +47,6 @@ import type {
   ProjectStatus,
   UpdateProjectPayload,
 } from "@/types/project";
-
-const PILLAR_LABELS: Record<ProjectPillar, string> = {
-  TECHNOLOGY: "Tecnología",
-  EDUCATION: "Educación",
-  HEALTH: "Salud",
-  ENTREPRENEURSHIP: "Emprendimiento",
-  CULTURE: "Cultura",
-};
-
-const STATUS_LABELS: Record<ProjectStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicado",
-  CANCELLED: "Cancelado",
-};
-
-const STATUS_VARIANT: Record<
-  ProjectStatus,
-  "default" | "secondary" | "destructive"
-> = {
-  DRAFT: "secondary",
-  PUBLISHED: "default",
-  CANCELLED: "destructive",
-};
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 type FormData = {
   title: string;
@@ -101,13 +69,6 @@ const EMPTY_FORM: FormData = {
   location: "",
   imageUrl: "",
 };
-
-function toLocalDatetime(iso: string | null): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "";
-  return date.toISOString().slice(0, 16);
-}
 
 export function AdminProjectsPage() {
   const { data: projects, isLoading, isError } = useAdminProjects();
@@ -296,7 +257,7 @@ export function AdminProjectsPage() {
                         </Badge>
                       </td>
                       <td className="px-4 py-3 text-muted-foreground">
-                        {formatDate(project.startsAt)}
+                        {formatDateShort(project.startsAt)}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex justify-end gap-1">

@@ -1,6 +1,5 @@
-import type { FormEvent } from "react";
-import { useState } from "react";
-import { getErrorMessage } from "@/lib/error-handler";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,6 +18,8 @@ import {
   useCreateInternalUser,
   useInternalUsers,
 } from "@/hooks/use-admin-users";
+import { getErrorMessage } from "@/lib/error-handler";
+import { createUserSchema, type CreateUserSchema } from "@/lib/schemas";
 import { useAuthStore } from "@/stores/auth.store";
 import type { InternalRole } from "@/types/user";
 
@@ -38,30 +39,39 @@ export function AdminUsersPage() {
   const { data: users, isLoading, isError } = useInternalUsers();
   const createMutation = useCreateInternalUser();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState<InternalRole>("EVENT_MANAGER");
-  const [formError, setFormError] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+    setError,
+  } = useForm<CreateUserSchema>({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "EVENT_MANAGER",
+    },
+  });
 
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setFormError(null);
+  const selectedRole = watch("role");
+
+  const onSubmit = (data: CreateUserSchema) => {
     createMutation.mutate(
-      { name: name.trim(), email: email.trim(), password, role, enabled: true },
+      { ...data, enabled: true },
       {
-        onSuccess: () => {
-          setName("");
-          setEmail("");
-          setPassword("");
-          setRole("EVENT_MANAGER");
-        },
+        onSuccess: () => reset(),
         onError: (err) => {
-          setFormError(getErrorMessage(err, "No se pudo crear el usuario."));
+          setError("root", {
+            message: getErrorMessage(err, "No se pudo crear el usuario."),
+          });
         },
       },
     );
-  }
+  };
 
   if (isError) {
     return (
@@ -86,54 +96,72 @@ export function AdminUsersPage() {
 
       {isSuperUser && (
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
           className="space-y-4 rounded-lg border p-4 md:p-6"
+          noValidate
         >
           <h3 className="text-lg font-medium">Crear usuario interno</h3>
-          {formError && <p className="text-sm text-destructive">{formError}</p>}
+          {errors.root && (
+            <p className="text-sm text-destructive" role="alert">
+              {errors.root.message}
+            </p>
+          )}
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="new-name">Nombre</Label>
               <Input
                 id="new-name"
-                required
                 maxLength={120}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                disabled={isSubmitting}
                 className="h-11"
+                {...register("name")}
               />
+              {errors.name && (
+                <p className="text-sm text-destructive">
+                  {errors.name.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="new-email">Correo</Label>
               <Input
                 id="new-email"
                 type="email"
-                required
                 maxLength={180}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                disabled={isSubmitting}
                 className="h-11"
+                {...register("email")}
               />
+              {errors.email && (
+                <p className="text-sm text-destructive">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="new-password">Contraseña</Label>
               <Input
                 id="new-password"
                 type="password"
-                required
                 autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                disabled={isSubmitting}
                 className="h-11"
+                {...register("password")}
               />
+              {errors.password && (
+                <p className="text-sm text-destructive">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Rol</Label>
               <Select
-                value={role}
-                onValueChange={(v) => {
-                  if (v != null) setRole(v as InternalRole);
-                }}
+                value={selectedRole}
+                onValueChange={(v) =>
+                  setValue("role", v as InternalRole, { shouldValidate: true })
+                }
+                disabled={isSubmitting}
               >
                 <SelectTrigger className="h-11">
                   <SelectValue />
@@ -147,14 +175,15 @@ export function AdminUsersPage() {
                   </SelectItem>
                 </SelectContent>
               </Select>
+              {errors.role && (
+                <p className="text-sm text-destructive">
+                  {errors.role.message}
+                </p>
+              )}
             </div>
           </div>
-          <Button
-            type="submit"
-            className="gap-2"
-            disabled={createMutation.isPending}
-          >
-            {createMutation.isPending ? (
+          <Button type="submit" className="gap-2" disabled={isSubmitting}>
+            {isSubmitting ? (
               <>
                 <Spinner size="sm" className="text-primary-foreground" />
                 Creando…
@@ -186,48 +215,54 @@ export function AdminUsersPage() {
           <p className="text-sm text-muted-foreground">No hay usuarios.</p>
         )}
         {!isLoading && users && users.length > 0 && (
-          <div className="hidden rounded-lg border md:block">
-            <div className="overflow-x-auto">
-              <table className="min-w-[520px] w-full text-sm">
-                <thead className="border-b bg-muted/50">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-medium">Nombre</th>
-                    <th className="px-4 py-3 text-left font-medium">Correo</th>
-                    <th className="px-4 py-3 text-left font-medium">Rol</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {users.map((u) => (
-                    <tr key={u.id}>
-                      <td className="px-4 py-3">{u.name}</td>
-                      <td className="px-4 py-3">{u.email}</td>
-                      <td className="px-4 py-3">
-                        <Badge variant={roleBadgeVariant(u.role)}>
-                          {ROLE_LABELS[u.role]}
-                        </Badge>
-                      </td>
+          <>
+            <div className="hidden rounded-lg border md:block">
+              <div className="overflow-x-auto">
+                <table className="min-w-[520px] w-full text-sm">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Nombre
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Correo
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">Rol</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y">
+                    {users.map((u) => (
+                      <tr key={u.id}>
+                        <td className="px-4 py-3">{u.name}</td>
+                        <td className="px-4 py-3">{u.email}</td>
+                        <td className="px-4 py-3">
+                          <Badge variant={roleBadgeVariant(u.role)}>
+                            {ROLE_LABELS[u.role]}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
-        )}
-        {!isLoading && users && users.length > 0 && (
-          <ul className="space-y-2 md:hidden">
-            {users.map((u) => (
-              <li
-                key={u.id}
-                className="flex flex-col gap-1 rounded-lg border p-3"
-              >
-                <span className="font-medium">{u.name}</span>
-                <span className="text-sm text-muted-foreground">{u.email}</span>
-                <Badge className="w-fit" variant={roleBadgeVariant(u.role)}>
-                  {ROLE_LABELS[u.role]}
-                </Badge>
-              </li>
-            ))}
-          </ul>
+            <ul className="space-y-2 md:hidden">
+              {users.map((u) => (
+                <li
+                  key={u.id}
+                  className="flex flex-col gap-1 rounded-lg border p-3"
+                >
+                  <span className="font-medium">{u.name}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {u.email}
+                  </span>
+                  <Badge className="w-fit" variant={roleBadgeVariant(u.role)}>
+                    {ROLE_LABELS[u.role]}
+                  </Badge>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
     </section>

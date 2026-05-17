@@ -258,26 +258,24 @@ export default function AdminApplicationsPage() {
         {!isLoading && filtered.length > 0 && (
           <>
             <div className="hidden rounded-lg border md:block">
-              <div className="w-full">
-                <table className="w-full text-sm">
+              <div className="overflow-x-auto">
+                <table className="min-w-[900px] w-full text-sm">
                   <thead className="border-b bg-muted/50">
                     <tr>
-                      <th className="px-3 py-3 text-left font-medium w-[20%]">
+                      <th className="px-3 py-3 text-left font-medium">
                         Solicitante
                       </th>
-                      <th className="px-3 py-3 text-left font-medium w-[20%]">
+                      <th className="px-3 py-3 text-left font-medium">
                         Proyecto
                       </th>
-                      <th className="px-3 py-3 text-left font-medium w-[15%]">
+                      <th className="px-3 py-3 text-left font-medium">
                         Estado
                       </th>
-                      <th className="px-3 py-3 text-left font-medium w-[10%]">
-                        DNI
-                      </th>
-                      <th className="px-3 py-3 text-left font-medium w-[15%]">
+                      <th className="px-3 py-3 text-left font-medium">DNI</th>
+                      <th className="px-3 py-3 text-left font-medium">
                         Creada
                       </th>
-                      <th className="px-3 py-3 text-left font-medium w-[20%]">
+                      <th className="px-3 py-3 text-left font-medium">
                         Acción
                       </th>
                     </tr>
@@ -285,11 +283,9 @@ export default function AdminApplicationsPage() {
                   <tbody className="divide-y">
                     {filtered.map((app) => (
                       <tr key={app.id} className="hover:bg-muted/30">
-                        <td className="px-3 py-3 align-top">
-                          <div className="font-medium break-words">
-                            {app.fullName}
-                          </div>
-                          <div className="text-xs text-muted-foreground break-words">
+                        <td className="px-3 py-3">
+                          <div className="font-medium">{app.fullName}</div>
+                          <div className="text-xs text-muted-foreground">
                             {app.email}
                           </div>
                           {app.phone && (
@@ -298,8 +294,8 @@ export default function AdminApplicationsPage() {
                             </div>
                           )}
                         </td>
-                        <td className="px-3 py-3 align-top">
-                          <span className="line-clamp-3">
+                        <td className="max-w-[180px] px-3 py-3 align-top">
+                          <span className="line-clamp-2">
                             {projectTitleById.get(app.projectId) ??
                               `#${app.projectId}`}
                           </span>
@@ -309,10 +305,10 @@ export default function AdminApplicationsPage() {
                             {APPLICATION_STATUS_LABELS[app.status]}
                           </Badge>
                         </td>
-                        <td className="px-3 py-3 align-top font-mono text-xs break-all">
+                        <td className="px-3 py-3 align-top font-mono text-xs">
                           {app.nationalId}
                         </td>
-                        <td className="px-3 py-3 align-top text-muted-foreground">
+                        <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
                           {formatDate(app.createdAt)}
                         </td>
                         <td className="px-3 py-3 align-top">

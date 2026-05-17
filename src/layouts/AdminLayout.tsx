@@ -31,7 +31,7 @@ export function AdminLayout() {
     <div className="min-h-svh bg-background text-foreground">
       <NavigationProgress />
       <header className="border-b border-border px-4 py-4 md:px-6">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-3">
+        <div className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center gap-3">
           <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
             Panel administrativo
           </h1>
@@ -84,7 +84,7 @@ export function AdminLayout() {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col md:flex-row">
         <aside className="shrink-0 border-b border-border md:w-64 md:border-b-0 md:border-r">
           <nav
             aria-label="Navegación del panel admin"

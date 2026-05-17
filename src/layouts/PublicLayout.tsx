@@ -1,4 +1,5 @@
-import { Link, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   FacebookLogo,
   InstagramLogo,
@@ -14,6 +15,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function PublicLayout() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <div className="flex min-h-svh flex-col bg-background text-foreground">
       <NavigationProgress />

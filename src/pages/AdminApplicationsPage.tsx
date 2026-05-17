@@ -15,9 +15,9 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import {
   AdminPage,
-  adminFilterGridClassName,
   adminListRegionClassName,
 } from "@/components/admin/admin-page";
+import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
 
 import {
   useAdminApplications,
@@ -156,6 +156,80 @@ export default function AdminApplicationsPage() {
     return m;
   }, [projects]);
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (projectId !== "all") count++;
+    if (status !== "all") count++;
+    if (searchName.trim() !== "") count++;
+    return count;
+  }, [projectId, status, searchName]);
+
+  const filterContent = (
+    <>
+      <div className="space-y-2">
+        <Label>Proyecto</Label>
+        <Select
+          value={projectId}
+          onValueChange={(v) => {
+            if (v != null) setProjectId(v);
+          }}
+        >
+          <SelectTrigger className="h-11 w-full">
+            <SelectValue placeholder="Todos los proyectos">
+              {projectId === "all"
+                ? null
+                : (projects?.find((p) => String(p.id) === projectId)?.title ??
+                  null)}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los proyectos</SelectItem>
+            {projects?.map((p) => (
+              <SelectItem key={p.id} value={String(p.id)}>
+                {p.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-2">
+        <Label>Estado</Label>
+        <Select
+          value={status}
+          onValueChange={(v) => {
+            if (v != null) setStatus(v);
+          }}
+        >
+          <SelectTrigger className="h-11 w-full">
+            <SelectValue placeholder="Todos los estados">
+              {status === "all"
+                ? null
+                : APPLICATION_STATUS_LABELS[status as ApplicationStatus]}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos los estados</SelectItem>
+            {ALL_STATUSES.map((s) => (
+              <SelectItem key={s} value={s}>
+                {APPLICATION_STATUS_LABELS[s]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="app-search">Buscar por nombre o correo</Label>
+        <Input
+          id="app-search"
+          value={searchName}
+          onChange={(e) => setSearchName(e.target.value)}
+          placeholder="Nombre o email"
+          className="h-11 w-full"
+        />
+      </div>
+    </>
+  );
+
   if (isError && !applications) {
     return (
       <AdminPage>
@@ -176,69 +250,15 @@ export default function AdminApplicationsPage() {
         </p>
       </div>
 
-      <div className={adminFilterGridClassName}>
-        <div className="space-y-2">
-          <Label>Proyecto</Label>
-          <Select
-            value={projectId}
-            onValueChange={(v) => {
-              if (v != null) setProjectId(v);
-            }}
-          >
-            <SelectTrigger className="h-11 w-full">
-              <SelectValue placeholder="Todos los proyectos">
-                {projectId === "all"
-                  ? null
-                  : (projects?.find((p) => String(p.id) === projectId)?.title ??
-                    null)}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los proyectos</SelectItem>
-              {projects?.map((p) => (
-                <SelectItem key={p.id} value={String(p.id)}>
-                  {p.title}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label>Estado</Label>
-          <Select
-            value={status}
-            onValueChange={(v) => {
-              if (v != null) setStatus(v);
-            }}
-          >
-            <SelectTrigger className="h-11 w-full">
-              <SelectValue placeholder="Todos los estados">
-                {status === "all"
-                  ? null
-                  : APPLICATION_STATUS_LABELS[status as ApplicationStatus]}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los estados</SelectItem>
-              {ALL_STATUSES.map((s) => (
-                <SelectItem key={s} value={s}>
-                  {APPLICATION_STATUS_LABELS[s]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2 sm:col-span-2 lg:col-span-1">
-          <Label htmlFor="app-search">Buscar por nombre o correo</Label>
-          <Input
-            id="app-search"
-            value={searchName}
-            onChange={(e) => setSearchName(e.target.value)}
-            placeholder="Nombre o email"
-            className="h-11 w-full"
-          />
-        </div>
+      {/* Desktop filters (grid) */}
+      <div className="hidden grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 [&_.space-y-2]:min-w-0 md:grid">
+        {filterContent}
       </div>
+
+      {/* Mobile filter sheet */}
+      <MobileFilterSheet activeFilterCount={activeFilterCount}>
+        {filterContent}
+      </MobileFilterSheet>
 
       <div className={adminListRegionClassName}>
         {isLoading && (

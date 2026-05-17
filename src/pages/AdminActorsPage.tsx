@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   AdminPage,
   adminListRegionClassName,
 } from "@/components/admin/admin-page";
+import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
 import { useActors } from "@/hooks/use-actors";
 import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { ALL_PILLARS, PILLAR_LABELS } from "@/lib/project";
@@ -28,6 +30,50 @@ export default function AdminActorsPage() {
 
   const filtered = actors?.filter((actor) =>
     actor.fullName.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (selectedPillar !== undefined) count++;
+    if (search.trim() !== "") count++;
+    return count;
+  }, [selectedPillar, search]);
+
+  const filterContent = (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="actor-search">Buscar por nombre</Label>
+        <Input
+          id="actor-search"
+          placeholder="Nombre del actor..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="h-11 w-full"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Categoría</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant={selectedPillar === undefined ? "default" : "outline"}
+            className="h-11 w-full text-sm font-medium"
+            onClick={() => setSelectedPillar(undefined)}
+          >
+            Todos
+          </Button>
+          {ALL_PILLARS.map((pillar) => (
+            <Button
+              key={pillar}
+              variant={selectedPillar === pillar ? "default" : "outline"}
+              className="h-11 w-full text-sm font-medium"
+              onClick={() => setSelectedPillar(pillar)}
+            >
+              {PILLAR_LABELS[pillar]}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </>
   );
 
   if (isLoading) {
@@ -73,18 +119,22 @@ export default function AdminActorsPage() {
         Directorio de actores vinculados a los proyectos.
       </p>
 
-      <div className="mt-4 space-y-4">
-        <Input
-          placeholder="Buscar por nombre..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="h-11 w-full max-w-md"
-        />
-
-        <div className="flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible md:pb-0">
+      {/* Desktop filters */}
+      <div className="mt-4 hidden gap-4 md:flex md:items-end md:flex-wrap">
+        <div className="w-full max-w-md space-y-2">
+          <Label htmlFor="actor-search-desktop">Buscar por nombre</Label>
+          <Input
+            id="actor-search-desktop"
+            placeholder="Nombre del actor..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-11 w-full"
+          />
+        </div>
+        <div className="flex flex-wrap gap-2">
           <Button
             variant={selectedPillar === undefined ? "default" : "outline"}
-            className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
+            className="h-11 shrink-0 px-5 text-sm font-medium"
             onClick={() => setSelectedPillar(undefined)}
           >
             Todos
@@ -93,7 +143,7 @@ export default function AdminActorsPage() {
             <Button
               key={pillar}
               variant={selectedPillar === pillar ? "default" : "outline"}
-              className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
+              className="h-11 shrink-0 px-5 text-sm font-medium"
               onClick={() => setSelectedPillar(pillar)}
             >
               {PILLAR_LABELS[pillar]}
@@ -101,6 +151,11 @@ export default function AdminActorsPage() {
           ))}
         </div>
       </div>
+
+      {/* Mobile filter sheet */}
+      <MobileFilterSheet activeFilterCount={activeFilterCount}>
+        {filterContent}
+      </MobileFilterSheet>
 
       <p className="mt-3 text-xs text-muted-foreground">
         {filtered?.length ?? 0} actores encontrados

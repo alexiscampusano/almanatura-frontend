@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { CalendarDots, MapPin, SquaresFour } from "@phosphor-icons/react";
+import {
+  CalendarDots,
+  MapPin,
+  SquaresFour,
+  ArrowDown,
+} from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
@@ -24,10 +29,15 @@ export function PublicHomePage() {
     undefined,
   );
   const {
-    data: projects,
+    data,
     isLoading,
     isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = usePublicProjects(activePillar);
+
+  const projects = data?.pages.flatMap((page) => page.content) ?? [];
 
   return (
     <section className="flex w-full flex-col gap-6 md:gap-8">
@@ -110,13 +120,13 @@ export function PublicHomePage() {
         </p>
       )}
 
-      {projects && projects.length === 0 && (
+      {projects.length === 0 && !isLoading && !isError && (
         <p className="py-12 text-center text-lg text-muted-foreground">
           No hay proyectos publicados en esta categoría.
         </p>
       )}
 
-      {projects && projects.length > 0 && (
+      {projects.length > 0 && (
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
           {projects.map((project) => {
             const config = PILLAR_CONFIG[project.pillar];
@@ -211,6 +221,27 @@ export function PublicHomePage() {
               </Card>
             );
           })}
+        </div>
+      )}
+
+      {hasNextPage && (
+        <div className="mt-4 flex justify-center pb-4">
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => fetchNextPage()}
+            disabled={isFetchingNextPage}
+            className="w-full max-w-sm h-14 text-base font-semibold shadow-sm gap-2"
+          >
+            {isFetchingNextPage ? (
+              "Cargando..."
+            ) : (
+              <>
+                <ArrowDown size={20} weight="bold" />
+                Cargar más proyectos
+              </>
+            )}
+          </Button>
         </div>
       )}
     </section>

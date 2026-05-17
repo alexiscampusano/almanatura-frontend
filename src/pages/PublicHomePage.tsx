@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarDots, MapPin } from "@phosphor-icons/react";
+import { CalendarDots, MapPin, SquaresFour } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/badge";
@@ -41,30 +41,47 @@ export function PublicHomePage() {
         </p>
       </div>
 
-      {/* Horizontal scroll on mobile, wrap on desktop */}
-      <div className="-mx-5 flex gap-2.5 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:gap-3 md:overflow-visible md:px-0 md:pb-0">
-        <Button
-          variant={activePillar === undefined ? "default" : "outline"}
-          className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
-          onClick={() => setActivePillar(undefined)}
-        >
-          Todos
-        </Button>
-        {ALL_PILLARS.map((pillar) => {
-          const config = PILLAR_CONFIG[pillar];
-          const Icon = config.icon;
-          return (
-            <Button
-              key={pillar}
-              variant={activePillar === pillar ? "default" : "outline"}
-              className="h-12 shrink-0 gap-2 px-4 text-sm font-medium md:h-11 md:px-5"
-              onClick={() => setActivePillar(pillar)}
-            >
-              <Icon size={20} weight="bold" aria-hidden />
-              {config.label}
-            </Button>
-          );
-        })}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-foreground md:text-2xl">
+          ¿Qué temas te interesan?
+        </h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 md:gap-4">
+          <Button
+            variant={activePillar === undefined ? "default" : "outline"}
+            className={cn(
+              "flex h-24 flex-col items-center justify-center gap-2 whitespace-normal p-2 text-center transition-all",
+              activePillar === undefined
+                ? "shadow-md"
+                : "bg-muted/30 hover:bg-muted/80",
+            )}
+            onClick={() => setActivePillar(undefined)}
+          >
+            <SquaresFour size={32} weight="duotone" aria-hidden />
+            <span className="text-sm font-semibold sm:text-base">Todos</span>
+          </Button>
+          {ALL_PILLARS.map((pillar) => {
+            const config = PILLAR_CONFIG[pillar];
+            const Icon = config.icon;
+            const isActive = activePillar === pillar;
+
+            return (
+              <Button
+                key={pillar}
+                variant={isActive ? "default" : "outline"}
+                className={cn(
+                  "flex h-24 flex-col items-center justify-center gap-2 whitespace-normal p-2 text-center transition-all",
+                  isActive ? "shadow-md" : "bg-muted/30 hover:bg-muted/80",
+                )}
+                onClick={() => setActivePillar(pillar)}
+              >
+                <Icon size={32} weight="duotone" aria-hidden />
+                <span className="text-sm font-semibold leading-tight sm:text-base">
+                  {config.label}
+                </span>
+              </Button>
+            );
+          })}
+        </div>
       </div>
 
       {isLoading && (

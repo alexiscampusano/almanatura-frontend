@@ -70,7 +70,7 @@ const EMPTY_FORM: FormData = {
   imageUrl: "",
 };
 
-export function AdminProjectsPage() {
+export default function AdminProjectsPage() {
   const { data: projects, isLoading, isError } = useAdminProjects();
   const createMutation = useCreateProject();
   const updateMutation = useUpdateProject();

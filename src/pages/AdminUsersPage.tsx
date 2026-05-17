@@ -32,7 +32,7 @@ function roleBadgeVariant(role: InternalRole): "default" | "secondary" {
   return role === "SUPER_USER" ? "default" : "secondary";
 }
 
-export function AdminUsersPage() {
+export default function AdminUsersPage() {
   const user = useAuthStore((s) => s.user);
   const isSuperUser = user?.role === "SUPER_USER";
 

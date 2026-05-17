@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { useAuthStore } from "@/stores/auth.store";
 
-export function AdminMePage() {
+export default function AdminMePage() {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const clearSession = useAuthStore((s) => s.clearSession);

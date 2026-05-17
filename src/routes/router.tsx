@@ -1,4 +1,4 @@
-/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-refresh/only-export-components -- route config exports appRouter alongside lazy page wrappers */
 import { Suspense, lazy } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
@@ -10,27 +10,22 @@ import { AdminLoginPage } from "@/pages/AdminLoginPage";
 import { PublicHomePage } from "@/pages/PublicHomePage";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const lazyImport = (importFn: () => Promise<any>) => lazy(importFn);
-
-const AdminActorDetailPage = lazyImport(
-  () => import("@/pages/AdminActorDetailPage"),
-);
-const AdminActorsPage = lazyImport(() => import("@/pages/AdminActorsPage"));
-const AdminApplicationsPage = lazyImport(
+const AdminActorDetailPage = lazy(() => import("@/pages/AdminActorDetailPage"));
+const AdminActorsPage = lazy(() => import("@/pages/AdminActorsPage"));
+const AdminApplicationsPage = lazy(
   () => import("@/pages/AdminApplicationsPage"),
 );
-const AdminMePage = lazyImport(() => import("@/pages/AdminMePage"));
-const AdminNotificationsPage = lazyImport(
+const AdminMePage = lazy(() => import("@/pages/AdminMePage"));
+const AdminNotificationsPage = lazy(
   () => import("@/pages/AdminNotificationsPage"),
 );
-const AdminProjectDetailPage = lazyImport(
+const AdminProjectDetailPage = lazy(
   () => import("@/pages/AdminProjectDetailPage"),
 );
-const AdminProjectsPage = lazyImport(() => import("@/pages/AdminProjectsPage"));
-const AdminReportsPage = lazyImport(() => import("@/pages/AdminReportsPage"));
-const AdminUsersPage = lazyImport(() => import("@/pages/AdminUsersPage"));
-const PublicProjectDetailPage = lazyImport(
+const AdminProjectsPage = lazy(() => import("@/pages/AdminProjectsPage"));
+const AdminReportsPage = lazy(() => import("@/pages/AdminReportsPage"));
+const AdminUsersPage = lazy(() => import("@/pages/AdminUsersPage"));
+const PublicProjectDetailPage = lazy(
   () => import("@/pages/PublicProjectDetailPage"),
 );
 

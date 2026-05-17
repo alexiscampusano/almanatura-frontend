@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/datetime";
 import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
 
-export function AdminProjectDetailPage() {
+export default function AdminProjectDetailPage() {
   const { projectId: param } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const id = Number(param);

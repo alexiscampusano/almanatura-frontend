@@ -111,7 +111,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
   );
 }
 
-export function AdminApplicationsPage() {
+export default function AdminApplicationsPage() {
   const { data: projects } = useAdminProjects();
   const [projectId, setProjectId] = useState<string>("all");
   const [status, setStatus] = useState<string>("all");

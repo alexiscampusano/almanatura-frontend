@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useActors } from "@/hooks/use-actors";
 
-export function AdminActorsPage() {
+export default function AdminActorsPage() {
   const { data: actors, isLoading, isError } = useActors();
   const [search, setSearch] = useState("");
 

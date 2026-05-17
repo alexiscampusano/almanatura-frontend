@@ -7,7 +7,7 @@ import { PILLAR_LABELS, STATUS_LABELS } from "@/lib/project";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function AdminReportsPage() {
+export default function AdminReportsPage() {
   const summary = useReportsSummary();
   const ranking = useProjectApplicationReport();
 

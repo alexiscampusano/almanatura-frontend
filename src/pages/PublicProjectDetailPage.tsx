@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import { formatDateLong } from "@/lib/datetime";
 import { PILLAR_CONFIG } from "@/lib/project";
 
-export function PublicProjectDetailPage() {
+export default function PublicProjectDetailPage() {
   const { projectId: param } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const id = Number(param);

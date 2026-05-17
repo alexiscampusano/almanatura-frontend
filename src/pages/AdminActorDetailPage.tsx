@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useActor } from "@/hooks/use-actors";
 import { cn } from "@/lib/utils";
 
-export function AdminActorDetailPage() {
+export default function AdminActorDetailPage() {
   const { actorId: param } = useParams<{ actorId: string }>();
   const navigate = useNavigate();
   const id = Number(param);

@@ -10,7 +10,7 @@ import { notificationSchema, type NotificationSchema } from "@/lib/schemas";
 import { createOutboundNotification } from "@/services/admin-notifications.service";
 import { useQueryClient } from "@tanstack/react-query";
 
-export function AdminNotificationsPage() {
+export default function AdminNotificationsPage() {
   const queryClient = useQueryClient();
 
   const {

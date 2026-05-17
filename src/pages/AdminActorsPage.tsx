@@ -1,15 +1,26 @@
 import { useState } from "react";
-import { getAvatarColor, getInitials } from "@/lib/avatar";
 
 import { Link } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useActors } from "@/hooks/use-actors";
+import { getAvatarColor, getInitials } from "@/lib/avatar";
+import { ALL_PILLARS, PILLAR_LABELS } from "@/lib/project";
+import type { ProjectPillar } from "@/types/project";
 
 export default function AdminActorsPage() {
-  const { data: actors, isLoading, isError } = useActors();
   const [search, setSearch] = useState("");
+  const [selectedPillar, setSelectedPillar] = useState<
+    ProjectPillar | undefined
+  >(undefined);
+
+  const {
+    data: actors,
+    isLoading,
+    isError,
+  } = useActors(selectedPillar ? { pillar: selectedPillar } : undefined);
 
   const filtered = actors?.filter((actor) =>
     actor.fullName.toLowerCase().includes(search.toLowerCase()),
@@ -56,13 +67,33 @@ export default function AdminActorsPage() {
         Directorio de actores vinculados a los proyectos.
       </p>
 
-      <div className="mt-4">
+      <div className="mt-4 space-y-4">
         <Input
           placeholder="Buscar por nombre..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-sm"
         />
+
+        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:gap-3 md:overflow-visible md:px-0 md:pb-0">
+          <Button
+            variant={selectedPillar === undefined ? "default" : "outline"}
+            className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
+            onClick={() => setSelectedPillar(undefined)}
+          >
+            Todos
+          </Button>
+          {ALL_PILLARS.map((pillar) => (
+            <Button
+              key={pillar}
+              variant={selectedPillar === pillar ? "default" : "outline"}
+              className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
+              onClick={() => setSelectedPillar(pillar)}
+            >
+              {PILLAR_LABELS[pillar]}
+            </Button>
+          ))}
+        </div>
       </div>
 
       <p className="mt-3 text-xs text-muted-foreground">

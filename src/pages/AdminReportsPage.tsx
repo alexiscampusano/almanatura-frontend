@@ -51,7 +51,7 @@ export default function AdminReportsPage() {
 
         {!loading && s && (
           <>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -75,7 +75,7 @@ export default function AdminReportsPage() {
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Indicadores de impacto
+                    Impacto (Entradas)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-2xl font-semibold">
@@ -85,103 +85,146 @@ export default function AdminReportsPage() {
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">
-                    Notificaciones (pendientes / cola)
+                    Notificaciones
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="text-2xl font-semibold">
                   {s.totalOutboundNotifications}
                 </CardContent>
               </Card>
+
+              {/* Nuevo Card para los estados */}
+              <Card className="sm:col-span-2 lg:col-span-1 bg-muted/20">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                    Por Estado
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-1.5 pt-1">
+                  {s.projectsByStatus.length > 0 ? (
+                    s.projectsByStatus.map((row) => (
+                      <div
+                        key={row.status}
+                        className="flex justify-between items-center text-sm"
+                      >
+                        <span className="text-muted-foreground">
+                          {STATUS_LABELS[row.status]}
+                        </span>
+                        <span className="font-semibold">{row.count}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span className="text-sm text-muted-foreground">
+                      Sin datos
+                    </span>
+                  )}
+                </CardContent>
+              </Card>
             </div>
 
-            {s.projectsByStatus.length > 0 && (
-              <div>
-                <h3 className="mb-2 text-lg font-medium">
-                  Proyectos por estado
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {s.projectsByStatus.map((row) => (
-                    <Badge
-                      key={row.status}
-                      variant="secondary"
-                      className="gap-1"
-                    >
-                      {STATUS_LABELS[row.status]}: {row.count}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {ranking.data && ranking.data.length > 0 && (
-              <div>
-                <h3 className="mb-3 text-lg font-medium">
-                  Proyectos con más solicitudes
-                </h3>
-                <div className="hidden rounded-lg border md:block">
-                  <div className="overflow-x-auto">
-                    <table className="min-w-[720px] w-full text-sm">
-                      <thead className="border-b bg-muted/50">
-                        <tr>
-                          <th className="px-3 py-3 text-left font-medium">
-                            Proyecto
-                          </th>
-                          <th className="px-3 py-3 text-left font-medium">
-                            Pilar
-                          </th>
-                          <th className="px-3 py-3 text-left font-medium">
-                            Estado
-                          </th>
-                          <th className="px-3 py-3 text-right font-medium">
-                            Solicitudes
-                          </th>
-                          <th className="px-3 py-3 text-left font-medium">
-                            Inicio
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {ranking.data.map((row) => (
-                          <tr key={row.id}>
-                            <td className="max-w-[200px] px-3 py-3 font-medium">
-                              {row.title}
-                            </td>
-                            <td className="px-3 py-3 text-muted-foreground">
-                              {PILLAR_LABELS[row.pillar]}
-                            </td>
-                            <td className="px-3 py-3">
-                              <Badge variant="outline">
-                                {STATUS_LABELS[row.status]}
-                              </Badge>
-                            </td>
-                            <td className="px-3 py-3 text-right tabular-nums">
-                              {row.applicationCount}
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-3 text-muted-foreground">
-                              {formatDateShort(row.startsAt)}
-                            </td>
+            <div className="mt-8">
+              {ranking.data && ranking.data.length > 0 && (
+                <Card className="overflow-hidden">
+                  <CardHeader className="bg-muted/30 border-b pb-4">
+                    <CardTitle className="text-lg font-semibold">
+                      Ranking de Solicitudes
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Proyectos ordenados por volumen de interés
+                    </p>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <div className="hidden md:block w-full">
+                      <table className="w-full text-sm">
+                        <thead className="border-b bg-muted/10">
+                          <tr>
+                            <th className="px-5 py-4 text-left font-medium w-[35%]">
+                              Proyecto
+                            </th>
+                            <th className="px-5 py-4 text-left font-medium w-[20%]">
+                              Pilar Estratégico
+                            </th>
+                            <th className="px-5 py-4 text-left font-medium w-[15%]">
+                              Estado
+                            </th>
+                            <th className="px-5 py-4 text-left font-medium w-[15%]">
+                              Inicio
+                            </th>
+                            <th className="px-5 py-4 text-right font-medium w-[15%]">
+                              Total Solicitudes
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-                <ul className="space-y-2 md:hidden">
-                  {ranking.data.map((row) => (
-                    <li key={row.id} className="rounded-lg border p-3 text-sm">
-                      <p className="font-medium">{row.title}</p>
-                      <p className="text-muted-foreground">
-                        {PILLAR_LABELS[row.pillar]} ·{" "}
-                        {STATUS_LABELS[row.status]}
-                      </p>
-                      <p className="mt-1 font-semibold">
-                        {row.applicationCount} solicitudes
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                        </thead>
+                        <tbody className="divide-y">
+                          {ranking.data.map((row, index) => (
+                            <tr
+                              key={row.id}
+                              className="hover:bg-muted/30 transition-colors"
+                            >
+                              <td className="px-5 py-4 align-top">
+                                <div className="font-semibold break-words text-base flex items-start gap-2">
+                                  <span className="text-muted-foreground text-sm font-normal pt-0.5">
+                                    #{index + 1}
+                                  </span>
+                                  {row.title}
+                                </div>
+                              </td>
+                              <td className="px-5 py-4 align-top text-muted-foreground">
+                                {PILLAR_LABELS[row.pillar]}
+                              </td>
+                              <td className="px-5 py-4 align-top">
+                                <Badge
+                                  variant="outline"
+                                  className="font-medium bg-background"
+                                >
+                                  {STATUS_LABELS[row.status]}
+                                </Badge>
+                              </td>
+                              <td className="px-5 py-4 align-top text-muted-foreground">
+                                {formatDateShort(row.startsAt)}
+                              </td>
+                              <td className="px-5 py-4 align-top text-right">
+                                <span className="inline-flex items-center justify-center bg-primary/10 text-primary font-bold px-3 py-1 rounded-full text-base">
+                                  {row.applicationCount}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="divide-y md:hidden">
+                      {ranking.data.map((row, index) => (
+                        <div key={row.id} className="p-4 space-y-3">
+                          <div className="flex justify-between items-start gap-2">
+                            <p className="font-semibold flex items-start gap-1.5">
+                              <span className="text-muted-foreground text-sm font-normal">
+                                #{index + 1}
+                              </span>
+                              {row.title}
+                            </p>
+                            <span className="inline-flex items-center justify-center bg-primary/10 text-primary font-bold px-2.5 py-0.5 rounded-full text-sm shrink-0">
+                              {row.applicationCount}
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                            <span>{PILLAR_LABELS[row.pillar]}</span>
+                            <span>•</span>
+                            <span>{formatDateShort(row.startsAt)}</span>
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className="font-medium bg-background"
+                          >
+                            {STATUS_LABELS[row.status]}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
 
             {ranking.data && ranking.data.length === 0 && (
               <p className="text-sm text-muted-foreground">

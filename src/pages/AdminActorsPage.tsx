@@ -1,49 +1,88 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
+import { Link } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  AdminPage,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
+import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
 import { useActors } from "@/hooks/use-actors";
+import { getAvatarColor, getInitials } from "@/lib/avatar";
+import { ALL_PILLARS, PILLAR_LABELS } from "@/lib/project";
+import type { ProjectPillar } from "@/types/project";
 
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-}
-
-function getAvatarColor(name: string): string {
-  const colors = [
-    "bg-rose-600",
-    "bg-amber-600",
-    "bg-emerald-600",
-    "bg-sky-600",
-    "bg-violet-600",
-    "bg-fuchsia-600",
-    "bg-teal-600",
-    "bg-orange-600",
-  ];
-  let hash = 0;
-  for (const char of name) {
-    hash = char.charCodeAt(0) + ((hash << 5) - hash);
-  }
-  return colors[Math.abs(hash) % colors.length];
-}
-
-export function AdminActorsPage() {
-  const { data: actors, isLoading, isError } = useActors();
+export default function AdminActorsPage() {
   const [search, setSearch] = useState("");
+  const [selectedPillar, setSelectedPillar] = useState<
+    ProjectPillar | undefined
+  >(undefined);
+
+  const {
+    data: actors,
+    isLoading,
+    isError,
+  } = useActors(selectedPillar ? { pillar: selectedPillar } : undefined);
 
   const filtered = actors?.filter((actor) =>
     actor.fullName.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (selectedPillar !== undefined) count++;
+    if (search.trim() !== "") count++;
+    return count;
+  }, [selectedPillar, search]);
+
+  const filterContent = (
+    <>
+      <div className="space-y-2">
+        <Label htmlFor="actor-search">Buscar por nombre</Label>
+        <Input
+          id="actor-search"
+          placeholder="Nombre del actor..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="h-11 w-full"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label>Categoría</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant={selectedPillar === undefined ? "default" : "outline"}
+            className="h-11 w-full text-sm font-medium"
+            onClick={() => setSelectedPillar(undefined)}
+          >
+            Todos
+          </Button>
+          {ALL_PILLARS.map((pillar) => (
+            <Button
+              key={pillar}
+              variant={selectedPillar === pillar ? "default" : "outline"}
+              className="h-11 w-full text-sm font-medium"
+              onClick={() => setSelectedPillar(pillar)}
+            >
+              {PILLAR_LABELS[pillar]}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-4xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Actores</h2>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          className={`${adminListRegionClassName} mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3`}
+        >
           {Array.from({ length: 6 }).map((_, i) => (
             <Card key={i} className="animate-pulse">
               <CardHeader>
@@ -58,68 +97,107 @@ export function AdminActorsPage() {
             </Card>
           ))}
         </div>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-4xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Actores</h2>
         <p className="mt-4 text-sm text-destructive">
           No se pudo cargar el directorio de actores. Inténtalo nuevamente.
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-4xl">
+    <AdminPage>
       <h2 className="text-2xl font-semibold">Actores</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Directorio de actores vinculados a los proyectos.
       </p>
 
-      <div className="mt-4">
-        <Input
-          placeholder="Buscar por nombre..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
+      {/* Desktop filters */}
+      <div className="mt-4 hidden gap-4 md:flex md:items-end md:flex-wrap">
+        <div className="w-full max-w-md space-y-2">
+          <Label htmlFor="actor-search-desktop">Buscar por nombre</Label>
+          <Input
+            id="actor-search-desktop"
+            placeholder="Nombre del actor..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-11 w-full"
+          />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant={selectedPillar === undefined ? "default" : "outline"}
+            className="h-11 shrink-0 px-5 text-sm font-medium"
+            onClick={() => setSelectedPillar(undefined)}
+          >
+            Todos
+          </Button>
+          {ALL_PILLARS.map((pillar) => (
+            <Button
+              key={pillar}
+              variant={selectedPillar === pillar ? "default" : "outline"}
+              className="h-11 shrink-0 px-5 text-sm font-medium"
+              onClick={() => setSelectedPillar(pillar)}
+            >
+              {PILLAR_LABELS[pillar]}
+            </Button>
+          ))}
+        </div>
       </div>
+
+      {/* Mobile filter sheet */}
+      <MobileFilterSheet activeFilterCount={activeFilterCount}>
+        {filterContent}
+      </MobileFilterSheet>
 
       <p className="mt-3 text-xs text-muted-foreground">
         {filtered?.length ?? 0} actores encontrados
       </p>
 
-      {filtered && filtered.length > 0 ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((actor) => (
-            <Card key={actor.id}>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
-                  >
-                    {getInitials(actor.fullName)}
-                  </span>
-                  <div className="min-w-0">
-                    <CardTitle className="truncate">{actor.fullName}</CardTitle>
-                    <CardContent className="p-0 text-xs text-muted-foreground">
-                      {actor.region}
-                    </CardContent>
-                  </div>
-                </div>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          No se encontraron actores.
-        </p>
-      )}
-    </section>
+      <div className={adminListRegionClassName}>
+        {filtered && filtered.length > 0 ? (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((actor) => (
+              <Link
+                key={actor.id}
+                to={`/admin/actors/${actor.id}`}
+                className="block transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              >
+                <Card className="h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
+                      >
+                        {getInitials(actor.fullName)}
+                      </span>
+                      <div className="min-w-0">
+                        <CardTitle className="truncate">
+                          {actor.fullName}
+                        </CardTitle>
+                        <CardContent className="p-0 text-xs text-muted-foreground">
+                          {actor.region}
+                        </CardContent>
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            No se encontraron actores.
+          </p>
+        )}
+      </div>
+    </AdminPage>
   );
 }

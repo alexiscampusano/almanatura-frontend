@@ -1,10 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getActors } from "@/services/actors.service";
+import type { GetActorsParams } from "@/services/actors.service";
+import { getActorById, getActors } from "@/services/actors.service";
 
-export function useActors() {
+const ACTORS_LIST_KEY = ["actors"] as const;
+
+export function useActors(params?: GetActorsParams) {
   return useQuery({
-    queryKey: ["actors"],
-    queryFn: getActors,
+    queryKey: [...ACTORS_LIST_KEY, params?.pillar ?? "all"],
+    queryFn: () => getActors(params),
+  });
+}
+
+export function useActor(actorId: number) {
+  return useQuery({
+    queryKey: [...ACTORS_LIST_KEY, actorId],
+    queryFn: () => getActorById(actorId),
+    enabled: Number.isFinite(actorId) && actorId > 0,
   });
 }

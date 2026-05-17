@@ -1,39 +1,91 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
+import { getInitials } from "@/lib/avatar";
+import { NavigationProgress } from "@/components/navigation-progress";
+import { Badge } from "@/components/ui/badge";
+import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/auth.store";
+
+function roleLabel(role: string): string {
+  if (role === "SUPER_USER") return "Super usuario";
+  if (role === "EVENT_MANAGER") return "Gestor de proyectos";
+  return role;
+}
 
 const adminNavigation = [
   { to: "/admin/projects", label: "Proyectos" },
   { to: "/admin/applications", label: "Solicitudes" },
   { to: "/admin/actors", label: "Actores" },
   { to: "/admin/reports", label: "Reportes" },
+  { to: "/admin/notifications", label: "Notificaciones" },
   { to: "/admin/users", label: "Usuarios" },
 ];
 
 export function AdminLayout() {
+  useSyncCurrentUser();
+  const user = useAuthStore((s) => s.user);
+
   return (
     <div className="min-h-svh bg-background text-foreground">
+      <NavigationProgress />
       <header className="border-b border-border px-4 py-4 md:px-6">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3">
-          <h1 className="text-lg font-semibold">Panel administrativo</h1>
-          <Link
-            to="/"
-            aria-label="Volver al inicio público"
-            className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-          >
-            <img
-              src={almanaturaLogo}
-              alt="Logo AlmaNatura"
-              className="h-6 w-auto"
-            />
-            <span>Ir al inicio</span>
-          </Link>
+        <div className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center gap-3">
+          <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
+            Panel administrativo
+          </h1>
+          <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:ml-auto sm:w-auto">
+            <Link
+              to="/"
+              aria-label="Volver al inicio público"
+              className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              <img
+                src={almanaturaLogo}
+                alt="Logo AlmaNatura"
+                className="h-6 w-auto"
+              />
+              <span className="hidden sm:inline">Ir al inicio</span>
+            </Link>
+            {user ? (
+              <NavLink
+                to="/admin/me"
+                aria-label={`Mi cuenta, ${roleLabel(user.role)}`}
+                className={({ isActive }) =>
+                  cn(
+                    "inline-flex items-center gap-2 rounded-sm border px-2.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    isActive
+                      ? "border-primary bg-primary/5 text-foreground"
+                      : "border-border bg-background hover:bg-muted/80",
+                  )
+                }
+              >
+                <span
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+                  aria-hidden
+                >
+                  {getInitials(user.name)}
+                </span>
+                <Badge
+                  variant="secondary"
+                  className="max-w-[11rem] shrink truncate font-normal text-xs sm:max-w-[10rem] sm:text-xs"
+                >
+                  {roleLabel(user.role)}
+                </Badge>
+              </NavLink>
+            ) : (
+              <span
+                className="inline-flex h-10 w-28 animate-pulse rounded-sm bg-muted"
+                aria-hidden
+              />
+            )}
+          </div>
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row">
-        <aside className="border-b border-border md:w-64 md:border-b-0 md:border-r">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-col md:flex-row">
+        <aside className="shrink-0 border-b border-border md:w-64 md:border-b-0 md:border-r">
           <nav
             aria-label="Navegación del panel admin"
             className="flex gap-2 overflow-x-auto px-3 py-3 md:grid md:gap-1 md:px-4 md:py-5"
@@ -57,7 +109,7 @@ export function AdminLayout() {
           </nav>
         </aside>
 
-        <main className="flex-1 px-4 py-6 md:px-6">
+        <main className="min-w-0 w-full flex-1 overflow-x-clip px-4 py-6 md:px-6">
           <Outlet />
         </main>
       </div>

@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import { Eye, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
   AlertDialog,
@@ -12,7 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -29,12 +30,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { ProjectImpactSection } from "@/components/admin/ProjectImpactSection";
 import {
   useAdminProjects,
   useCreateProject,
   useDeleteProject,
   useUpdateProject,
 } from "@/hooks/use-admin-projects";
+import { cn } from "@/lib/utils";
+import { formatDateShort, toLocalDate } from "@/lib/datetime";
+import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
+import {
+  AdminPage,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
 import type {
   AdminProjectResponse,
   CreateProjectPayload,
@@ -42,40 +51,6 @@ import type {
   ProjectStatus,
   UpdateProjectPayload,
 } from "@/types/project";
-
-const PILLAR_LABELS: Record<ProjectPillar, string> = {
-  TECHNOLOGY: "Tecnología",
-  EDUCATION: "Educación",
-  HEALTH: "Salud",
-  ENTREPRENEURSHIP: "Emprendimiento",
-  CULTURE: "Cultura",
-};
-
-const STATUS_LABELS: Record<ProjectStatus, string> = {
-  DRAFT: "Borrador",
-  PUBLISHED: "Publicado",
-  CANCELLED: "Cancelado",
-};
-
-const STATUS_VARIANT: Record<
-  ProjectStatus,
-  "default" | "secondary" | "destructive"
-> = {
-  DRAFT: "secondary",
-  PUBLISHED: "default",
-  CANCELLED: "destructive",
-};
-
-function formatDate(iso: string | null): string {
-  if (!iso) return "—";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "—";
-  return date.toLocaleDateString("es-CL", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 type FormData = {
   title: string;
@@ -99,18 +74,13 @@ const EMPTY_FORM: FormData = {
   imageUrl: "",
 };
 
-function toLocalDatetime(iso: string | null): string {
-  if (!iso) return "";
-  const date = new Date(iso);
-  if (isNaN(date.getTime())) return "";
-  return date.toISOString().slice(0, 16);
-}
-
-export function AdminProjectsPage() {
+export default function AdminProjectsPage() {
   const { data: projects, isLoading, isError } = useAdminProjects();
   const createMutation = useCreateProject();
   const updateMutation = useUpdateProject();
   const deleteMutation = useDeleteProject();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProject, setEditingProject] =
@@ -133,13 +103,37 @@ export function AdminProjectsPage() {
       description: project.description ?? "",
       pillar: project.pillar,
       status: project.status,
-      startsAt: toLocalDatetime(project.startsAt),
-      endsAt: toLocalDatetime(project.endsAt),
+      startsAt: toLocalDate(project.startsAt),
+      endsAt: toLocalDate(project.endsAt),
       location: project.location ?? "",
       imageUrl: project.imageUrl ?? "",
     });
     setDialogOpen(true);
   }
+
+  useEffect(() => {
+    const openId = (location.state as { openEditForId?: number } | null)
+      ?.openEditForId;
+    if (openId == null || !projects) return;
+    const p = projects.find((x) => x.id === openId);
+    navigate(".", { replace: true, state: {} });
+    if (p) {
+      queueMicrotask(() => {
+        setEditingProject(p);
+        setForm({
+          title: p.title,
+          description: p.description ?? "",
+          pillar: p.pillar,
+          status: p.status,
+          startsAt: toLocalDate(p.startsAt),
+          endsAt: toLocalDate(p.endsAt),
+          location: p.location ?? "",
+          imageUrl: p.imageUrl ?? "",
+        });
+        setDialogOpen(true);
+      });
+    }
+  }, [location.state, projects, navigate]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -149,10 +143,8 @@ export function AdminProjectsPage() {
         description: form.description || undefined,
         pillar: form.pillar,
         status: form.status,
-        startsAt: form.startsAt
-          ? new Date(form.startsAt).toISOString()
-          : undefined,
-        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        startsAt: form.startsAt || undefined,
+        endsAt: form.endsAt || undefined,
         location: form.location || undefined,
         imageUrl: form.imageUrl || undefined,
       };
@@ -165,10 +157,8 @@ export function AdminProjectsPage() {
         title: form.title,
         description: form.description || undefined,
         pillar: form.pillar,
-        startsAt: form.startsAt
-          ? new Date(form.startsAt).toISOString()
-          : undefined,
-        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        startsAt: form.startsAt || undefined,
+        endsAt: form.endsAt || undefined,
         location: form.location || undefined,
         imageUrl: form.imageUrl || undefined,
       };
@@ -189,154 +179,195 @@ export function AdminProjectsPage() {
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-5xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-        <div className="mt-6 space-y-3">
+        <div className={`${adminListRegionClassName} mt-6 space-y-3`}>
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />
           ))}
         </div>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-5xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
         <p className="mt-4 text-destructive">
           No se pudieron cargar los proyectos. Inténtalo nuevamente.
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-5xl">
-      <div className="flex items-center justify-between gap-4">
-        <div>
+    <AdminPage>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {projects?.length ?? 0} proyectos registrados
           </p>
         </div>
-        <Button onClick={openCreate} className="gap-2">
+        <Button
+          onClick={openCreate}
+          className="shrink-0 gap-2 self-stretch sm:self-auto"
+        >
           <Plus size={18} weight="bold" />
           Nuevo proyecto
         </Button>
       </div>
 
-      {projects && projects.length === 0 && (
-        <p className="mt-8 text-center text-muted-foreground">
-          Aún no hay proyectos creados.
-        </p>
-      )}
+      <div className={adminListRegionClassName}>
+        {projects && projects.length === 0 && (
+          <p className="mt-8 text-center text-muted-foreground">
+            Aún no hay proyectos creados.
+          </p>
+        )}
 
-      {projects && projects.length > 0 && (
-        <>
-          {/* Desktop table */}
-          <div className="mt-6 hidden overflow-hidden rounded-lg border md:block">
-            <table className="w-full text-sm">
-              <thead className="border-b bg-muted/50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium">Título</th>
-                  <th className="px-4 py-3 text-left font-medium">Pilar</th>
-                  <th className="px-4 py-3 text-left font-medium">Estado</th>
-                  <th className="px-4 py-3 text-left font-medium">Inicio</th>
-                  <th className="px-4 py-3 text-right font-medium">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {projects.map((project) => (
-                  <tr key={project.id} className="hover:bg-muted/30">
-                    <td className="max-w-[200px] truncate px-4 py-3 font-medium">
-                      {project.title}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {PILLAR_LABELS[project.pillar]}
-                    </td>
-                    <td className="px-4 py-3">
-                      <Badge variant={STATUS_VARIANT[project.status]}>
+        {projects && projects.length > 0 && (
+          <>
+            {/* Desktop table */}
+            <div className="mt-6 hidden rounded-lg border md:block">
+              <div className="overflow-x-auto">
+                <table className="min-w-[640px] w-full text-sm">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Título
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">Pilar</th>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Estado
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Inicio
+                      </th>
+                      <th className="px-4 py-3 text-right font-medium">
+                        Acciones
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {projects.map((project) => (
+                      <tr key={project.id} className="hover:bg-muted/30">
+                        <td className="max-w-[200px] truncate px-4 py-3 font-medium">
+                          {project.title}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {PILLAR_LABELS[project.pillar]}
+                        </td>
+                        <td className="px-4 py-3">
+                          <Badge variant={STATUS_VARIANT[project.status]}>
+                            {STATUS_LABELS[project.status]}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {formatDateShort(project.startsAt)}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="flex justify-end gap-1">
+                            <Link
+                              to={`/admin/projects/${project.id}`}
+                              className={cn(
+                                buttonVariants({
+                                  variant: "ghost",
+                                  size: "icon",
+                                }),
+                              )}
+                              aria-label="Ver detalle"
+                            >
+                              <Eye size={18} />
+                            </Link>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => openEdit(project)}
+                              aria-label="Editar proyecto"
+                            >
+                              <PencilSimple size={18} />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setDeleteTarget(project)}
+                              aria-label="Eliminar proyecto"
+                            >
+                              <Trash size={18} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="mt-6 space-y-3 md:hidden">
+              {projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border p-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium">{project.title}</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Badge
+                        variant={STATUS_VARIANT[project.status]}
+                        className="text-xs"
+                      >
                         {STATUS_LABELS[project.status]}
                       </Badge>
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">
-                      {formatDate(project.startsAt)}
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEdit(project)}
-                          aria-label="Editar proyecto"
-                        >
-                          <PencilSimple size={18} />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setDeleteTarget(project)}
-                          aria-label="Eliminar proyecto"
-                        >
-                          <Trash size={18} />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile cards */}
-          <div className="mt-6 space-y-3 md:hidden">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="flex items-center justify-between gap-3 rounded-lg border p-4"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{project.title}</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <Badge
-                      variant={STATUS_VARIANT[project.status]}
-                      className="text-xs"
+                      <span className="text-xs text-muted-foreground">
+                        {PILLAR_LABELS[project.pillar]}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 gap-1">
+                    <Link
+                      to={`/admin/projects/${project.id}`}
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "icon" }),
+                      )}
+                      aria-label="Ver detalle"
                     >
-                      {STATUS_LABELS[project.status]}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {PILLAR_LABELS[project.pillar]}
-                    </span>
+                      <Eye size={18} />
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => openEdit(project)}
+                      aria-label="Editar proyecto"
+                    >
+                      <PencilSimple size={18} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setDeleteTarget(project)}
+                      aria-label="Eliminar proyecto"
+                    >
+                      <Trash size={18} />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex shrink-0 gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => openEdit(project)}
-                    aria-label="Editar proyecto"
-                  >
-                    <PencilSimple size={18} />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteTarget(project)}
-                    aria-label="Eliminar proyecto"
-                  >
-                    <Trash size={18} />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+        <DialogContent
+          className={cn(
+            "max-h-[90vh] w-[calc(100vw-2rem)] overflow-x-hidden overflow-y-auto sm:w-auto",
+            editingProject ? "sm:max-w-2xl" : "sm:max-w-lg",
+          )}
+        >
           <DialogHeader>
             <DialogTitle>
               {editingProject ? "Editar proyecto" : "Nuevo proyecto"}
@@ -377,7 +408,9 @@ export function AdminProjectsPage() {
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue placeholder="Seleccionar pilar">
+                      {PILLAR_LABELS[form.pillar]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(PILLAR_LABELS).map(([value, label]) => (
@@ -399,7 +432,9 @@ export function AdminProjectsPage() {
                     }
                   >
                     <SelectTrigger>
-                      <SelectValue />
+                      <SelectValue placeholder="Seleccionar estado">
+                        {STATUS_LABELS[form.status]}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {Object.entries(STATUS_LABELS).map(([value, label]) => (
@@ -418,7 +453,7 @@ export function AdminProjectsPage() {
                 <Label htmlFor="startsAt">Fecha inicio</Label>
                 <Input
                   id="startsAt"
-                  type="datetime-local"
+                  type="date"
                   value={form.startsAt}
                   onChange={(e) =>
                     setForm({ ...form, startsAt: e.target.value })
@@ -429,7 +464,7 @@ export function AdminProjectsPage() {
                 <Label htmlFor="endsAt">Fecha fin</Label>
                 <Input
                   id="endsAt"
-                  type="datetime-local"
+                  type="date"
                   value={form.endsAt}
                   onChange={(e) => setForm({ ...form, endsAt: e.target.value })}
                 />
@@ -457,6 +492,10 @@ export function AdminProjectsPage() {
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
               />
             </div>
+
+            {editingProject && (
+              <ProjectImpactSection projectId={editingProject.id} />
+            )}
 
             <div className="flex justify-end gap-2 pt-2">
               <Button
@@ -502,6 +541,6 @@ export function AdminProjectsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </section>
+    </AdminPage>
   );
 }

@@ -117,6 +117,32 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@keyframes nav-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.animate-nav-indeterminate {
+  animation: nav-indeterminate 0.9s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -128,6 +154,7 @@
   html {
     @apply font-sans;
     font-size: 112.5%; /* 18px base — better readability for elderly */
+    scrollbar-gutter: stable;
   }
   @media (min-width: 768px) {
     html {

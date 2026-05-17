@@ -40,6 +40,13 @@ export function toLocalDatetime(iso: string | null | undefined): string {
   return date.toISOString().slice(0, 16);
 }
 
+export function toLocalDate(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 10);
+}
+
 export function isValidDate(iso: string | null | undefined): boolean {
   if (!iso) return false;
   const date = new Date(iso);

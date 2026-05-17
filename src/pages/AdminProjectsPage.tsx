@@ -38,7 +38,7 @@ import {
   useUpdateProject,
 } from "@/hooks/use-admin-projects";
 import { cn } from "@/lib/utils";
-import { formatDateShort, toLocalDatetime } from "@/lib/datetime";
+import { formatDateShort, toLocalDate } from "@/lib/datetime";
 import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
 import {
   AdminPage,
@@ -103,8 +103,8 @@ export default function AdminProjectsPage() {
       description: project.description ?? "",
       pillar: project.pillar,
       status: project.status,
-      startsAt: toLocalDatetime(project.startsAt),
-      endsAt: toLocalDatetime(project.endsAt),
+      startsAt: toLocalDate(project.startsAt),
+      endsAt: toLocalDate(project.endsAt),
       location: project.location ?? "",
       imageUrl: project.imageUrl ?? "",
     });
@@ -125,8 +125,8 @@ export default function AdminProjectsPage() {
           description: p.description ?? "",
           pillar: p.pillar,
           status: p.status,
-          startsAt: toLocalDatetime(p.startsAt),
-          endsAt: toLocalDatetime(p.endsAt),
+          startsAt: toLocalDate(p.startsAt),
+          endsAt: toLocalDate(p.endsAt),
           location: p.location ?? "",
           imageUrl: p.imageUrl ?? "",
         });
@@ -143,10 +143,8 @@ export default function AdminProjectsPage() {
         description: form.description || undefined,
         pillar: form.pillar,
         status: form.status,
-        startsAt: form.startsAt
-          ? new Date(form.startsAt).toISOString()
-          : undefined,
-        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        startsAt: form.startsAt || undefined,
+        endsAt: form.endsAt || undefined,
         location: form.location || undefined,
         imageUrl: form.imageUrl || undefined,
       };
@@ -159,10 +157,8 @@ export default function AdminProjectsPage() {
         title: form.title,
         description: form.description || undefined,
         pillar: form.pillar,
-        startsAt: form.startsAt
-          ? new Date(form.startsAt).toISOString()
-          : undefined,
-        endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : undefined,
+        startsAt: form.startsAt || undefined,
+        endsAt: form.endsAt || undefined,
         location: form.location || undefined,
         imageUrl: form.imageUrl || undefined,
       };
@@ -457,7 +453,7 @@ export default function AdminProjectsPage() {
                 <Label htmlFor="startsAt">Fecha inicio</Label>
                 <Input
                   id="startsAt"
-                  type="datetime-local"
+                  type="date"
                   value={form.startsAt}
                   onChange={(e) =>
                     setForm({ ...form, startsAt: e.target.value })
@@ -468,7 +464,7 @@ export default function AdminProjectsPage() {
                 <Label htmlFor="endsAt">Fecha fin</Label>
                 <Input
                   id="endsAt"
-                  type="datetime-local"
+                  type="date"
                   value={form.endsAt}
                   onChange={(e) => setForm({ ...form, endsAt: e.target.value })}
                 />

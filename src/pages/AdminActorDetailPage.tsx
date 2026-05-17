@@ -3,9 +3,34 @@ import { ArrowLeft } from "@phosphor-icons/react";
 import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActor } from "@/hooks/use-actors";
+import { PILLAR_LABELS } from "@/lib/project";
 import { cn } from "@/lib/utils";
+import type { ApplicationStatus } from "@/types/application";
+
+const STATUS_LABELS: Record<ApplicationStatus, string> = {
+  SUBMITTED: "Enviada",
+  UNDER_REVIEW: "En revisión",
+  REJECTED: "Rechazada",
+  NEEDS_INFO: "Requiere información",
+  APPROVED: "Aprobada",
+  REGISTERED_AS_ACTOR: "Registrado como actor",
+};
+
+const STATUS_VARIANT: Record<
+  ApplicationStatus,
+  "default" | "secondary" | "destructive" | "outline"
+> = {
+  SUBMITTED: "secondary",
+  UNDER_REVIEW: "secondary",
+  REJECTED: "destructive",
+  NEEDS_INFO: "outline",
+  APPROVED: "default",
+  REGISTERED_AS_ACTOR: "default",
+};
 
 export default function AdminActorDetailPage() {
   const { actorId: param } = useParams<{ actorId: string }>();
@@ -74,7 +99,7 @@ export default function AdminActorDetailPage() {
   }
 
   return (
-    <section className="mx-auto w-full max-w-lg space-y-8">
+    <section className="mx-auto w-full max-w-2xl space-y-8">
       <Button
         type="button"
         variant="ghost"
@@ -100,10 +125,41 @@ export default function AdminActorDetailPage() {
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">
-        Los datos se sincronizan con el listado de actores. Si en el futuro se
-        añaden más campos en la API, aparecerán aquí.
-      </p>
+      <div>
+        <h2 className="text-lg font-semibold">Proyectos vinculados</h2>
+        {actor.projects && actor.projects.length > 0 ? (
+          <div className="mt-4 space-y-3">
+            {actor.projects.map((project) => (
+              <Card key={project.projectId}>
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <CardTitle className="text-base">
+                      <Link
+                        to={`/admin/projects/${project.projectId}`}
+                        className="text-primary underline-offset-4 hover:underline"
+                      >
+                        {project.projectTitle}
+                      </Link>
+                    </CardTitle>
+                    <Badge variant="secondary">
+                      {PILLAR_LABELS[project.pillar]}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <Badge variant={STATUS_VARIANT[project.applicationStatus]}>
+                    {STATUS_LABELS[project.applicationStatus]}
+                  </Badge>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted-foreground">
+            Este actor no tiene proyectos vinculados.
+          </p>
+        )}
+      </div>
     </section>
   );
 }

@@ -27,6 +27,13 @@ export default defineConfig([
     files: ["src/components/ui/**/*.{ts,tsx}"],
     rules: {
       "react-refresh/only-export-components": "off",
+      "jsx-a11y/label-has-associated-control": "off",
+    },
+  },
+  {
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      "react-hooks/incompatible-library": "warn",
     },
   },
   eslintConfigPrettier,

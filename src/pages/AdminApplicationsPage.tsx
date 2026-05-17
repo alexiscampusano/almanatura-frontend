@@ -79,7 +79,9 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
         }}
       >
         <SelectTrigger className="h-10 w-full sm:w-[200px]">
-          <SelectValue placeholder="Siguiente estado" />
+          <SelectValue placeholder="Siguiente estado">
+            {target ? APPLICATION_STATUS_LABELS[target] : null}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           {options.map((s) => (
@@ -179,7 +181,12 @@ export default function AdminApplicationsPage() {
             }}
           >
             <SelectTrigger className="h-11">
-              <SelectValue placeholder="Todos" />
+              <SelectValue placeholder="Todos los proyectos">
+                {projectId === "all"
+                  ? null
+                  : (projects?.find((p) => String(p.id) === projectId)?.title ??
+                    null)}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos los proyectos</SelectItem>
@@ -200,7 +207,11 @@ export default function AdminApplicationsPage() {
             }}
           >
             <SelectTrigger className="h-11">
-              <SelectValue placeholder="Todos" />
+              <SelectValue placeholder="Todos los estados">
+                {status === "all"
+                  ? null
+                  : APPLICATION_STATUS_LABELS[status as ApplicationStatus]}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos los estados</SelectItem>

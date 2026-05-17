@@ -4,6 +4,7 @@ import {
   MapPin,
   SquaresFour,
   ArrowDown,
+  ArrowUp,
   MagnifyingGlass,
 } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
@@ -93,6 +94,7 @@ export function PublicHomePage() {
 
   const topFiltersRef = useRef<HTMLDivElement>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -108,6 +110,14 @@ export function PublicHomePage() {
     return () => {
       if (el) observer.unobserve(el);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -393,6 +403,20 @@ export function PublicHomePage() {
           })}
         </div>
       </div>
+
+      {/* Back to top button */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className={cn(
+          "fixed right-4 z-50 flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-all duration-300 hover:bg-primary/90 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+          showBackToTop
+            ? "bottom-20 opacity-100 md:bottom-8"
+            : "bottom-8 opacity-0 pointer-events-none",
+        )}
+        aria-label="Volver al inicio"
+      >
+        <ArrowUp size={24} weight="bold" />
+      </button>
     </section>
   );
 }

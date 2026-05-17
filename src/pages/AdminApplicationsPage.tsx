@@ -13,6 +13,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  AdminPage,
+  adminFilterGridClassName,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
 
 import {
   useAdminApplications,
@@ -153,17 +158,17 @@ export default function AdminApplicationsPage() {
 
   if (isError && !applications) {
     return (
-      <section className="mx-auto w-full max-w-6xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Solicitudes</h2>
-        <p className="mt-4 text-destructive">
+        <p className="text-destructive">
           No se pudieron cargar las solicitudes. ¿Tienes sesión iniciada?
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-6xl space-y-6">
+    <AdminPage>
       <div>
         <h2 className="text-2xl font-semibold">Solicitudes</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -171,8 +176,8 @@ export default function AdminApplicationsPage() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end">
-        <div className="space-y-2 sm:min-w-[200px]">
+      <div className={adminFilterGridClassName}>
+        <div className="space-y-2">
           <Label>Proyecto</Label>
           <Select
             value={projectId}
@@ -180,7 +185,7 @@ export default function AdminApplicationsPage() {
               if (v != null) setProjectId(v);
             }}
           >
-            <SelectTrigger className="h-11">
+            <SelectTrigger className="h-11 w-full">
               <SelectValue placeholder="Todos los proyectos">
                 {projectId === "all"
                   ? null
@@ -198,7 +203,7 @@ export default function AdminApplicationsPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-2 sm:min-w-[200px]">
+        <div className="space-y-2">
           <Label>Estado</Label>
           <Select
             value={status}
@@ -206,7 +211,7 @@ export default function AdminApplicationsPage() {
               if (v != null) setStatus(v);
             }}
           >
-            <SelectTrigger className="h-11">
+            <SelectTrigger className="h-11 w-full">
               <SelectValue placeholder="Todos los estados">
                 {status === "all"
                   ? null
@@ -223,125 +228,133 @@ export default function AdminApplicationsPage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-2 sm:min-w-[220px] flex-1">
+        <div className="space-y-2 sm:col-span-2 lg:col-span-1">
           <Label htmlFor="app-search">Buscar por nombre o correo</Label>
           <Input
             id="app-search"
             value={searchName}
             onChange={(e) => setSearchName(e.target.value)}
             placeholder="Nombre o email"
-            className="h-11"
+            className="h-11 w-full"
           />
         </div>
       </div>
 
-      {isLoading && (
-        <div className="space-y-2">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-14 animate-pulse rounded-lg bg-muted" />
-          ))}
-        </div>
-      )}
-
-      {!isLoading && filtered.length === 0 && (
-        <p className="py-8 text-center text-muted-foreground">
-          No hay solicitudes con estos filtros.
-        </p>
-      )}
-
-      {!isLoading && filtered.length > 0 && (
-        <>
-          <div className="hidden rounded-lg border md:block">
-            <div className="overflow-x-auto">
-              <table className="min-w-[900px] w-full text-sm">
-                <thead className="border-b bg-muted/50">
-                  <tr>
-                    <th className="px-3 py-3 text-left font-medium">
-                      Solicitante
-                    </th>
-                    <th className="px-3 py-3 text-left font-medium">
-                      Proyecto
-                    </th>
-                    <th className="px-3 py-3 text-left font-medium">Estado</th>
-                    <th className="px-3 py-3 text-left font-medium">DNI</th>
-                    <th className="px-3 py-3 text-left font-medium">Creada</th>
-                    <th className="px-3 py-3 text-left font-medium">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {filtered.map((app) => (
-                    <tr key={app.id} className="hover:bg-muted/30">
-                      <td className="px-3 py-3">
-                        <div className="font-medium">{app.fullName}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {app.email}
-                        </div>
-                        {app.phone && (
-                          <div className="text-xs text-muted-foreground">
-                            {app.phone}
-                          </div>
-                        )}
-                      </td>
-                      <td className="max-w-[180px] px-3 py-3 align-top">
-                        <span className="line-clamp-2">
-                          {projectTitleById.get(app.projectId) ??
-                            `#${app.projectId}`}
-                        </span>
-                      </td>
-                      <td className="px-3 py-3 align-top">
-                        <Badge variant={statusBadgeVariant(app.status)}>
-                          {APPLICATION_STATUS_LABELS[app.status]}
-                        </Badge>
-                      </td>
-                      <td className="px-3 py-3 align-top font-mono text-xs">
-                        {app.nationalId}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
-                        {formatDate(app.createdAt)}
-                      </td>
-                      <td className="px-3 py-3 align-top">
-                        <TransitionControls
-                          key={`${app.id}-${app.status}`}
-                          app={app}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className="space-y-3 md:hidden">
-            {filtered.map((app) => (
-              <Card key={app.id}>
-                <CardContent className="space-y-3 p-4 pt-4">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="font-medium">{app.fullName}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {app.email}
-                      </p>
-                    </div>
-                    <Badge variant={statusBadgeVariant(app.status)}>
-                      {APPLICATION_STATUS_LABELS[app.status]}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {projectTitleById.get(app.projectId) ??
-                      `Proyecto #${app.projectId}`}
-                  </p>
-                  <p className="font-mono text-xs">DNI: {app.nationalId}</p>
-                  <TransitionControls
-                    key={`${app.id}-${app.status}`}
-                    app={app}
-                  />
-                </CardContent>
-              </Card>
+      <div className={adminListRegionClassName}>
+        {isLoading && (
+          <div className="space-y-2">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="h-14 animate-pulse rounded-lg bg-muted" />
             ))}
           </div>
-        </>
-      )}
-    </section>
+        )}
+
+        {!isLoading && filtered.length === 0 && (
+          <p className="py-8 text-center text-muted-foreground">
+            No hay solicitudes con estos filtros.
+          </p>
+        )}
+
+        {!isLoading && filtered.length > 0 && (
+          <>
+            <div className="hidden rounded-lg border md:block">
+              <div className="overflow-x-auto">
+                <table className="min-w-[900px] w-full text-sm">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-3 py-3 text-left font-medium">
+                        Solicitante
+                      </th>
+                      <th className="px-3 py-3 text-left font-medium">
+                        Proyecto
+                      </th>
+                      <th className="px-3 py-3 text-left font-medium">
+                        Estado
+                      </th>
+                      <th className="px-3 py-3 text-left font-medium">DNI</th>
+                      <th className="px-3 py-3 text-left font-medium">
+                        Creada
+                      </th>
+                      <th className="px-3 py-3 text-left font-medium">
+                        Acción
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y">
+                    {filtered.map((app) => (
+                      <tr key={app.id} className="hover:bg-muted/30">
+                        <td className="px-3 py-3">
+                          <div className="font-medium">{app.fullName}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {app.email}
+                          </div>
+                          {app.phone && (
+                            <div className="text-xs text-muted-foreground">
+                              {app.phone}
+                            </div>
+                          )}
+                        </td>
+                        <td className="max-w-[180px] px-3 py-3 align-top">
+                          <span className="line-clamp-2">
+                            {projectTitleById.get(app.projectId) ??
+                              `#${app.projectId}`}
+                          </span>
+                        </td>
+                        <td className="px-3 py-3 align-top">
+                          <Badge variant={statusBadgeVariant(app.status)}>
+                            {APPLICATION_STATUS_LABELS[app.status]}
+                          </Badge>
+                        </td>
+                        <td className="px-3 py-3 align-top font-mono text-xs">
+                          {app.nationalId}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
+                          {formatDate(app.createdAt)}
+                        </td>
+                        <td className="px-3 py-3 align-top">
+                          <TransitionControls
+                            key={`${app.id}-${app.status}`}
+                            app={app}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="space-y-3 md:hidden">
+              {filtered.map((app) => (
+                <Card key={app.id}>
+                  <CardContent className="space-y-3 p-4 pt-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-medium">{app.fullName}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {app.email}
+                        </p>
+                      </div>
+                      <Badge variant={statusBadgeVariant(app.status)}>
+                        {APPLICATION_STATUS_LABELS[app.status]}
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {projectTitleById.get(app.projectId) ??
+                        `Proyecto #${app.projectId}`}
+                    </p>
+                    <p className="font-mono text-xs">DNI: {app.nationalId}</p>
+                    <TransitionControls
+                      key={`${app.id}-${app.status}`}
+                      app={app}
+                    />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </AdminPage>
   );
 }

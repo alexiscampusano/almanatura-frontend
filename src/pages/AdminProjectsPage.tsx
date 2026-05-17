@@ -40,6 +40,10 @@ import {
 import { cn } from "@/lib/utils";
 import { formatDateShort, toLocalDatetime } from "@/lib/datetime";
 import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
+import {
+  AdminPage,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
 import type {
   AdminProjectResponse,
   CreateProjectPayload,
@@ -179,30 +183,30 @@ export default function AdminProjectsPage() {
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-5xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-        <div className="mt-6 space-y-3">
+        <div className={`${adminListRegionClassName} mt-6 space-y-3`}>
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />
           ))}
         </div>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-5xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
         <p className="mt-4 text-destructive">
           No se pudieron cargar los proyectos. Inténtalo nuevamente.
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-5xl">
+    <AdminPage>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
@@ -219,138 +223,146 @@ export default function AdminProjectsPage() {
         </Button>
       </div>
 
-      {projects && projects.length === 0 && (
-        <p className="mt-8 text-center text-muted-foreground">
-          Aún no hay proyectos creados.
-        </p>
-      )}
+      <div className={adminListRegionClassName}>
+        {projects && projects.length === 0 && (
+          <p className="mt-8 text-center text-muted-foreground">
+            Aún no hay proyectos creados.
+          </p>
+        )}
 
-      {projects && projects.length > 0 && (
-        <>
-          {/* Desktop table */}
-          <div className="mt-6 hidden rounded-lg border md:block">
-            <div className="overflow-x-auto">
-              <table className="min-w-[640px] w-full text-sm">
-                <thead className="border-b bg-muted/50">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-medium">Título</th>
-                    <th className="px-4 py-3 text-left font-medium">Pilar</th>
-                    <th className="px-4 py-3 text-left font-medium">Estado</th>
-                    <th className="px-4 py-3 text-left font-medium">Inicio</th>
-                    <th className="px-4 py-3 text-right font-medium">
-                      Acciones
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {projects.map((project) => (
-                    <tr key={project.id} className="hover:bg-muted/30">
-                      <td className="max-w-[200px] truncate px-4 py-3 font-medium">
-                        {project.title}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {PILLAR_LABELS[project.pillar]}
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge variant={STATUS_VARIANT[project.status]}>
-                          {STATUS_LABELS[project.status]}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {formatDateShort(project.startsAt)}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex justify-end gap-1">
-                          <Link
-                            to={`/admin/projects/${project.id}`}
-                            className={cn(
-                              buttonVariants({
-                                variant: "ghost",
-                                size: "icon",
-                              }),
-                            )}
-                            aria-label="Ver detalle"
-                          >
-                            <Eye size={18} />
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openEdit(project)}
-                            aria-label="Editar proyecto"
-                          >
-                            <PencilSimple size={18} />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => setDeleteTarget(project)}
-                            aria-label="Eliminar proyecto"
-                          >
-                            <Trash size={18} />
-                          </Button>
-                        </div>
-                      </td>
+        {projects && projects.length > 0 && (
+          <>
+            {/* Desktop table */}
+            <div className="mt-6 hidden rounded-lg border md:block">
+              <div className="overflow-x-auto">
+                <table className="min-w-[640px] w-full text-sm">
+                  <thead className="border-b bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Título
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">Pilar</th>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Estado
+                      </th>
+                      <th className="px-4 py-3 text-left font-medium">
+                        Inicio
+                      </th>
+                      <th className="px-4 py-3 text-right font-medium">
+                        Acciones
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y">
+                    {projects.map((project) => (
+                      <tr key={project.id} className="hover:bg-muted/30">
+                        <td className="max-w-[200px] truncate px-4 py-3 font-medium">
+                          {project.title}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {PILLAR_LABELS[project.pillar]}
+                        </td>
+                        <td className="px-4 py-3">
+                          <Badge variant={STATUS_VARIANT[project.status]}>
+                            {STATUS_LABELS[project.status]}
+                          </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {formatDateShort(project.startsAt)}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <div className="flex justify-end gap-1">
+                            <Link
+                              to={`/admin/projects/${project.id}`}
+                              className={cn(
+                                buttonVariants({
+                                  variant: "ghost",
+                                  size: "icon",
+                                }),
+                              )}
+                              aria-label="Ver detalle"
+                            >
+                              <Eye size={18} />
+                            </Link>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => openEdit(project)}
+                              aria-label="Editar proyecto"
+                            >
+                              <PencilSimple size={18} />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => setDeleteTarget(project)}
+                              aria-label="Eliminar proyecto"
+                            >
+                              <Trash size={18} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
 
-          {/* Mobile cards */}
-          <div className="mt-6 space-y-3 md:hidden">
-            {projects.map((project) => (
-              <div
-                key={project.id}
-                className="flex items-center justify-between gap-3 rounded-lg border p-4"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate font-medium">{project.title}</p>
-                  <div className="mt-1 flex items-center gap-2">
-                    <Badge
-                      variant={STATUS_VARIANT[project.status]}
-                      className="text-xs"
+            {/* Mobile cards */}
+            <div className="mt-6 space-y-3 md:hidden">
+              {projects.map((project) => (
+                <div
+                  key={project.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border p-4"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium">{project.title}</p>
+                    <div className="mt-1 flex items-center gap-2">
+                      <Badge
+                        variant={STATUS_VARIANT[project.status]}
+                        className="text-xs"
+                      >
+                        {STATUS_LABELS[project.status]}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {PILLAR_LABELS[project.pillar]}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex shrink-0 gap-1">
+                    <Link
+                      to={`/admin/projects/${project.id}`}
+                      className={cn(
+                        buttonVariants({ variant: "ghost", size: "icon" }),
+                      )}
+                      aria-label="Ver detalle"
                     >
-                      {STATUS_LABELS[project.status]}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {PILLAR_LABELS[project.pillar]}
-                    </span>
+                      <Eye size={18} />
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => openEdit(project)}
+                      aria-label="Editar proyecto"
+                    >
+                      <PencilSimple size={18} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setDeleteTarget(project)}
+                      aria-label="Eliminar proyecto"
+                    >
+                      <Trash size={18} />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex shrink-0 gap-1">
-                  <Link
-                    to={`/admin/projects/${project.id}`}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                    )}
-                    aria-label="Ver detalle"
-                  >
-                    <Eye size={18} />
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => openEdit(project)}
-                    aria-label="Editar proyecto"
-                  >
-                    <PencilSimple size={18} />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setDeleteTarget(project)}
-                    aria-label="Eliminar proyecto"
-                  >
-                    <Trash size={18} />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+              ))}
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -533,6 +545,6 @@ export default function AdminProjectsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </section>
+    </AdminPage>
   );
 }

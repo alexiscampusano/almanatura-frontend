@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { AdminPage, AdminPageNarrow } from "@/components/admin/admin-page";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +51,7 @@ export default function AdminNotificationsPage() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-lg space-y-6">
+    <AdminPage>
       <div>
         <h2 className="text-2xl font-semibold">Registrar notificación</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -60,62 +61,75 @@ export default function AdminNotificationsPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-        {errors.root && (
-          <p className="text-sm text-destructive" role="alert">
-            {errors.root.message}
-          </p>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="notif-recipient">
-            Destinatario (correo o referencia) *
-          </Label>
-          <Input
-            id="notif-recipient"
-            type="email"
-            autoComplete="email"
-            placeholder="actor@ejemplo.org"
-            disabled={isSubmitting}
-            className="h-11"
-            {...register("recipientHint")}
-          />
-          {errors.recipientHint && (
-            <p className="text-sm text-destructive">
-              {errors.recipientHint.message}
+      <AdminPageNarrow>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          noValidate
+        >
+          {errors.root && (
+            <p className="text-sm text-destructive" role="alert">
+              {errors.root.message}
             </p>
           )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="notif-subject">Asunto</Label>
-          <Input
-            id="notif-subject"
-            maxLength={500}
-            disabled={isSubmitting}
-            className="h-11"
-            {...register("subject")}
-          />
-          {errors.subject && (
-            <p className="text-sm text-destructive">{errors.subject.message}</p>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="notif-body">Cuerpo del mensaje</Label>
-          <Textarea
-            id="notif-body"
-            rows={6}
-            maxLength={10_000}
-            disabled={isSubmitting}
-            {...register("body")}
-          />
-          {errors.body && (
-            <p className="text-sm text-destructive">{errors.body.message}</p>
-          )}
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="notif-recipient">
+              Destinatario (correo o referencia) *
+            </Label>
+            <Input
+              id="notif-recipient"
+              type="email"
+              autoComplete="email"
+              placeholder="actor@ejemplo.org"
+              disabled={isSubmitting}
+              className="h-11 w-full"
+              {...register("recipientHint")}
+            />
+            {errors.recipientHint && (
+              <p className="text-sm text-destructive">
+                {errors.recipientHint.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="notif-subject">Asunto</Label>
+            <Input
+              id="notif-subject"
+              maxLength={500}
+              disabled={isSubmitting}
+              className="h-11 w-full"
+              {...register("subject")}
+            />
+            {errors.subject && (
+              <p className="text-sm text-destructive">
+                {errors.subject.message}
+              </p>
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="notif-body">Cuerpo del mensaje</Label>
+            <Textarea
+              id="notif-body"
+              rows={6}
+              maxLength={10_000}
+              disabled={isSubmitting}
+              className="w-full"
+              {...register("body")}
+            />
+            {errors.body && (
+              <p className="text-sm text-destructive">{errors.body.message}</p>
+            )}
+          </div>
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Guardando..." : "Registrar notificación"}
-        </Button>
-      </form>
-    </section>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full sm:w-auto"
+          >
+            {isSubmitting ? "Guardando..." : "Registrar notificación"}
+          </Button>
+        </form>
+      </AdminPageNarrow>
+    </AdminPage>
   );
 }

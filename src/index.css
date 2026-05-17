@@ -141,6 +141,7 @@
   html {
     @apply font-sans;
     font-size: 112.5%; /* 18px base — better readability for elderly */
+    scrollbar-gutter: stable;
   }
   @media (min-width: 768px) {
     html {

@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  AdminPage,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
 import { useActors } from "@/hooks/use-actors";
 import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { ALL_PILLARS, PILLAR_LABELS } from "@/lib/project";
@@ -28,9 +32,11 @@ export default function AdminActorsPage() {
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-4xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Actores</h2>
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          className={`${adminListRegionClassName} mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3`}
+        >
           {Array.from({ length: 6 }).map((_, i) => (
             <Card key={i} className="animate-pulse">
               <CardHeader>
@@ -45,23 +51,23 @@ export default function AdminActorsPage() {
             </Card>
           ))}
         </div>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-4xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Actores</h2>
         <p className="mt-4 text-sm text-destructive">
           No se pudo cargar el directorio de actores. Inténtalo nuevamente.
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-4xl">
+    <AdminPage>
       <h2 className="text-2xl font-semibold">Actores</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Directorio de actores vinculados a los proyectos.
@@ -72,10 +78,10 @@ export default function AdminActorsPage() {
           placeholder="Buscar por nombre..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
+          className="h-11 w-full max-w-md"
         />
 
-        <div className="-mx-5 flex gap-2 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:gap-3 md:overflow-visible md:px-0 md:pb-0">
+        <div className="flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible md:pb-0">
           <Button
             variant={selectedPillar === undefined ? "default" : "outline"}
             className="h-12 shrink-0 px-5 text-sm font-medium md:h-11"
@@ -100,41 +106,43 @@ export default function AdminActorsPage() {
         {filtered?.length ?? 0} actores encontrados
       </p>
 
-      {filtered && filtered.length > 0 ? (
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((actor) => (
-            <Link
-              key={actor.id}
-              to={`/admin/actors/${actor.id}`}
-              className="block transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-            >
-              <Card className="h-full">
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
-                    >
-                      {getInitials(actor.fullName)}
-                    </span>
-                    <div className="min-w-0">
-                      <CardTitle className="truncate">
-                        {actor.fullName}
-                      </CardTitle>
-                      <CardContent className="p-0 text-xs text-muted-foreground">
-                        {actor.region}
-                      </CardContent>
+      <div className={adminListRegionClassName}>
+        {filtered && filtered.length > 0 ? (
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((actor) => (
+              <Link
+                key={actor.id}
+                to={`/admin/actors/${actor.id}`}
+                className="block transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              >
+                <Card className="h-full">
+                  <CardHeader>
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
+                      >
+                        {getInitials(actor.fullName)}
+                      </span>
+                      <div className="min-w-0">
+                        <CardTitle className="truncate">
+                          {actor.fullName}
+                        </CardTitle>
+                        <CardContent className="p-0 text-xs text-muted-foreground">
+                          {actor.region}
+                        </CardContent>
+                      </div>
                     </div>
-                  </div>
-                </CardHeader>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-6 text-center text-sm text-muted-foreground">
-          No se encontraron actores.
-        </p>
-      )}
-    </section>
+                  </CardHeader>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            No se encontraron actores.
+          </p>
+        )}
+      </div>
+    </AdminPage>
   );
 }

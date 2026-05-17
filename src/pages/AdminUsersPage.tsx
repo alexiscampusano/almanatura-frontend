@@ -22,6 +22,10 @@ import { getErrorMessage } from "@/lib/error-handler";
 import { createUserSchema, type CreateUserSchema } from "@/lib/schemas";
 import { useAuthStore } from "@/stores/auth.store";
 import type { InternalRole } from "@/types/user";
+import {
+  AdminPage,
+  adminListRegionClassName,
+} from "@/components/admin/admin-page";
 
 const ROLE_LABELS: Record<InternalRole, string> = {
   SUPER_USER: "Super usuario",
@@ -75,17 +79,17 @@ export default function AdminUsersPage() {
 
   if (isError) {
     return (
-      <section className="mx-auto w-full max-w-4xl">
+      <AdminPage>
         <h2 className="text-2xl font-semibold">Gestión de usuarios</h2>
         <p className="mt-4 text-destructive">
           No se pudieron cargar los usuarios internos.
         </p>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-4xl space-y-8">
+    <AdminPage className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold">Gestión de usuarios</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -163,8 +167,10 @@ export default function AdminUsersPage() {
                 }
                 disabled={isSubmitting}
               >
-                <SelectTrigger className="h-11">
-                  <SelectValue />
+                <SelectTrigger className="h-11 w-full">
+                  <SelectValue placeholder="Seleccionar rol">
+                    {ROLE_LABELS[selectedRole]}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="EVENT_MANAGER">
@@ -202,7 +208,7 @@ export default function AdminUsersPage() {
         </p>
       )}
 
-      <div>
+      <div className={adminListRegionClassName}>
         <h3 className="mb-3 text-lg font-medium">Usuarios registrados</h3>
         {isLoading && (
           <div className="space-y-2">
@@ -265,6 +271,6 @@ export default function AdminUsersPage() {
           </>
         )}
       </div>
-    </section>
+    </AdminPage>
   );
 }

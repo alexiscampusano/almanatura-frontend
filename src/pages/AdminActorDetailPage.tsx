@@ -10,6 +10,7 @@ import { useActor } from "@/hooks/use-actors";
 import { PILLAR_LABELS } from "@/lib/project";
 import { cn } from "@/lib/utils";
 import type { ApplicationStatus } from "@/types/application";
+import { AdminPage } from "@/components/admin/admin-page";
 
 const STATUS_LABELS: Record<ApplicationStatus, string> = {
   SUBMITTED: "Enviada",
@@ -44,7 +45,7 @@ export default function AdminActorDetailPage() {
 
   if (!valid) {
     return (
-      <section className="mx-auto w-full max-w-lg">
+      <AdminPage>
         <p className="text-destructive">Identificador no válido.</p>
         <Link
           to="/admin/actors"
@@ -55,22 +56,22 @@ export default function AdminActorDetailPage() {
         >
           Volver al directorio
         </Link>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-lg">
+      <AdminPage>
         <div className="h-10 w-64 animate-pulse rounded bg-muted" />
         <div className="mt-8 h-32 animate-pulse rounded-lg bg-muted" />
-      </section>
+      </AdminPage>
     );
   }
 
   if (notFound || (isError && !actor)) {
     return (
-      <section className="mx-auto w-full max-w-lg space-y-4">
+      <AdminPage className="space-y-4">
         <h1 className="text-2xl font-semibold">Actor no encontrado</h1>
         <p className="text-muted-foreground">
           No existe o no tienes permiso para verlo.
@@ -81,25 +82,25 @@ export default function AdminActorDetailPage() {
         >
           Volver al directorio
         </Link>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError || !actor) {
     return (
-      <section className="mx-auto w-full max-w-lg">
+      <AdminPage>
         <p className="text-destructive">
           No se pudo cargar el actor. Inténtalo nuevamente.
         </p>
         <Button variant="outline" className="mt-4" onClick={() => navigate(0)}>
           Reintentar
         </Button>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-2xl space-y-8">
+    <AdminPage className="space-y-8">
       <Button
         type="button"
         variant="ghost"
@@ -160,6 +161,6 @@ export default function AdminActorDetailPage() {
           </p>
         )}
       </div>
-    </section>
+    </AdminPage>
   );
 }

@@ -9,6 +9,7 @@ import { useAdminProject } from "@/hooks/use-admin-project";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/datetime";
 import { PILLAR_LABELS, STATUS_LABELS, STATUS_VARIANT } from "@/lib/project";
+import { AdminPage } from "@/components/admin/admin-page";
 
 export default function AdminProjectDetailPage() {
   const { projectId: param } = useParams<{ projectId: string }>();
@@ -34,7 +35,7 @@ export default function AdminProjectDetailPage() {
 
   if (!valid) {
     return (
-      <section className="mx-auto w-full max-w-3xl">
+      <AdminPage>
         <p className="text-destructive">Identificador no válido.</p>
         <Link
           to="/admin/projects"
@@ -45,22 +46,22 @@ export default function AdminProjectDetailPage() {
         >
           Volver al listado
         </Link>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-3xl">
+      <AdminPage>
         <div className="h-8 w-48 animate-pulse rounded bg-muted" />
         <div className="mt-6 h-64 animate-pulse rounded-lg bg-muted" />
-      </section>
+      </AdminPage>
     );
   }
 
   if (notFound || (isError && !project)) {
     return (
-      <section className="mx-auto w-full max-w-3xl space-y-4">
+      <AdminPage className="space-y-4">
         <h1 className="text-2xl font-semibold">Proyecto no encontrado</h1>
         <p className="text-muted-foreground">
           No existe o no tienes permiso para verlo.
@@ -71,25 +72,25 @@ export default function AdminProjectDetailPage() {
         >
           Volver al listado
         </Link>
-      </section>
+      </AdminPage>
     );
   }
 
   if (isError || !project) {
     return (
-      <section className="mx-auto w-full max-w-3xl">
+      <AdminPage>
         <p className="text-destructive">
           No se pudo cargar el proyecto. Inténtalo nuevamente.
         </p>
         <Button variant="outline" className="mt-4" onClick={() => navigate(0)}>
           Reintentar
         </Button>
-      </section>
+      </AdminPage>
     );
   }
 
   return (
-    <section className="mx-auto w-full max-w-3xl space-y-8">
+    <AdminPage className="space-y-8">
       <div className="flex flex-wrap items-center gap-3">
         <Button
           type="button"
@@ -159,6 +160,6 @@ export default function AdminProjectDetailPage() {
       </div>
 
       <ProjectImpactSection projectId={project.id} />
-    </section>
+    </AdminPage>
   );
 }

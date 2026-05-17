@@ -85,7 +85,7 @@ export function AdminLayout() {
       </header>
 
       <div className="mx-auto flex w-full max-w-6xl flex-col md:flex-row">
-        <aside className="border-b border-border md:w-64 md:border-b-0 md:border-r">
+        <aside className="shrink-0 border-b border-border md:w-64 md:border-b-0 md:border-r">
           <nav
             aria-label="Navegación del panel admin"
             className="flex gap-2 overflow-x-auto px-3 py-3 md:grid md:gap-1 md:px-4 md:py-5"
@@ -109,7 +109,7 @@ export function AdminLayout() {
           </nav>
         </aside>
 
-        <main className="flex-1 px-4 py-6 md:px-6">
+        <main className="min-w-0 w-full flex-1 overflow-x-clip px-4 py-6 md:px-6">
           <Outlet />
         </main>
       </div>

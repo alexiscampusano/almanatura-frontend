@@ -2,6 +2,7 @@ import { SignOut } from "@phosphor-icons/react";
 import { getInitials } from "@/lib/avatar";
 import { useNavigate } from "react-router-dom";
 
+import { AdminPage, AdminPageNarrow } from "@/components/admin/admin-page";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,15 +25,15 @@ export default function AdminMePage() {
 
   if (!user) {
     return (
-      <div className="max-w-lg">
+      <AdminPage>
         <p className="text-sm text-muted-foreground">Cargando perfil…</p>
-      </div>
+      </AdminPage>
     );
   }
 
   return (
-    <div className="mx-auto max-w-lg">
-      <div className="mb-6">
+    <AdminPage>
+      <div>
         <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
           Mi cuenta
         </h1>
@@ -41,39 +42,41 @@ export default function AdminMePage() {
         </p>
       </div>
 
-      <Card>
-        <CardHeader className="border-b border-border pb-4">
-          <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
-            <span
-              className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground"
-              aria-hidden
-            >
-              {getInitials(user.name)}
-            </span>
-            <div className="min-w-0 flex-1 space-y-1">
-              <CardTitle className="text-base font-semibold">
-                {user.name}
-              </CardTitle>
-              <CardDescription className="break-all">
-                {user.email}
-              </CardDescription>
+      <AdminPageNarrow>
+        <Card>
+          <CardHeader className="border-b border-border pb-4">
+            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+              <span
+                className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary text-lg font-semibold text-primary-foreground"
+                aria-hidden
+              >
+                {getInitials(user.name)}
+              </span>
+              <div className="min-w-0 flex-1 space-y-1">
+                <CardTitle className="text-base font-semibold">
+                  {user.name}
+                </CardTitle>
+                <CardDescription className="break-all">
+                  {user.email}
+                </CardDescription>
+              </div>
             </div>
-          </div>
-        </CardHeader>
+          </CardHeader>
 
-        <CardFooter className="flex-col gap-2 sm:flex-row sm:justify-stretch">
-          <Button
-            type="button"
-            variant="destructive"
-            size="lg"
-            className="h-10 w-full gap-2 sm:justify-center"
-            onClick={handleLogout}
-          >
-            <SignOut size={18} weight="bold" aria-hidden />
-            Cerrar sesión
-          </Button>
-        </CardFooter>
-      </Card>
-    </div>
+          <CardFooter className="flex-col gap-2 sm:flex-row sm:justify-stretch">
+            <Button
+              type="button"
+              variant="destructive"
+              size="lg"
+              className="h-10 w-full gap-2 sm:justify-center"
+              onClick={handleLogout}
+            >
+              <SignOut size={18} weight="bold" aria-hidden />
+              Cerrar sesión
+            </Button>
+          </CardFooter>
+        </Card>
+      </AdminPageNarrow>
+    </AdminPage>
   );
 }

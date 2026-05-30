@@ -44,6 +44,17 @@ npm run dev
 
 The app runs at `http://localhost:5173`.
 
+## Accessibility policy (font scaling)
+
+- Root font-size is controlled by CSS (`html { font-size: 100% }`).
+- The app exposes a limited user font-scale range (0.9–1.3) to improve readability without breaking layout. The persisted preference key is `alma-natura-accessibility` in `localStorage`.
+- A visible "Reset accessibility" control exists in the admin header to restore defaults and clear the saved preference.
+
+## Developer: MCP DevTools (DEV)
+
+- The project uses external MCP DevTools for inspecting Model Context Protocol data during development. Do not add in-app dev overlays for MCP data. Install and use the MCP DevTools extension or webview when needed.
+- Keep MCP DevTools usage scoped to local/dev environments only; do not reference or bundle MCP helpers into production code.
+
 ### Environment variables
 
 - `VITE_API_BASE_URL`: backend base URL used by the frontend API client.
@@ -187,10 +198,9 @@ almanatura-frontend/
 ### App bootstrap
 
 - `src/main.tsx`: React entry point, mounts `App` inside `StrictMode`.
-- `src/App.tsx`: application shell wiring:
-  - `QueryClientProvider` for server-state operations.
-  - global `RouterProvider`.
-  - font-size synchronization from accessibility store to root `html`.
+  - `src/App.tsx`: application shell wiring:
+    - `QueryClientProvider` for server-state operations.
+    - global `RouterProvider`.
 - `src/index.css`: global styles, Tailwind imports, design tokens, and brand typography setup.
 
 ### Routing

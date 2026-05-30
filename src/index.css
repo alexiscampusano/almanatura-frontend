@@ -81,6 +81,14 @@
   --sidebar-accent-foreground: #38332e;
   --sidebar-border: #d7d2cb;
   --sidebar-ring: #8f0d57;
+  /* Design tokens for component sizing (mobile-first) */
+  --size-button-default: 2.75rem; /* ~h-11 */
+  --size-button-sm: 2rem; /* ~h-8 */
+  --size-button-lg: 3rem; /* ~h-12 */
+  --size-input-default: 2.75rem; /* ~h-11 */
+  --size-input-sm: 2rem; /* ~h-8 */
+  --text-size-sm: 0.875rem; /* 14px */
+  --size-avatar: 2.5rem; /* default avatar size */
 }
 
 .dark {
@@ -153,14 +161,10 @@
   }
   html {
     @apply font-sans;
-    font-size: 112.5%; /* 18px base — better readability for elderly */
+    font-size: 100%;
     scrollbar-gutter: stable;
   }
-  @media (min-width: 768px) {
-    html {
-      font-size: 100%;
-    }
-  }
+  /* Responsive scaling can be tuned with tokens; keep root at 100% for now. */
   button,
   a {
     @apply touch-manipulation;

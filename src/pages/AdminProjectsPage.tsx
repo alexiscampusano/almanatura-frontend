@@ -308,49 +308,51 @@ export default function AdminProjectsPage() {
             {/* Mobile cards */}
             <div className="mt-6 space-y-3 md:hidden">
               {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border p-4"
-                >
-                  <div className="min-w-0 flex-1">
+                <div key={project.id} className="rounded-lg border p-4">
+                  <div className="min-w-0">
                     <p className="truncate font-medium">{project.title}</p>
-                    <div className="mt-1 flex items-center gap-2">
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {formatDateShort(project.startsAt)} ·{" "}
+                      {PILLAR_LABELS[project.pillar]}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
                       <Badge
                         variant={STATUS_VARIANT[project.status]}
                         className="text-xs"
                       >
                         {STATUS_LABELS[project.status]}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {PILLAR_LABELS[project.pillar]}
-                      </span>
                     </div>
                   </div>
-                  <div className="flex shrink-0 gap-1">
+                  <div className="mt-4 grid grid-cols-3 gap-2">
                     <Link
                       to={`/admin/projects/${project.id}`}
                       className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        buttonVariants({ variant: "outline", size: "default" }),
+                        "h-11 gap-2 px-3 text-sm",
                       )}
                       aria-label="Ver detalle"
                     >
                       <Eye size={18} />
+                      Ver
                     </Link>
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant="outline"
+                      className="h-11 gap-2 px-3 text-sm"
                       onClick={() => openEdit(project)}
                       aria-label="Editar proyecto"
                     >
                       <PencilSimple size={18} />
+                      Editar
                     </Button>
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant="outline"
+                      className="h-11 gap-2 px-3 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => setDeleteTarget(project)}
                       aria-label="Eliminar proyecto"
                     >
                       <Trash size={18} />
+                      Elim.
                     </Button>
                   </div>
                 </div>

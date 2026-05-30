@@ -83,7 +83,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
           if (v != null) setTarget(v as ApplicationStatus);
         }}
       >
-        <SelectTrigger className="h-10 w-full sm:w-[200px]">
+        <SelectTrigger className="h-11 w-full sm:w-[200px]">
           <SelectValue placeholder="Siguiente estado">
             {target ? APPLICATION_STATUS_LABELS[target] : null}
           </SelectValue>
@@ -98,7 +98,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
       </Select>
       <Button
         size="sm"
-        className="h-10 gap-2"
+        className="h-11 gap-2"
         disabled={!target || patchMutation.isPending}
         onClick={() => {
           if (!target) return;

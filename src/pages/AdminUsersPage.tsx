@@ -252,17 +252,20 @@ export default function AdminUsersPage() {
                 </table>
               </div>
             </div>
-            <ul className="space-y-2 md:hidden">
+            <ul className="space-y-3 md:hidden">
               {users.map((u) => (
                 <li
                   key={u.id}
-                  className="flex flex-col gap-1 rounded-lg border p-3"
+                  className="flex flex-col gap-2 rounded-lg border p-4"
                 >
                   <span className="font-medium">{u.name}</span>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-sm text-muted-foreground break-words">
                     {u.email}
                   </span>
-                  <Badge className="w-fit" variant={roleBadgeVariant(u.role)}>
+                  <Badge
+                    className="w-fit mt-2"
+                    variant={roleBadgeVariant(u.role)}
+                  >
                     {ROLE_LABELS[u.role]}
                   </Badge>
                 </li>

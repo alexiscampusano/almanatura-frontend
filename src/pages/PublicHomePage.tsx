@@ -95,6 +95,7 @@ export function PublicHomePage() {
   const topFiltersRef = useRef<HTMLDivElement>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [mobileFiltersDimmed, setMobileFiltersDimmed] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -114,9 +115,12 @@ export function PublicHomePage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
+      const scrollY = window.scrollY;
+      setShowBackToTop(scrollY > 300);
+      setMobileFiltersDimmed(scrollY > 120);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -375,7 +379,14 @@ export function PublicHomePage() {
       </div>
 
       {/* Mobile floating filter bar (sticky bottom, stops before footer) */}
-      <div className="sticky bottom-0 z-40 -mx-5 mt-8 border-t border-border bg-background/95 px-5 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] backdrop-blur-md md:hidden">
+      <div
+        className={cn(
+          "sticky bottom-0 z-40 -mx-5 mt-8 border-t px-5 py-4 backdrop-blur-xl transition-all duration-300 md:hidden",
+          mobileFiltersDimmed
+            ? "border-border/50 bg-background/78 shadow-[0_-2px_10px_rgba(0,0,0,0.06)]"
+            : "border-border bg-background/95 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+        )}
+      >
         <p className="mb-3 text-xs font-semibold text-muted-foreground">
           Filtrar por tema:
         </p>

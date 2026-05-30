@@ -48,7 +48,7 @@ export default function AdminActorsPage() {
           placeholder="Nombre del actor..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-11 w-full"
+          className="w-full"
         />
       </div>
       <div className="space-y-2">
@@ -56,7 +56,7 @@ export default function AdminActorsPage() {
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant={selectedPillar === undefined ? "default" : "outline"}
-            className="h-11 w-full text-sm font-medium"
+            className="w-full"
             onClick={() => setSelectedPillar(undefined)}
           >
             Todos
@@ -65,7 +65,7 @@ export default function AdminActorsPage() {
             <Button
               key={pillar}
               variant={selectedPillar === pillar ? "default" : "outline"}
-              className="h-11 w-full text-sm font-medium"
+              className="w-full"
               onClick={() => setSelectedPillar(pillar)}
             >
               {PILLAR_LABELS[pillar]}
@@ -128,13 +128,13 @@ export default function AdminActorsPage() {
             placeholder="Nombre del actor..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-11 w-full"
+            className="w-full"
           />
         </div>
         <div className="flex flex-wrap gap-2">
           <Button
             variant={selectedPillar === undefined ? "default" : "outline"}
-            className="h-11 shrink-0 px-5 text-sm font-medium"
+            className="shrink-0 px-5"
             onClick={() => setSelectedPillar(undefined)}
           >
             Todos
@@ -143,7 +143,7 @@ export default function AdminActorsPage() {
             <Button
               key={pillar}
               variant={selectedPillar === pillar ? "default" : "outline"}
-              className="h-11 shrink-0 px-5 text-sm font-medium"
+              className="shrink-0 px-5"
               onClick={() => setSelectedPillar(pillar)}
             >
               {PILLAR_LABELS[pillar]}
@@ -170,11 +170,11 @@ export default function AdminActorsPage() {
                 to={`/admin/actors/${actor.id}`}
                 className="block transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
               >
-                <Card className="h-full">
+                <Card className="h-full p-4">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <span
-                        className={`inline-flex size-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
+                        className={`inline-flex h-[var(--size-avatar)] w-[var(--size-avatar)] shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ${getAvatarColor(actor.fullName)}`}
                       >
                         {getInitials(actor.fullName)}
                       </span>

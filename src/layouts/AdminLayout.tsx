@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
-import TokenDevTools from "@/components/dev/TokenDevTools";
 import McpDevtools from "@/components/dev/McpDevtools";
 
 function roleLabel(role: string): string {
@@ -168,7 +167,6 @@ export function AdminLayout() {
 
         <main className="min-w-0 w-full flex-1 overflow-x-clip px-4 py-6 md:px-6">
           <Outlet />
-          {import.meta.env.DEV ? <TokenDevTools /> : null}
           {import.meta.env.DEV ? <McpDevtools /> : null}
         </main>
       </div>

@@ -1,5 +1,3 @@
-import * as React from "react";
-
 export default function McpDevtools() {
   if (!import.meta.env.DEV) return null;
 

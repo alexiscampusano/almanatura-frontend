@@ -1,5 +1,4 @@
 import { chromium } from 'playwright';
-import * as axe from 'axe-core';
 
 const TARGET = process.env.TARGET_URL || 'http://localhost:5173';
 
@@ -9,8 +8,8 @@ async function run() {
   console.log('Visiting', TARGET);
   await page.goto(TARGET, { waitUntil: 'load', timeout: 60000 });
 
-  // Inject axe-core into the page
-  await page.addScriptTag({ content: axe.source });
+  // Inject axe-core from CDN into the page
+  await page.addScriptTag({ url: 'https://cdn.jsdelivr.net/npm/axe-core@4.11.4/axe.min.js' });
 
   // Run axe in page context
   const results = await page.evaluate(async () => {

@@ -187,10 +187,9 @@ almanatura-frontend/
 ### App bootstrap
 
 - `src/main.tsx`: React entry point, mounts `App` inside `StrictMode`.
-- `src/App.tsx`: application shell wiring:
-  - `QueryClientProvider` for server-state operations.
-  - global `RouterProvider`.
-  - font-size synchronization from accessibility store to root `html`.
+  - `src/App.tsx`: application shell wiring:
+    - `QueryClientProvider` for server-state operations.
+    - global `RouterProvider`.
 - `src/index.css`: global styles, Tailwind imports, design tokens, and brand typography setup.
 
 ### Routing

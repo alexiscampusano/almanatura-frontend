@@ -206,7 +206,7 @@ export default function AdminProjectsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
             {projects?.length ?? 0} proyectos registrados
           </p>
         </div>
@@ -231,7 +231,7 @@ export default function AdminProjectsPage() {
             {/* Desktop table */}
             <div className="mt-6 hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
-                <table className="min-w-[640px] w-full text-sm">
+                <table className="min-w-[640px] w-full text-[var(--text-size-sm)]">
                   <thead className="border-b bg-muted/50">
                     <tr>
                       <th className="px-4 py-3 text-left font-medium">
@@ -311,14 +311,14 @@ export default function AdminProjectsPage() {
                 <div key={project.id} className="rounded-lg border p-4">
                   <div className="min-w-0">
                     <p className="truncate font-medium">{project.title}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="mt-1 text-[var(--text-size-xs)] text-muted-foreground">
                       {formatDateShort(project.startsAt)} ·{" "}
                       {PILLAR_LABELS[project.pillar]}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
                       <Badge
                         variant={STATUS_VARIANT[project.status]}
-                        className="text-xs"
+                        className="text-[var(--text-size-xs)]"
                       >
                         {STATUS_LABELS[project.status]}
                       </Badge>
@@ -329,7 +329,7 @@ export default function AdminProjectsPage() {
                       to={`/admin/projects/${project.id}`}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "default" }),
-                        "h-11 gap-2 px-3 text-sm",
+                        "h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]",
                       )}
                       aria-label="Ver detalle"
                     >
@@ -338,7 +338,7 @@ export default function AdminProjectsPage() {
                     </Link>
                     <Button
                       variant="outline"
-                      className="h-11 gap-2 px-3 text-sm"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]"
                       onClick={() => openEdit(project)}
                       aria-label="Editar proyecto"
                     >
@@ -347,7 +347,7 @@ export default function AdminProjectsPage() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="h-11 gap-2 px-3 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)] text-destructive hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => setDeleteTarget(project)}
                       aria-label="Eliminar proyecto"
                     >

@@ -88,7 +88,10 @@ export function PublicApplicationDialog({
           <Button
             variant="default"
             size="default"
-            className={cn("text-sm font-medium", triggerClassName)}
+            className={cn(
+              "text-[var(--text-size-sm)] font-medium",
+              triggerClassName,
+            )}
           />
         }
       >
@@ -134,7 +137,7 @@ export function PublicApplicationDialog({
             >
               {errors.root && (
                 <p
-                  className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive"
+                  className="rounded-md bg-destructive/10 px-3 py-2 text-[var(--text-size-sm)] text-destructive"
                   role="alert"
                 >
                   {errors.root.message}
@@ -146,7 +149,7 @@ export function PublicApplicationDialog({
                   className="text-base font-medium"
                 >
                   Nombre completo{" "}
-                  <span className="text-muted-foreground font-normal text-sm">
+                  <span className="text-muted-foreground font-normal text-[var(--text-size-sm)]">
                     (Obligatorio)
                   </span>
                 </Label>
@@ -159,7 +162,7 @@ export function PublicApplicationDialog({
                   {...register("fullName")}
                 />
                 {errors.fullName && (
-                  <p className="text-sm font-medium text-destructive">
+                  <p className="text-[var(--text-size-sm)] font-medium text-destructive">
                     {errors.fullName.message}
                   </p>
                 )}
@@ -170,7 +173,7 @@ export function PublicApplicationDialog({
                   className="text-base font-medium"
                 >
                   Correo electrónico{" "}
-                  <span className="text-muted-foreground font-normal text-sm">
+                  <span className="text-muted-foreground font-normal text-[var(--text-size-sm)]">
                     (Obligatorio)
                   </span>
                 </Label>
@@ -183,7 +186,7 @@ export function PublicApplicationDialog({
                   {...register("email")}
                 />
                 {errors.email && (
-                  <p className="text-sm font-medium text-destructive">
+                  <p className="text-[var(--text-size-sm)] font-medium text-destructive">
                     {errors.email.message}
                   </p>
                 )}
@@ -194,7 +197,7 @@ export function PublicApplicationDialog({
                   className="text-base font-medium"
                 >
                   Documento de identidad (DNI/NIE){" "}
-                  <span className="text-muted-foreground font-normal text-sm">
+                  <span className="text-muted-foreground font-normal text-[var(--text-size-sm)]">
                     (Obligatorio)
                   </span>
                 </Label>
@@ -210,7 +213,7 @@ export function PublicApplicationDialog({
                   {...register("dni")}
                 />
                 {errors.dni && (
-                  <p className="text-sm font-medium text-destructive">
+                  <p className="text-[var(--text-size-sm)] font-medium text-destructive">
                     {errors.dni.message}
                   </p>
                 )}
@@ -221,7 +224,7 @@ export function PublicApplicationDialog({
                   className="text-base font-medium"
                 >
                   Teléfono{" "}
-                  <span className="text-muted-foreground font-normal text-sm">
+                  <span className="text-muted-foreground font-normal text-[var(--text-size-sm)]">
                     (Opcional)
                   </span>
                 </Label>
@@ -235,7 +238,7 @@ export function PublicApplicationDialog({
                   {...register("phone")}
                 />
                 {errors.phone && (
-                  <p className="text-sm font-medium text-destructive">
+                  <p className="text-[var(--text-size-sm)] font-medium text-destructive">
                     {errors.phone.message}
                   </p>
                 )}
@@ -261,7 +264,7 @@ export function PublicApplicationDialog({
                 </Label>
               </div>
               {errors.acceptPolicy && (
-                <p className="text-sm font-medium text-destructive px-1">
+                <p className="text-[var(--text-size-sm)] font-medium text-destructive px-1">
                   {errors.acceptPolicy.message}
                 </p>
               )}

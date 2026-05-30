@@ -1,5 +1,4 @@
 import { chromium } from 'playwright';
-import * as axe from 'axe-core';
 
 const TARGET = process.env.TARGET_URL || 'http://localhost:4173';
 const PAGES = (process.env.AXE_PAGES || '/').split(',').map((p) => p.trim());

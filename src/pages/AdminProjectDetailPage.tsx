@@ -122,7 +122,7 @@ export default function AdminProjectDetailPage() {
             {STATUS_LABELS[project.status]}
           </Badge>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-[var(--text-size-sm)] text-muted-foreground">
           {PILLAR_LABELS[project.pillar]}
           {project.location ? ` · ${project.location}` : ""}
         </p>
@@ -139,7 +139,7 @@ export default function AdminProjectDetailPage() {
 
       {project.description && (
         <div>
-          <h2 className="text-sm font-medium text-muted-foreground">
+          <h2 className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
             Descripción
           </h2>
           <p className="mt-2 whitespace-pre-wrap text-base leading-relaxed">
@@ -150,11 +150,15 @@ export default function AdminProjectDetailPage() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <h2 className="text-sm font-medium text-muted-foreground">Inicio</h2>
+          <h2 className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
+            Inicio
+          </h2>
           <p className="mt-1">{formatDate(project.startsAt)}</p>
         </div>
         <div>
-          <h2 className="text-sm font-medium text-muted-foreground">Fin</h2>
+          <h2 className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
+            Fin
+          </h2>
           <p className="mt-1">{formatDate(project.endsAt)}</p>
         </div>
       </div>

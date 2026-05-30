@@ -55,7 +55,7 @@ export class ErrorBoundary extends Component<Props, State> {
           </CardHeader>
           <CardContent>
             {this.state.error && (
-              <pre className="max-h-32 overflow-auto rounded bg-muted p-3 text-xs text-muted-foreground">
+              <pre className="max-h-32 overflow-auto rounded bg-muted p-3 text-[var(--text-size-xs)] text-muted-foreground">
                 {String(this.state.error.message ?? "Error desconocido")}
               </pre>
             )}

@@ -35,7 +35,7 @@ export default function AdminReportsPage() {
     <AdminPage className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold">Reportes</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
           Resumen de la organización y proyectos con más solicitudes.
         </p>
       </div>
@@ -54,7 +54,7 @@ export default function AdminReportsPage() {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
                     Proyectos
                   </CardTitle>
                 </CardHeader>
@@ -64,7 +64,7 @@ export default function AdminReportsPage() {
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
                     Solicitudes
                   </CardTitle>
                 </CardHeader>
@@ -74,7 +74,7 @@ export default function AdminReportsPage() {
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
                     Impacto (Entradas)
                   </CardTitle>
                 </CardHeader>
@@ -84,7 +84,7 @@ export default function AdminReportsPage() {
               </Card>
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
                     Notificaciones
                   </CardTitle>
                 </CardHeader>
@@ -96,7 +96,7 @@ export default function AdminReportsPage() {
               {/* Nuevo Card para los estados */}
               <Card className="sm:col-span-2 lg:col-span-1 bg-muted/20">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
+                  <CardTitle className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
                     Por Estado
                   </CardTitle>
                 </CardHeader>
@@ -105,7 +105,7 @@ export default function AdminReportsPage() {
                     s.projectsByStatus.map((row) => (
                       <div
                         key={row.status}
-                        className="flex justify-between items-center text-sm"
+                        className="flex justify-between items-center text-[var(--text-size-sm)]"
                       >
                         <span className="text-muted-foreground">
                           {STATUS_LABELS[row.status]}
@@ -114,7 +114,7 @@ export default function AdminReportsPage() {
                       </div>
                     ))
                   ) : (
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-[var(--text-size-sm)] text-muted-foreground">
                       Sin datos
                     </span>
                   )}
@@ -129,13 +129,13 @@ export default function AdminReportsPage() {
                     <CardTitle className="text-lg font-semibold">
                       Ranking de Solicitudes
                     </CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="text-[var(--text-size-sm)] text-muted-foreground mt-1">
                       Proyectos ordenados por volumen de interés
                     </p>
                   </CardHeader>
                   <CardContent className="p-0">
                     <div className="hidden md:block w-full">
-                      <table className="w-full text-sm">
+                      <table className="w-full text-[var(--text-size-sm)]">
                         <thead className="border-b bg-muted/10">
                           <tr>
                             <th className="px-5 py-4 text-left font-medium w-[35%]">
@@ -163,7 +163,7 @@ export default function AdminReportsPage() {
                             >
                               <td className="px-5 py-4 align-top">
                                 <div className="font-semibold break-words text-base flex items-start gap-2">
-                                  <span className="text-muted-foreground text-sm font-normal pt-0.5">
+                                  <span className="text-muted-foreground text-[var(--text-size-sm)] font-normal pt-0.5">
                                     #{index + 1}
                                   </span>
                                   {row.title}
@@ -198,16 +198,16 @@ export default function AdminReportsPage() {
                         <div key={row.id} className="p-4 space-y-3">
                           <div className="flex justify-between items-start gap-2">
                             <p className="font-semibold flex items-start gap-1.5">
-                              <span className="text-muted-foreground text-sm font-normal">
+                              <span className="text-muted-foreground text-[var(--text-size-sm)] font-normal">
                                 #{index + 1}
                               </span>
                               {row.title}
                             </p>
-                            <span className="inline-flex items-center justify-center bg-primary/10 text-primary font-bold px-2.5 py-0.5 rounded-full text-sm shrink-0">
+                            <span className="inline-flex items-center justify-center bg-primary/10 text-primary font-bold px-2.5 py-0.5 rounded-full text-[var(--text-size-sm)] shrink-0">
                               {row.applicationCount}
                             </span>
                           </div>
-                          <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+                          <div className="flex flex-wrap gap-2 text-[var(--text-size-sm)] text-muted-foreground">
                             <span>{PILLAR_LABELS[row.pillar]}</span>
                             <span>•</span>
                             <span>{formatDateShort(row.startsAt)}</span>
@@ -227,7 +227,7 @@ export default function AdminReportsPage() {
             </div>
 
             {ranking.data && ranking.data.length === 0 && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-[var(--text-size-sm)] text-muted-foreground">
                 Aún no hay datos de ranking de solicitudes.
               </p>
             )}

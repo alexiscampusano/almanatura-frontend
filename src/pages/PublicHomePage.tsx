@@ -47,7 +47,7 @@ function PillarButton({
       <Button
         variant={isActive ? "default" : "outline"}
         className={cn(
-          "w-full justify-start gap-3 text-sm font-medium transition-all",
+          "w-full justify-start gap-3 text-[var(--text-size-sm)] font-medium transition-all",
           isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
         )}
         onClick={onClick}
@@ -62,7 +62,7 @@ function PillarButton({
     <Button
       variant={isActive ? "default" : "outline"}
       className={cn(
-        "h-11 shrink-0 gap-2 px-4 text-sm font-medium transition-all",
+        "h-[var(--size-button-default)] shrink-0 gap-2 px-4 text-[var(--text-size-sm)] font-medium transition-all",
         isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
       )}
       onClick={onClick}
@@ -172,7 +172,7 @@ export function PublicHomePage() {
           )}
           aria-hidden={!sidebarVisible}
         >
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="mb-1 text-[var(--text-size-xs)] font-semibold uppercase tracking-wider text-muted-foreground">
             Filtrar
           </p>
           {allPillars.map((pillar) => (
@@ -238,7 +238,7 @@ export function PublicHomePage() {
                   <p className="text-lg font-semibold text-foreground">
                     No hay proyectos en esta categoría todavía
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-[var(--text-size-sm)] text-muted-foreground">
                     Explora otra categoría o vuelve más tarde para ver
                     novedades.
                   </p>
@@ -286,7 +286,7 @@ export function PublicHomePage() {
                       <CardHeader className="gap-2 px-5 pt-5 md:px-6">
                         <Badge
                           variant="secondary"
-                          className="w-fit gap-1.5 px-2.5 py-1 text-xs font-medium"
+                          className="w-fit gap-1.5 px-2.5 py-1 text-[var(--text-size-xs)] font-medium"
                         >
                           <PillarIcon size={14} weight="bold" aria-hidden />
                           {config.label}
@@ -301,7 +301,7 @@ export function PublicHomePage() {
                           {project.description}
                         </p>
 
-                        <div className="space-y-1.5 text-sm text-muted-foreground">
+                        <div className="space-y-1.5 text-[var(--text-size-sm)] text-muted-foreground">
                           <p className="flex items-center gap-2">
                             <CalendarDots
                               size={18}
@@ -387,7 +387,7 @@ export function PublicHomePage() {
             : "border-border bg-background/95 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
         )}
       >
-        <p className="mb-3 text-xs font-semibold text-muted-foreground">
+        <p className="mb-3 text-[var(--text-size-xs)] font-semibold text-muted-foreground">
           Filtrar por tema:
         </p>
         <div className="grid grid-cols-3 gap-2">
@@ -402,7 +402,7 @@ export function PublicHomePage() {
                 key={`mobile-${pillar ?? "all"}`}
                 variant={isActive ? "default" : "outline"}
                 className={cn(
-                  "h-10 gap-1.5 px-3 text-xs font-semibold",
+                  "h-10 gap-1.5 px-3 text-[var(--text-size-xs)] font-semibold",
                   isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
                 )}
                 onClick={() => setActivePillar(pillar)}

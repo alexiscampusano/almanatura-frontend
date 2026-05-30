@@ -26,7 +26,7 @@ export function PublicLayout() {
       <NavigationProgress />
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-[var(--text-size-sm)] focus:font-medium focus:ring-2 focus:ring-ring"
       >
         Saltar al contenido principal
       </a>
@@ -47,7 +47,7 @@ export function PublicLayout() {
           <div className="flex items-center gap-2 sm:gap-4">
             <Link
               to="/"
-              className="flex min-h-11 items-center gap-2 rounded-sm px-2 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 sm:px-0"
+              className="flex min-h-[var(--size-button-default)] items-center gap-2 rounded-sm px-2 text-[var(--text-size-sm)] font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 sm:px-0"
             >
               <House size={24} weight="duotone" className="sm:hidden" />
               <span className="hidden sm:inline">Inicio</span>
@@ -56,7 +56,7 @@ export function PublicLayout() {
               href="mailto:hola@almanatura.com"
               className={cn(
                 buttonVariants({ variant: "outline", size: "default" }),
-                "h-11 min-w-0 shrink border-primary-foreground/60 bg-transparent px-4 text-sm font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-12 md:h-11 gap-2",
+                "h-[var(--size-button-default)] min-w-0 shrink border-primary-foreground/60 bg-transparent px-4 text-[var(--text-size-sm)] font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-12 md:h-[var(--size-button-default)] gap-2",
               )}
             >
               <EnvelopeSimple size={20} weight="bold" />
@@ -93,7 +93,7 @@ export function PublicLayout() {
                 <li>
                   <a
                     href="tel:+34900000000"
-                    className="flex min-h-11 items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+                    className="flex min-h-[var(--size-button-default)] items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   >
                     <Phone size={22} weight="duotone" className="shrink-0" />
                     <span>Llámanos: 900 000 000</span>
@@ -102,7 +102,7 @@ export function PublicLayout() {
                 <li>
                   <a
                     href="mailto:hola@almanatura.com"
-                    className="flex min-h-11 items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+                    className="flex min-h-[var(--size-button-default)] items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   >
                     <EnvelopeSimple
                       size={22}
@@ -151,7 +151,7 @@ export function PublicLayout() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-6 text-sm opacity-80 sm:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-6 text-[var(--text-size-sm)] opacity-80 sm:flex-row">
             <p>
               © {new Date().getFullYear()} AlmaNatura. Todos los derechos
               reservados.

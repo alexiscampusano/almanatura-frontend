@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
+import ResetAccessibility from "@/components/accessibility/ResetAccessibility";
 
 function roleLabel(role: string): string {
   if (role === "SUPER_USER") return "Super usuario";
@@ -50,7 +51,7 @@ export function AdminLayout() {
             <Link
               to="/"
               aria-label="Volver al inicio público"
-              className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-[var(--text-size-sm)] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <img
                 src={almanaturaLogo}
@@ -65,7 +66,7 @@ export function AdminLayout() {
                 aria-label={`Mi cuenta, ${roleLabel(user.role)}`}
                 className={({ isActive }) =>
                   cn(
-                    "inline-flex items-center gap-2 rounded-sm border px-2.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    "inline-flex items-center gap-2 rounded-sm border px-2.5 py-2 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
                       ? "border-primary bg-primary/5 text-foreground"
                       : "border-border bg-background hover:bg-muted/80",
@@ -73,14 +74,14 @@ export function AdminLayout() {
                 }
               >
                 <span
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-[var(--text-size-xs)] font-semibold text-primary-foreground"
                   aria-hidden
                 >
                   {getInitials(user.name)}
                 </span>
                 <Badge
                   variant="secondary"
-                  className="max-w-[11rem] shrink truncate font-normal text-xs sm:max-w-[10rem] sm:text-xs"
+                  className="max-w-[11rem] shrink truncate font-normal text-[var(--text-size-xs)] sm:max-w-[10rem] sm:text-[var(--text-size-xs)]"
                 >
                   {roleLabel(user.role)}
                 </Badge>
@@ -91,6 +92,7 @@ export function AdminLayout() {
                 aria-hidden
               />
             )}
+            <ResetAccessibility />
           </div>
         </div>
       </header>
@@ -99,7 +101,7 @@ export function AdminLayout() {
         <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
           <Button
             variant="outline"
-            className="h-12 w-full justify-start gap-2 text-base font-medium"
+            className="h-[var(--size-button-lg)] w-full justify-start gap-2 text-base font-medium"
             onClick={() => setMobileNavOpen(true)}
           >
             <List size={20} weight="bold" />
@@ -124,7 +126,7 @@ export function AdminLayout() {
                   onClick={() => setMobileNavOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      "flex min-h-12 items-center rounded-sm border px-4 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                      "flex min-h-[var(--size-button-lg)] items-center rounded-sm border px-4 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                       isActive
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -151,7 +153,7 @@ export function AdminLayout() {
                 to={item.to}
                 className={({ isActive }) =>
                   cn(
-                    "inline-flex min-h-11 items-center rounded-sm border border-transparent px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    "inline-flex min-h-[var(--size-button-default)] items-center rounded-sm border border-transparent px-3 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
                       ? "bg-primary text-primary-foreground"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -166,6 +168,7 @@ export function AdminLayout() {
 
         <main className="min-w-0 w-full flex-1 overflow-x-clip px-4 py-6 md:px-6">
           <Outlet />
+          {/* MCP DevTools helper removed per user request */}
         </main>
       </div>
     </div>

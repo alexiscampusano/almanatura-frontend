@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import * as axe from 'axe-core';
 
-const TARGET = process.env.TARGET_URL || 'http://localhost:5173';
+const TARGET = process.env.TARGET_URL || 'http://localhost:4173';
 const PAGES = (process.env.AXE_PAGES || '/').split(',').map((p) => p.trim());
 
 async function auditPage(page, url) {
@@ -15,8 +15,8 @@ async function auditPage(page, url) {
     console.warn('Timed out waiting for main/h1 - proceeding to run axe anyway');
   }
 
-  // Inject axe-core into the page
-  await page.addScriptTag({ content: axe.source });
+  // Inject axe-core into the page via CDN (more robust for CI/local runs)
+  await page.addScriptTag({ url: 'https://cdn.jsdelivr.net/npm/axe-core@4.11.4/axe.min.js' });
 
   // Optional diagnostics
   const title = await page.title();

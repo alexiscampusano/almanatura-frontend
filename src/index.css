@@ -81,6 +81,13 @@
   --sidebar-accent-foreground: #38332e;
   --sidebar-border: #d7d2cb;
   --sidebar-ring: #8f0d57;
+  /* Design tokens for component sizing (mobile-first) */
+  --size-button-default: 2.75rem; /* ~h-11 */
+  --size-button-sm: 2rem; /* ~h-8 */
+  --size-button-lg: 3rem; /* ~h-12 */
+  --size-input-default: 2.75rem; /* ~h-11 */
+  --size-input-sm: 2rem; /* ~h-8 */
+  --text-size-sm: 0.875rem; /* 14px */
 }
 
 .dark {

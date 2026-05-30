@@ -123,8 +123,9 @@ export function PublicHomePage() {
 
     // prefer native inert
     try {
-      // @ts-expect-error - inert may not exist on HTMLElement in TS lib
-      aside.inert = !sidebarVisible;
+      // cast to a shaped type to avoid explicit any
+      const a = aside as HTMLElement & { inert?: boolean };
+      a.inert = !sidebarVisible;
     } catch {
       // ignore if inert not supported
     }

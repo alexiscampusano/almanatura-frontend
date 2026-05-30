@@ -1,54 +1,67 @@
-import { chromium } from "playwright";
-import { source as axeSource } from "axe-core";
+import { chromium } from 'playwright';
 
-const URL = process.env.AXE_URL || "http://127.0.0.1:5173";
+const TARGET = process.env.TARGET_URL || 'http://localhost:4173';
+const PAGES = (process.env.AXE_PAGES || '/').split(',').map((p) => p.trim());
 
-async function run() {
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
-  console.log("Visiting", URL);
-  await page.goto(URL);
+async function auditPage(page, url) {
+  console.log(`Visiting ${url}`);
+  await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => {});
 
-  // Inject axe source into page
-  await page.evaluate((axe) => {
-    const script = document.createElement("script");
-    script.type = "text/javascript";
-    script.text = axe;
-    document.head.appendChild(script);
-  }, axeSource);
+  // Wait for a main landmark or h1 to appear (single-page apps may render async)
+  try {
+    await page.waitForSelector('main, h1, #main-content, [role="main"]', { timeout: 15000 });
+  } catch (e) {
+    console.warn('Timed out waiting for main/h1 - proceeding to run axe anyway');
+  }
 
-  // Run axe
+  // Inject axe-core into the page via CDN (more robust for CI/local runs)
+  await page.addScriptTag({ url: 'https://cdn.jsdelivr.net/npm/axe-core@4.11.4/axe.min.js' });
+
+  // Optional diagnostics
+  const title = await page.title();
+  const hasLang = await page.evaluate(() => !!document.documentElement.lang);
+  console.log(`title: "${title}", html[lang]: ${hasLang}`);
+
+  // Run axe in page context
   const results = await page.evaluate(async () => {
-    // global axe is available now
-    // eslint-disable-next-line no-undef
-    return await axe.run();
+    // @ts-ignore
+    return await window.axe.run();
   });
 
-  console.log("axe results summary:");
-  console.log(
-    JSON.stringify(
-      { violations: results.violations.length, passes: results.passes.length },
-      null,
-      2,
-    ),
-  );
+  console.log(JSON.stringify(results, null, 2));
 
-  if (results.violations && results.violations.length > 0) {
-    console.error("Accessibility violations found:");
-    for (const v of results.violations) {
-      console.error(`- ${v.id}: ${v.impact} (${v.nodes.length} nodes)`);
-      console.error(v.help);
+  const violations = results.violations || [];
+  if (violations.length > 0) {
+    console.error(`Axe found ${violations.length} violations on ${url}`);
+    for (const v of violations) {
+      console.error(`- ${v.id} (${v.impact}): ${v.help}`);
     }
-    await browser.close();
-    process.exit(1);
+  }
+
+  return violations.length;
+}
+
+async function run() {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+
+  let totalViolations = 0;
+  for (const p of PAGES) {
+    const url = p.startsWith('http') ? p : `${TARGET.replace(/\/$/, '')}${p === '/' ? '' : p}`;
+    const count = await auditPage(page, url);
+    totalViolations += count;
   }
 
   await browser.close();
-  console.log("No accessibility violations (axe).");
-  process.exit(0);
+
+  if (totalViolations > 0) {
+    process.exit(2);
+  }
+
+  console.log('No axe violations found across all pages');
 }
 
 run().catch((err) => {
   console.error(err);
-  process.exit(2);
+  process.exit(3);
 });

@@ -78,7 +78,7 @@ export function PublicLayout() {
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
             {/* Mission */}
             <div className="space-y-3">
-              <h3 className="text-lg font-bold">Reactivamos lo rural.</h3>
+              <h2 className="text-lg font-bold">Reactivamos lo rural.</h2>
               <p className="text-[0.95rem] leading-relaxed opacity-90">
                 Impulsamos el desarrollo rural mediante cuatro ejes de
                 intervención: empleo, educación, salud y tecnología, mejorando
@@ -88,7 +88,7 @@ export function PublicLayout() {
 
             {/* Contact */}
             <div className="space-y-4">
-              <h3 className="text-lg font-bold">¿Necesitas ayuda?</h3>
+              <h2 className="text-lg font-bold">¿Necesitas ayuda?</h2>
               <ul className="space-y-3 text-base leading-relaxed">
                 <li>
                   <a
@@ -117,7 +117,7 @@ export function PublicLayout() {
 
             {/* Social & Admin */}
             <div className="space-y-4 sm:col-span-2 md:col-span-1">
-              <h3 className="text-lg font-bold">Síguenos</h3>
+              <h2 className="text-lg font-bold">Síguenos</h2>
               <div className="flex items-center gap-4">
                 <a
                   href="https://facebook.com/almanatura"

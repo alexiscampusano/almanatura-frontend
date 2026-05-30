@@ -94,6 +94,7 @@ export function PublicHomePage() {
 
   const topFiltersRef = useRef<HTMLDivElement>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const asideRef = useRef<HTMLElement | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mobileFiltersDimmed, setMobileFiltersDimmed] = useState(false);
 
@@ -112,6 +113,48 @@ export function PublicHomePage() {
       if (el) observer.unobserve(el);
     };
   }, []);
+
+  // Ensure that when the sidebar is hidden (aria-hidden) its focusable children
+  // are not tabbable. Use a small effect to set `inert` where supported and
+  // fallback to removing tabindex from focusable elements.
+  useEffect(() => {
+    const aside = asideRef.current;
+    if (!aside) return;
+
+    // prefer native inert
+    try {
+      // cast to a shaped type to avoid explicit any
+      const a = aside as HTMLElement & { inert?: boolean };
+      a.inert = !sidebarVisible;
+    } catch {
+      // ignore if inert not supported
+    }
+
+    const focusable = aside.querySelectorAll<HTMLElement>(
+      "a[href], button, input, select, textarea, [tabindex]",
+    );
+
+    focusable.forEach((el) => {
+      if (!sidebarVisible) {
+        if (el.hasAttribute("tabindex")) {
+          el.setAttribute(
+            "data-prev-tabindex",
+            el.getAttribute("tabindex") || "",
+          );
+        }
+        el.setAttribute("tabindex", "-1");
+      } else {
+        if (el.hasAttribute("data-prev-tabindex")) {
+          const prev = el.getAttribute("data-prev-tabindex");
+          if (prev === "") el.removeAttribute("tabindex");
+          else el.setAttribute("tabindex", prev || "0");
+          el.removeAttribute("data-prev-tabindex");
+        } else {
+          el.removeAttribute("tabindex");
+        }
+      }
+    });
+  }, [sidebarVisible]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -164,6 +207,7 @@ export function PublicHomePage() {
       <div className="relative flex gap-8 md:min-h-[16rem]">
         {/* Desktop sticky sidebar */}
         <aside
+          ref={asideRef}
           className={cn(
             "hidden w-44 shrink-0 flex-col gap-2 transition-all duration-300 md:flex",
             sidebarVisible

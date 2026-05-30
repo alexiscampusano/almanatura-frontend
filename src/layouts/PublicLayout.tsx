@@ -32,7 +32,7 @@ export function PublicLayout() {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-primary/40 bg-primary text-primary-foreground">
-        <div className="mx-auto flex min-h-[4rem] w-full max-w-5xl items-center justify-between gap-3 px-5 py-3 md:px-6">
+        <div className="mx-auto flex min-h-[4rem] w-full max-w-5xl items-center justify-between gap-3 px-4 py-3 md:px-6">
           <Link
             to="/"
             aria-label="Ir al inicio público"
@@ -47,7 +47,7 @@ export function PublicLayout() {
           <div className="flex items-center gap-2 sm:gap-4">
             <Link
               to="/"
-              className="flex items-center gap-2 text-sm font-medium text-primary-foreground/90 hover:text-primary-foreground transition-colors"
+              className="flex min-h-11 items-center gap-2 rounded-sm px-2 text-sm font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 sm:px-0"
             >
               <House size={24} weight="duotone" className="sm:hidden" />
               <span className="hidden sm:inline">Inicio</span>
@@ -60,7 +60,7 @@ export function PublicLayout() {
               )}
             >
               <EnvelopeSimple size={20} weight="bold" />
-              <span className="hidden sm:inline">Contacto</span>
+              <span>Contacto</span>
             </a>
           </div>
         </div>
@@ -89,23 +89,23 @@ export function PublicLayout() {
             {/* Contact */}
             <div className="space-y-4">
               <h3 className="text-lg font-bold">¿Necesitas ayuda?</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3 text-base leading-relaxed">
                 <li>
                   <a
                     href="tel:+34900000000"
-                    className="flex items-center gap-3 text-[0.95rem] opacity-90 hover:opacity-100 transition-opacity"
+                    className="flex min-h-11 items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   >
-                    <Phone size={24} weight="duotone" className="shrink-0" />
+                    <Phone size={22} weight="duotone" className="shrink-0" />
                     <span>Llámanos: 900 000 000</span>
                   </a>
                 </li>
                 <li>
                   <a
                     href="mailto:hola@almanatura.com"
-                    className="flex items-center gap-3 text-[0.95rem] opacity-90 hover:opacity-100 transition-opacity"
+                    className="flex min-h-11 items-center gap-3 rounded-sm px-2 py-1.5 opacity-90 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   >
                     <EnvelopeSimple
-                      size={24}
+                      size={22}
                       weight="duotone"
                       className="shrink-0"
                     />
@@ -123,28 +123,28 @@ export function PublicLayout() {
                   href="https://facebook.com/almanatura"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-primary-foreground/10 p-2.5 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+                  className="rounded-full bg-primary-foreground/10 p-3 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   aria-label="Facebook de Almanatura"
                 >
-                  <FacebookLogo size={28} weight="fill" />
+                  <FacebookLogo size={30} weight="fill" />
                 </a>
                 <a
                   href="https://instagram.com/almanatura"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-primary-foreground/10 p-2.5 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+                  className="rounded-full bg-primary-foreground/10 p-3 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   aria-label="Instagram de Almanatura"
                 >
-                  <InstagramLogo size={28} weight="fill" />
+                  <InstagramLogo size={30} weight="fill" />
                 </a>
                 <a
                   href="https://youtube.com/almanatura"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-primary-foreground/10 p-2.5 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+                  className="rounded-full bg-primary-foreground/10 p-3 transition-colors hover:bg-primary-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
                   aria-label="YouTube de Almanatura"
                 >
-                  <YoutubeLogo size={28} weight="fill" />
+                  <YoutubeLogo size={30} weight="fill" />
                 </a>
               </div>
             </div>

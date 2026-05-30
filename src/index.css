@@ -88,6 +88,7 @@
   --size-input-default: 2.75rem; /* ~h-11 */
   --size-input-sm: 2rem; /* ~h-8 */
   --text-size-sm: 0.875rem; /* 14px */
+  --size-avatar: 2.5rem; /* default avatar size */
 }
 
 .dark {

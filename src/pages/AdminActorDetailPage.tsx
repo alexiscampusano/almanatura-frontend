@@ -124,11 +124,10 @@ export default function AdminActorDetailPage() {
         >
           {getInitials(actor.fullName)}
         </span>
-        <div className="min-w-0 flex-1 space-y-2">
-          <h1 className="text-2xl font-semibold break-words">
+        <div className="flex flex-col gap-1 pb-6 sm:pb-0">
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
             {actor.fullName}
           </h1>
-          <p className="text-muted-foreground">{actor.region}</p>
         </div>
         {(actor.email || actor.phone || actor.nationalId) && (
           <div className="flex flex-col gap-3 text-sm text-muted-foreground border-t pt-6 sm:border-t-0 sm:border-l sm:pl-8 sm:pt-0">

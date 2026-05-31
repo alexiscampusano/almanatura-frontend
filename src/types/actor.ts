@@ -11,7 +11,6 @@ export type ActorProjectInfo = {
 export type ActorResponse = {
   id: number;
   fullName: string;
-  region: string;
   email?: string;
   phone?: string;
   nationalId?: string;

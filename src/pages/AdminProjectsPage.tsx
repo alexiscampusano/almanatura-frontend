@@ -371,12 +371,7 @@ export default function AdminProjectsPage() {
 
       {/* Create/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent
-          className={cn(
-            "max-h-[90vh] w-[calc(100vw-2rem)] overflow-x-hidden overflow-y-auto sm:w-auto",
-            editingProject ? "sm:max-w-2xl" : "sm:max-w-lg",
-          )}
-        >
+        <DialogContent className="max-h-[100dvh] h-[100dvh] w-full max-w-full border-0 p-4 sm:h-auto sm:w-full sm:max-w-2xl sm:rounded-xl sm:border sm:p-6 overflow-x-hidden overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingProject ? "Editar proyecto" : "Nuevo proyecto"}

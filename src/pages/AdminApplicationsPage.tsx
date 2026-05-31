@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
+import { CheckCircle, Clock, FileText } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -251,6 +252,55 @@ export default function AdminApplicationsPage() {
           Revisa postulaciones y actualiza el estado según el flujo definido.
         </p>
       </div>
+
+      {applications && (
+        <div className="mt-6 mb-8 grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Total Solicitudes
+              </CardTitle>
+              <FileText size={20} className="text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{applications.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Aprobadas</CardTitle>
+              <CheckCircle size={20} className="text-emerald-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {
+                  applications.filter(
+                    (a) =>
+                      a.status === "APPROVED" ||
+                      a.status === "REGISTERED_AS_ACTOR",
+                  ).length
+                }
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Pendientes</CardTitle>
+              <Clock size={20} className="text-amber-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {
+                  applications.filter(
+                    (a) =>
+                      a.status === "SUBMITTED" || a.status === "UNDER_REVIEW",
+                  ).length
+                }
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Desktop filters (grid) */}
       <div className="hidden grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 [&_.space-y-2]:min-w-0 md:grid">

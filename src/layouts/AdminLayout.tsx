@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
-import { List } from "@phosphor-icons/react";
+import {
+  List,
+  Folder,
+  FileText,
+  Users,
+  UsersThree,
+  ChartBar,
+  Bell,
+} from "@phosphor-icons/react";
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { getInitials } from "@/lib/avatar";
@@ -25,12 +33,12 @@ function roleLabel(role: string): string {
 }
 
 const adminNavigation = [
-  { to: "/admin/projects", label: "Proyectos" },
-  { to: "/admin/applications", label: "Solicitudes" },
-  { to: "/admin/actors", label: "Actores" },
-  { to: "/admin/reports", label: "Reportes" },
-  { to: "/admin/notifications", label: "Notificaciones" },
-  { to: "/admin/users", label: "Usuarios" },
+  { to: "/admin/projects", label: "Proyectos", icon: Folder },
+  { to: "/admin/applications", label: "Solicitudes", icon: FileText },
+  { to: "/admin/actors", label: "Actores", icon: UsersThree },
+  { to: "/admin/reports", label: "Reportes", icon: ChartBar },
+  { to: "/admin/notifications", label: "Notificaciones", icon: Bell },
+  { to: "/admin/users", label: "Usuarios", icon: Users },
 ];
 
 export function AdminLayout() {
@@ -41,7 +49,7 @@ export function AdminLayout() {
   return (
     <div className="min-h-svh bg-background text-foreground flex flex-col">
       <NavigationProgress />
-      <header className="sticky top-0 z-30 border-b border-border bg-card shadow-sm px-4 py-4 md:px-6">
+      <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-md shadow-sm px-4 py-4 md:px-6">
         <div className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center gap-3">
           <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
             Panel administrativo
@@ -131,7 +139,16 @@ export function AdminLayout() {
                     )
                   }
                 >
-                  {item.label}
+                  {({ isActive }) => (
+                    <>
+                      <item.icon
+                        size={22}
+                        weight={isActive ? "fill" : "regular"}
+                        className="mr-3"
+                      />
+                      {item.label}
+                    </>
+                  )}
                 </NavLink>
               ))}
             </nav>
@@ -140,7 +157,7 @@ export function AdminLayout() {
       </div>
 
       <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col md:flex-row">
-        <aside className="hidden shrink-0 border-b border-border bg-card/40 md:block md:w-64 md:border-b-0 md:border-r">
+        <aside className="hidden shrink-0 bg-zinc-950 text-zinc-400 md:block md:w-64">
           <nav
             aria-label="Navegación del panel admin"
             className="grid gap-1 py-5 pr-4"
@@ -154,11 +171,20 @@ export function AdminLayout() {
                     "inline-flex min-h-[var(--size-button-default)] items-center rounded-r-full px-5 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-md"
-                      : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
+                      : "hover:bg-white/10 hover:text-white",
                   )
                 }
               >
-                {item.label}
+                {({ isActive }) => (
+                  <>
+                    <item.icon
+                      size={20}
+                      weight={isActive ? "fill" : "regular"}
+                      className="mr-3 shrink-0"
+                    />
+                    {item.label}
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>

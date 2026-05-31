@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Eye, PencilSimple, Plus, Trash } from "@phosphor-icons/react";
+import {
+  Eye,
+  PencilSimple,
+  Plus,
+  Trash,
+  DotsThreeVertical,
+  CheckCircle,
+  FolderDashed,
+} from "@phosphor-icons/react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -14,6 +22,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Dialog,
   DialogContent,
@@ -219,6 +234,46 @@ export default function AdminProjectsPage() {
         </Button>
       </div>
 
+      {projects && (
+        <div className="mt-6 mb-8 grid gap-4 sm:grid-cols-3">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Total de Proyectos
+              </CardTitle>
+              <FolderDashed size={20} className="text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{projects.length}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                Proyectos Activos
+              </CardTitle>
+              <CheckCircle size={20} className="text-emerald-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {projects.filter((p) => p.status === "PUBLISHED").length}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Borradores</CardTitle>
+              <PencilSimple size={20} className="text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {projects.filter((p) => p.status === "DRAFT").length}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className={adminListRegionClassName}>
         {projects && projects.length === 0 && (
           <p className="mt-8 text-center text-muted-foreground">
@@ -272,38 +327,41 @@ export default function AdminProjectsPage() {
                           {formatDateShort(project.startsAt)}
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="flex justify-end gap-1">
-                            <Link
-                              to={`/admin/projects/${project.id}`}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger
                               className={cn(
                                 buttonVariants({
                                   variant: "ghost",
                                   size: "icon",
                                 }),
+                                "h-8 w-8 p-0",
                               )}
-                              aria-label="Ver detalle"
                             >
-                              <Eye size={18} />
-                            </Link>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => openEdit(project)}
-                              aria-label="Editar proyecto"
-                              className="hover:bg-primary/10 hover:text-primary transition-colors"
-                            >
-                              <PencilSimple size={18} />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => setDeleteTarget(project)}
-                              aria-label="Eliminar proyecto"
-                              className="hover:bg-destructive/10 hover:text-destructive transition-colors"
-                            >
-                              <Trash size={18} />
-                            </Button>
-                          </div>
+                              <DotsThreeVertical size={18} />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  navigate(`/admin/projects/${project.id}`)
+                                }
+                                className="flex items-center gap-2 cursor-pointer"
+                              >
+                                <Eye size={16} /> Ver detalle
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => openEdit(project)}
+                                className="flex items-center gap-2 cursor-pointer"
+                              >
+                                <PencilSimple size={16} /> Editar
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setDeleteTarget(project)}
+                                className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+                              >
+                                <Trash size={16} /> Eliminar
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </td>
                       </tr>
                     ))}

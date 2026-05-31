@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+} from "@tanstack/react-query";
 
 import type { SearchApplicationsParams } from "@/services/admin-applications.service";
 import {
@@ -18,6 +23,7 @@ export function useAdminApplications(params: SearchApplicationsParams) {
   return useQuery({
     queryKey: applicationQueryKey(params),
     queryFn: () => searchApplications(params),
+    placeholderData: keepPreviousData,
   });
 }
 

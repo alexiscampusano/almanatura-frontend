@@ -1,21 +1,29 @@
-import { chromium } from 'playwright';
+import { chromium } from "playwright";
 
-const TARGET = process.env.TARGET_URL || 'http://localhost:4173';
-const PAGES = (process.env.AXE_PAGES || '/').split(',').map((p) => p.trim());
+const TARGET = process.env.TARGET_URL || "http://localhost:4173";
+const PAGES = (process.env.AXE_PAGES || "/").split(",").map((p) => p.trim());
 
 async function auditPage(page, url) {
   console.log(`Visiting ${url}`);
-  await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => {});
+  await page
+    .goto(url, { waitUntil: "networkidle", timeout: 60000 })
+    .catch(() => {});
 
   // Wait for a main landmark or h1 to appear (single-page apps may render async)
   try {
-    await page.waitForSelector('main, h1, #main-content, [role="main"]', { timeout: 15000 });
+    await page.waitForSelector('main, h1, #main-content, [role="main"]', {
+      timeout: 15000,
+    });
   } catch (e) {
-    console.warn('Timed out waiting for main/h1 - proceeding to run axe anyway');
+    console.warn(
+      "Timed out waiting for main/h1 - proceeding to run axe anyway",
+    );
   }
 
   // Inject axe-core into the page via CDN (more robust for CI/local runs)
-  await page.addScriptTag({ url: 'https://cdn.jsdelivr.net/npm/axe-core@4.11.4/axe.min.js' });
+  await page.addScriptTag({
+    url: "https://cdn.jsdelivr.net/npm/axe-core@4.11.4/axe.min.js",
+  });
 
   // Optional diagnostics
   const title = await page.title();
@@ -47,7 +55,9 @@ async function run() {
 
   let totalViolations = 0;
   for (const p of PAGES) {
-    const url = p.startsWith('http') ? p : `${TARGET.replace(/\/$/, '')}${p === '/' ? '' : p}`;
+    const url = p.startsWith("http")
+      ? p
+      : `${TARGET.replace(/\/$/, "")}${p === "/" ? "" : p}`;
     const count = await auditPage(page, url);
     totalViolations += count;
   }
@@ -58,7 +68,7 @@ async function run() {
     process.exit(2);
   }
 
-  console.log('No axe violations found across all pages');
+  console.log("No axe violations found across all pages");
 }
 
 run().catch((err) => {

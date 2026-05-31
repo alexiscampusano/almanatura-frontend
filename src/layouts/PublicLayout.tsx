@@ -11,8 +11,7 @@ import {
 
 import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { NavigationProgress } from "@/components/navigation-progress";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { AccessibilityBar } from "@/components/accessibility/AccessibilityBar";
 
 export function PublicLayout() {
   const location = useLocation();
@@ -31,37 +30,37 @@ export function PublicLayout() {
         Saltar al contenido principal
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-primary/40 bg-primary text-primary-foreground">
-        <div className="mx-auto flex min-h-[4rem] w-full max-w-5xl items-center justify-between gap-3 px-4 py-3 md:px-6">
-          <Link
-            to="/"
-            aria-label="Ir al inicio público"
-            className="inline-flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
-          >
-            <img
-              src={almanaturaLogo}
-              alt="Logo AlmaNatura"
-              className="h-10 w-auto md:h-9"
-            />
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-4">
+      <header className="sticky top-0 z-40 flex flex-col shadow-sm">
+        <AccessibilityBar />
+        <div className="border-b border-primary/40 bg-primary text-primary-foreground">
+          <div className="mx-auto flex min-h-[4rem] w-full max-w-5xl items-center justify-between gap-3 px-4 py-3 md:px-6">
             <Link
               to="/"
-              className="flex min-h-[var(--size-button-default)] items-center gap-2 rounded-sm px-2 text-[var(--text-size-sm)] font-medium text-primary-foreground/90 transition-colors hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 sm:px-0"
+              aria-label="Ir al inicio público"
+              className="inline-flex shrink-0 items-center gap-3 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
             >
-              <House size={24} weight="duotone" className="sm:hidden" />
-              <span className="hidden sm:inline">Inicio</span>
+              <img
+                src={almanaturaLogo}
+                alt="Logo AlmaNatura"
+                className="h-10 w-auto md:h-9"
+              />
             </Link>
-            <a
-              href="mailto:hola@almanatura.com"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "default" }),
-                "h-[var(--size-button-default)] min-w-0 shrink border-primary-foreground/60 bg-transparent px-4 text-[var(--text-size-sm)] font-medium text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground sm:h-12 md:h-[var(--size-button-default)] gap-2",
-              )}
-            >
-              <EnvelopeSimple size={20} weight="bold" />
-              <span>Contacto</span>
-            </a>
+            <div className="flex items-center gap-2 md:gap-4">
+              <Link
+                to="/"
+                className="flex h-12 items-center gap-2 rounded-md px-3 md:px-4 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+              >
+                <House size={22} weight="fill" />
+                <span>Inicio</span>
+              </Link>
+              <a
+                href="mailto:hola@almanatura.com"
+                className="flex h-12 items-center gap-2 rounded-md border-2 border-primary-foreground/80 bg-transparent px-4 md:px-6 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+              >
+                <EnvelopeSimple size={22} weight="bold" />
+                <span>Contacto</span>
+              </a>
+            </div>
           </div>
         </div>
       </header>

@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import { useSyncCurrentUser } from "@/hooks/use-auth-me";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/stores/auth.store";
-import ResetAccessibility from "@/components/accessibility/ResetAccessibility";
 
 function roleLabel(role: string): string {
   if (role === "SUPER_USER") return "Super usuario";
@@ -92,7 +91,6 @@ export function AdminLayout() {
                 aria-hidden
               />
             )}
-            <ResetAccessibility />
           </div>
         </div>
       </header>

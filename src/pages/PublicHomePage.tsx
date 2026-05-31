@@ -433,9 +433,6 @@ export function PublicHomePage() {
             : "border-border bg-background/95 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
         )}
       >
-        <p className="mb-3 px-5 text-[var(--text-size-xs)] font-semibold text-muted-foreground uppercase tracking-wider">
-          Explorar por categoría:
-        </p>
         <div className="grid grid-cols-2 gap-2 px-5 pb-2">
           {allPillars.map((pillar) => {
             const config = pillar ? PILLAR_CONFIG[pillar] : null;

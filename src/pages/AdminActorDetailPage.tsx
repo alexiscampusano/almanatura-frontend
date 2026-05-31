@@ -1,5 +1,10 @@
 import { isNotFoundError } from "@/lib/error-handler";
-import { ArrowLeft } from "@phosphor-icons/react";
+import {
+  ArrowLeft,
+  EnvelopeSimple,
+  Phone,
+  IdentificationCard,
+} from "@phosphor-icons/react";
 import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -119,13 +124,62 @@ export default function AdminActorDetailPage() {
         >
           {getInitials(actor.fullName)}
         </span>
-        <div className="min-w-0 space-y-2">
+        <div className="min-w-0 flex-1 space-y-2">
           <h1 className="text-2xl font-semibold break-words">
             {actor.fullName}
           </h1>
           <p className="text-muted-foreground">{actor.region}</p>
+          {actor.createdAt && (
+            <p className="text-xs text-muted-foreground">
+              Integrado el{" "}
+              {new Date(actor.createdAt).toLocaleDateString("es-CL")}
+            </p>
+          )}
         </div>
+        {(actor.email || actor.phone || actor.nationalId) && (
+          <div className="flex flex-col gap-3 text-sm text-muted-foreground border-t pt-6 sm:border-t-0 sm:border-l sm:pl-8 sm:pt-0">
+            {actor.email && (
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <EnvelopeSimple size={18} weight="regular" />
+                <a
+                  href={`mailto:${actor.email}`}
+                  className="hover:text-primary transition-colors"
+                >
+                  {actor.email}
+                </a>
+              </div>
+            )}
+            {actor.phone && (
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <Phone size={18} weight="regular" />
+                <a
+                  href={`tel:${actor.phone}`}
+                  className="hover:text-primary transition-colors"
+                >
+                  {actor.phone}
+                </a>
+              </div>
+            )}
+            {actor.nationalId && (
+              <div className="flex items-center justify-center sm:justify-start gap-2">
+                <IdentificationCard size={18} weight="regular" />
+                <span>{actor.nationalId}</span>
+              </div>
+            )}
+          </div>
+        )}
       </div>
+
+      {actor.notes && (
+        <div>
+          <h2 className="text-lg font-semibold">Notas</h2>
+          <Card className="mt-4">
+            <CardContent className="p-4 text-sm text-muted-foreground whitespace-pre-wrap">
+              {actor.notes}
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div>
         <h2 className="text-lg font-semibold">Proyectos vinculados</h2>

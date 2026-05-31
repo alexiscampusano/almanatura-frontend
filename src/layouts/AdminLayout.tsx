@@ -46,7 +46,7 @@ export function AdminLayout() {
           <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
             Panel administrativo
           </h1>
-          <div className="flex w-full flex-wrap items-center justify-end gap-2 sm:ml-auto sm:w-auto">
+          <div className="flex w-full flex-wrap items-center justify-between gap-2 sm:ml-auto sm:w-auto sm:justify-end">
             <Link
               to="/"
               aria-label="Volver al inicio público"

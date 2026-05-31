@@ -156,7 +156,7 @@ export default function AdminActorDetailPage() {
             ))}
           </div>
         ) : (
-          <p className="mt-3 text-[var(--text-size-sm)] text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             Este actor no tiene proyectos vinculados.
           </p>
         )}

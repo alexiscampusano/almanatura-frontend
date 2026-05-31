@@ -52,9 +52,7 @@ export function LoadingState({
     >
       <Spinner size="lg" />
       {label ? (
-        <p className="text-[var(--text-size-sm)] font-medium text-muted-foreground">
-          {label}
-        </p>
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
       ) : null}
     </div>
   );

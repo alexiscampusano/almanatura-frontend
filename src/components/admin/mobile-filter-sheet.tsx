@@ -35,7 +35,7 @@ export function MobileFilterSheet({
       <div className="md:hidden">
         <Button
           variant="outline"
-          className="h-[var(--size-button-lg)] w-full gap-2 text-[var(--text-size-sm)] font-medium"
+          className="h-[var(--size-button-lg)] w-full gap-2 text-sm font-medium"
           onClick={() => setOpen(true)}
         >
           <Funnel size={20} weight="bold" />
@@ -43,7 +43,7 @@ export function MobileFilterSheet({
           {activeFilterCount > 0 && (
             <Badge
               variant="destructive"
-              className="ml-auto h-6 min-w-6 rounded-full px-1.5 text-[var(--text-size-xs)] font-bold"
+              className="ml-auto h-6 min-w-6 rounded-full px-1.5 text-xs font-bold"
             >
               {activeFilterCount}
             </Badge>
@@ -64,7 +64,7 @@ export function MobileFilterSheet({
           <SheetFooter>
             <Button
               size="lg"
-              className="h-[var(--size-button-default)] w-full text-[var(--text-size-sm)] font-semibold"
+              className="h-[var(--size-button-default)] w-full text-sm font-semibold"
               onClick={() => {
                 onApply?.();
                 setOpen(false);

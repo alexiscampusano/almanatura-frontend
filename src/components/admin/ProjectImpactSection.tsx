@@ -74,10 +74,8 @@ export function ProjectImpactSection({ projectId }: Props) {
   return (
     <div className="space-y-4 border-t pt-4">
       <div>
-        <h3 className="text-[var(--text-size-sm)] font-semibold">
-          Indicadores de impacto
-        </h3>
-        <p className="mt-1 text-[var(--text-size-xs)] text-muted-foreground">
+        <h3 className="text-sm font-semibold">Indicadores de impacto</h3>
+        <p className="mt-1 text-xs text-muted-foreground">
           Registros de seguimiento asociados a este proyecto (aparecen en
           reportes).
         </p>
@@ -91,20 +89,20 @@ export function ProjectImpactSection({ projectId }: Props) {
       )}
 
       {!isLoading && entries && entries.length === 0 && (
-        <p className="text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Aún no hay indicadores registrados.
         </p>
       )}
 
       {!isLoading && entries && entries.length > 0 && (
-        <ul className="max-h-48 space-y-2 overflow-y-auto rounded-md border p-2 text-[var(--text-size-sm)]">
+        <ul className="max-h-48 space-y-2 overflow-y-auto rounded-md border p-2 text-sm">
           {entries.map((row) => (
             <li
               key={row.id}
               className="border-b border-border/50 pb-2 last:border-0 last:pb-0"
             >
               <div className="font-medium">{row.metricLabel}</div>
-              <div className="text-[var(--text-size-xs)] text-muted-foreground">
+              <div className="text-xs text-muted-foreground">
                 {formatRecordedAt(row.recordedAt)}
                 {row.numericValue != null && (
                   <span className="ml-2">· Valor: {row.numericValue}</span>

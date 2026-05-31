@@ -68,9 +68,7 @@ export function AdminLoginPage() {
           aria-label="Preparando sesión"
         >
           <Spinner size="lg" />
-          <p className="text-[var(--text-size-sm)] text-muted-foreground">
-            Preparando acceso…
-          </p>
+          <p className="text-sm text-muted-foreground">Preparando acceso…</p>
         </main>
       </>
     );
@@ -87,9 +85,7 @@ export function AdminLoginPage() {
           aria-label="Redirigiendo al panel"
         >
           <Spinner size="lg" />
-          <p className="text-[var(--text-size-sm)] text-muted-foreground">
-            Entrando al panel…
-          </p>
+          <p className="text-sm text-muted-foreground">Entrando al panel…</p>
         </main>
       </>
     );
@@ -101,7 +97,7 @@ export function AdminLoginPage() {
       <main className="flex min-h-svh items-center justify-center bg-muted/20 px-4 py-8">
         <section className="w-full max-w-md border border-border bg-card p-6 shadow-sm">
           <h1 className="text-2xl font-semibold">Ingreso administrativo</h1>
-          <p className="mt-2 text-[var(--text-size-sm)] text-muted-foreground">
+          <p className="mt-2 text-sm text-muted-foreground">
             Solo usuarios internos autorizados pueden acceder.
           </p>
           <form
@@ -116,14 +112,11 @@ export function AdminLoginPage() {
                 type="email"
                 autoComplete="email"
                 disabled={isSubmitting}
-                className="h-[var(--size-input-default)] px-3 text-base md:text-[var(--text-size-xs)]"
+                className="h-[var(--size-input-default)] px-3 text-base md:text-xs"
                 {...register("email")}
               />
               {errors.email && (
-                <p
-                  className="text-[var(--text-size-sm)] text-destructive"
-                  role="alert"
-                >
+                <p className="text-sm text-destructive" role="alert">
                   {errors.email.message}
                 </p>
               )}
@@ -136,7 +129,7 @@ export function AdminLoginPage() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   disabled={isSubmitting}
-                  className="h-[var(--size-input-default)] px-3 pr-10 text-base md:text-[var(--text-size-xs)]"
+                  className="h-[var(--size-input-default)] px-3 pr-10 text-base md:text-xs"
                   {...register("password")}
                 />
                 <button
@@ -151,19 +144,13 @@ export function AdminLoginPage() {
                 </button>
               </div>
               {errors.password && (
-                <p
-                  className="text-[var(--text-size-sm)] text-destructive"
-                  role="alert"
-                >
+                <p className="text-sm text-destructive" role="alert">
                   {errors.password.message}
                 </p>
               )}
             </div>
             {errors.root && (
-              <p
-                className="text-[var(--text-size-sm)] text-destructive"
-                role="alert"
-              >
+              <p className="text-sm text-destructive" role="alert">
                 {errors.root.message}
               </p>
             )}
@@ -182,7 +169,7 @@ export function AdminLoginPage() {
               )}
             </Button>
           </form>
-          <p className="mt-6 text-center text-[var(--text-size-sm)]">
+          <p className="mt-6 text-center text-sm">
             <Link
               to="/"
               className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"

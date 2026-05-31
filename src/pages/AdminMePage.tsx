@@ -26,9 +26,7 @@ export default function AdminMePage() {
   if (!user) {
     return (
       <AdminPage>
-        <p className="text-[var(--text-size-sm)] text-muted-foreground">
-          Cargando perfil…
-        </p>
+        <p className="text-sm text-muted-foreground">Cargando perfil…</p>
       </AdminPage>
     );
   }
@@ -39,7 +37,7 @@ export default function AdminMePage() {
         <h1 className="text-xl font-semibold tracking-tight md:text-2xl">
           Mi cuenta
         </h1>
-        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Datos de tu perfil en el panel.
         </p>
       </div>

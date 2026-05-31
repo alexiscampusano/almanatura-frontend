@@ -49,23 +49,23 @@
 }
 
 :root {
-  --background: #f4f2f1;
-  --foreground: #38332e;
+  --background: #f8fafc;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #38332e;
+  --card-foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #38332e;
+  --popover-foreground: #0f172a;
   --primary: #8f0d57;
   --primary-foreground: #ffffff;
-  --secondary: #d2c8be;
-  --secondary-foreground: #38332e;
-  --muted: #e8e6e3;
-  --muted-foreground: #766c60;
-  --accent: #ad1069;
-  --accent-foreground: #ffffff;
-  --destructive: #b91c1c;
-  --border: #d7d2cb;
-  --input: #cfc8bf;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
   --ring: #8f0d57;
   --chart-1: #8f0d57;
   --chart-2: #a0968b;
@@ -87,8 +87,6 @@
   --size-button-lg: 3.5rem; /* 56px */
   --size-input-default: 3rem; /* 48px */
   --size-input-sm: 2rem; /* ~h-8 */
-  --text-size-sm: 0.875rem; /* 14px */
-  --text-size-xs: 0.75rem; /* 12px */
   --size-avatar: 2.5rem; /* default avatar size */
 }
 

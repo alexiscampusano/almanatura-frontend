@@ -98,7 +98,7 @@ export default function AdminUsersPage() {
     <AdminPage className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold">Gestión de usuarios</h2>
-        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Usuarios del panel administrativo (solo super usuario puede crear
           cuentas nuevas).
         </p>
@@ -112,10 +112,7 @@ export default function AdminUsersPage() {
         >
           <h3 className="text-lg font-medium">Crear usuario interno</h3>
           {errors.root && (
-            <p
-              className="text-[var(--text-size-sm)] text-destructive"
-              role="alert"
-            >
+            <p className="text-sm text-destructive" role="alert">
               {errors.root.message}
             </p>
           )}
@@ -130,7 +127,7 @@ export default function AdminUsersPage() {
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-[var(--text-size-sm)] text-destructive">
+                <p className="text-sm text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -146,7 +143,7 @@ export default function AdminUsersPage() {
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-[var(--text-size-sm)] text-destructive">
+                <p className="text-sm text-destructive">
                   {errors.email.message}
                 </p>
               )}
@@ -174,7 +171,7 @@ export default function AdminUsersPage() {
                 </button>
               </div>
               {errors.password && (
-                <p className="text-[var(--text-size-sm)] text-destructive">
+                <p className="text-sm text-destructive">
                   {errors.password.message}
                 </p>
               )}
@@ -203,7 +200,7 @@ export default function AdminUsersPage() {
                 </SelectContent>
               </Select>
               {errors.role && (
-                <p className="text-[var(--text-size-sm)] text-destructive">
+                <p className="text-sm text-destructive">
                   {errors.role.message}
                 </p>
               )}
@@ -223,7 +220,7 @@ export default function AdminUsersPage() {
       )}
 
       {!isSuperUser && (
-        <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
           Solo los super usuarios pueden crear nuevas cuentas. Puedes ver el
           listado del equipo.
         </p>
@@ -239,15 +236,13 @@ export default function AdminUsersPage() {
           </div>
         )}
         {!isLoading && users && users.length === 0 && (
-          <p className="text-[var(--text-size-sm)] text-muted-foreground">
-            No hay usuarios.
-          </p>
+          <p className="text-sm text-muted-foreground">No hay usuarios.</p>
         )}
         {!isLoading && users && users.length > 0 && (
           <>
             <div className="hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
-                <table className="min-w-[520px] w-full text-[var(--text-size-sm)]">
+                <table className="min-w-[520px] w-full text-sm">
                   <thead className="border-b bg-muted/50">
                     <tr>
                       <th className="px-4 py-3 text-left font-medium">
@@ -282,7 +277,7 @@ export default function AdminUsersPage() {
                   className="flex flex-col gap-2 rounded-lg border p-4"
                 >
                   <span className="font-medium">{u.name}</span>
-                  <span className="text-[var(--text-size-sm)] text-muted-foreground break-words">
+                  <span className="text-sm text-muted-foreground break-words">
                     {u.email}
                   </span>
                   <Badge

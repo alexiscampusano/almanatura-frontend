@@ -41,7 +41,7 @@ export function AccessibilityBar() {
 
   return (
     <div className="w-full bg-foreground text-background px-3 py-1.5 flex items-center justify-center sm:justify-end gap-2 border-b border-background/20">
-      <span className="text-[var(--text-size-xs)] font-medium hidden sm:inline mr-2 opacity-90">
+      <span className="text-xs font-medium hidden sm:inline mr-2 opacity-90">
         Accesibilidad:
       </span>
 
@@ -60,7 +60,7 @@ export function AccessibilityBar() {
 
         <button
           onClick={resetFontSize}
-          className="flex h-10 w-11 items-center justify-center rounded-sm hover:bg-background/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary font-bold text-[var(--text-size-sm)] active:scale-95 transition-transform"
+          className="flex h-10 w-11 items-center justify-center rounded-sm hover:bg-background/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary font-bold text-sm active:scale-95 transition-transform"
           aria-label="Tamaño de letra original"
           title="Tamaño original"
         >
@@ -82,7 +82,7 @@ export function AccessibilityBar() {
 
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger
-          className="flex h-10 items-center justify-center gap-1.5 px-3 ml-1 rounded-md bg-background/10 hover:bg-background/20 text-[var(--text-size-xs)] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all active:scale-95"
+          className="flex h-10 items-center justify-center gap-1.5 px-3 ml-1 rounded-md bg-background/10 hover:bg-background/20 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all active:scale-95"
           aria-label="Restablecer todos los ajustes visuales"
           title="Restablecer ajustes"
         >

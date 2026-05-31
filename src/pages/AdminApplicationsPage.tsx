@@ -7,6 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -72,9 +80,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
 
   if (options.length === 0) {
     return (
-      <span className="text-[var(--text-size-sm)] text-muted-foreground">
-        Sin transiciones
-      </span>
+      <span className="text-sm text-muted-foreground">Sin transiciones</span>
     );
   }
 
@@ -248,7 +254,7 @@ export default function AdminApplicationsPage() {
     <AdminPage>
       <div>
         <h2 className="text-2xl font-semibold">Solicitudes</h2>
-        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Revisa postulaciones y actualiza el estado según el flujo definido.
         </p>
       </div>
@@ -329,76 +335,59 @@ export default function AdminApplicationsPage() {
 
         {!isLoading && filtered.length > 0 && (
           <>
-            <div className="hidden rounded-lg border md:block">
-              <div className="overflow-x-auto">
-                <table className="min-w-[900px] w-full text-[var(--text-size-sm)]">
-                  <thead className="border-b bg-muted/30">
-                    <tr>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Solicitante
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Proyecto
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Estado
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        DNI
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Creada
-                      </th>
-                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Acción
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {filtered.map((app) => (
-                      <tr
-                        key={app.id}
-                        className="hover:bg-muted/50 transition-colors"
-                      >
-                        <td className="px-3 py-3">
-                          <div className="font-medium">{app.fullName}</div>
-                          <div className="text-[var(--text-size-xs)] text-muted-foreground">
-                            {app.email}
+            <div className="hidden rounded-lg border bg-card md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Solicitante</TableHead>
+                    <TableHead>Proyecto</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>DNI</TableHead>
+                    <TableHead>Creada</TableHead>
+                    <TableHead>Acción</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((app) => (
+                    <TableRow key={app.id}>
+                      <TableCell>
+                        <div className="font-medium">{app.fullName}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {app.email}
+                        </div>
+                        {app.phone && (
+                          <div className="text-xs text-muted-foreground">
+                            {app.phone}
                           </div>
-                          {app.phone && (
-                            <div className="text-[var(--text-size-xs)] text-muted-foreground">
-                              {app.phone}
-                            </div>
-                          )}
-                        </td>
-                        <td className="max-w-[180px] px-3 py-3 align-top">
-                          <span className="line-clamp-2">
-                            {projectTitleById.get(app.projectId) ??
-                              `#${app.projectId}`}
-                          </span>
-                        </td>
-                        <td className="px-3 py-3 align-top">
-                          <Badge variant={statusBadgeVariant(app.status)}>
-                            {APPLICATION_STATUS_LABELS[app.status]}
-                          </Badge>
-                        </td>
-                        <td className="px-3 py-3 align-top font-mono text-[var(--text-size-xs)]">
-                          {app.nationalId}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
-                          {formatDate(app.createdAt)}
-                        </td>
-                        <td className="px-3 py-3 align-top">
-                          <TransitionControls
-                            key={`${app.id}-${app.status}`}
-                            app={app}
-                          />
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="max-w-[180px] align-top">
+                        <span className="line-clamp-2">
+                          {projectTitleById.get(app.projectId) ??
+                            `#${app.projectId}`}
+                        </span>
+                      </TableCell>
+                      <TableCell className="align-top">
+                        <Badge variant={statusBadgeVariant(app.status)}>
+                          {APPLICATION_STATUS_LABELS[app.status]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="align-top font-mono text-xs">
+                        {app.nationalId}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap align-top text-muted-foreground">
+                        {formatDate(app.createdAt)}
+                      </TableCell>
+                      <TableCell className="align-top">
+                        <TransitionControls
+                          key={`${app.id}-${app.status}`}
+                          app={app}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
 
             <div className="space-y-3 md:hidden">
@@ -408,7 +397,7 @@ export default function AdminApplicationsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-medium">{app.fullName}</p>
-                        <p className="text-[var(--text-size-xs)] text-muted-foreground">
+                        <p className="text-xs text-muted-foreground">
                           {app.email}
                         </p>
                       </div>
@@ -416,13 +405,11 @@ export default function AdminApplicationsPage() {
                         {APPLICATION_STATUS_LABELS[app.status]}
                       </Badge>
                     </div>
-                    <p className="text-[var(--text-size-sm)] text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {projectTitleById.get(app.projectId) ??
                         `Proyecto #${app.projectId}`}
                     </p>
-                    <p className="font-mono text-[var(--text-size-xs)]">
-                      DNI: {app.nationalId}
-                    </p>
+                    <p className="font-mono text-xs">DNI: {app.nationalId}</p>
                     <TransitionControls
                       key={`${app.id}-${app.status}`}
                       app={app}

@@ -27,6 +27,7 @@ import {
   AdminPage,
   adminListRegionClassName,
 } from "@/components/admin/admin-page";
+import { NotificationDialog } from "@/components/admin/NotificationDialog";
 import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
 
 import {
@@ -353,11 +354,17 @@ export default function AdminApplicationsPage() {
                     <TableRow key={app.id}>
                       <TableCell>
                         <div className="font-medium">{app.fullName}</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground flex items-center gap-2">
                           {app.email}
+                          {app.email && (
+                            <NotificationDialog
+                              recipientEmail={app.email}
+                              recipientName={app.fullName}
+                            />
+                          )}
                         </div>
                         {app.phone && (
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-muted-foreground mt-1">
                             {app.phone}
                           </div>
                         )}
@@ -398,9 +405,15 @@ export default function AdminApplicationsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-medium">{app.fullName}</p>
-                        <p className="text-xs text-muted-foreground">
+                        <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
                           {app.email}
-                        </p>
+                          {app.email && (
+                            <NotificationDialog
+                              recipientEmail={app.email}
+                              recipientName={app.fullName}
+                            />
+                          )}
+                        </div>
                       </div>
                       <Badge variant={statusBadgeVariant(app.status)}>
                         {APPLICATION_STATUS_LABELS[app.status]}

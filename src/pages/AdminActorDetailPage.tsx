@@ -16,6 +16,7 @@ import { useActor } from "@/hooks/use-actors";
 import { PILLAR_LABELS } from "@/lib/project";
 import { cn } from "@/lib/utils";
 import type { ApplicationStatus } from "@/types/application";
+import { NotificationDialog } from "@/components/admin/NotificationDialog";
 import { AdminPage } from "@/components/admin/admin-page";
 
 const STATUS_LABELS: Record<ApplicationStatus, string> = {
@@ -132,14 +133,20 @@ export default function AdminActorDetailPage() {
         {(actor.email || actor.phone || actor.nationalId) && (
           <div className="flex flex-col gap-3 text-sm text-muted-foreground border-t pt-6 sm:border-t-0 sm:border-l sm:pl-8 sm:pt-0">
             {actor.email && (
-              <div className="flex items-center justify-center sm:justify-start gap-2">
-                <EnvelopeSimple size={18} weight="regular" />
-                <a
-                  href={`mailto:${actor.email}`}
-                  className="hover:text-primary transition-colors"
-                >
-                  {actor.email}
-                </a>
+              <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-3">
+                <div className="flex items-center gap-2">
+                  <EnvelopeSimple size={18} weight="regular" />
+                  <a
+                    href={`mailto:${actor.email}`}
+                    className="hover:text-primary transition-colors"
+                  >
+                    {actor.email}
+                  </a>
+                </div>
+                <NotificationDialog
+                  recipientEmail={actor.email}
+                  recipientName={actor.fullName}
+                />
               </div>
             )}
             {actor.phone && (

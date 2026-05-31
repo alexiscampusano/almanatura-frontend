@@ -129,12 +129,6 @@ export default function AdminActorDetailPage() {
             {actor.fullName}
           </h1>
           <p className="text-muted-foreground">{actor.region}</p>
-          {actor.createdAt && (
-            <p className="text-xs text-muted-foreground">
-              Integrado el{" "}
-              {new Date(actor.createdAt).toLocaleDateString("es-CL")}
-            </p>
-          )}
         </div>
         {(actor.email || actor.phone || actor.nationalId) && (
           <div className="flex flex-col gap-3 text-sm text-muted-foreground border-t pt-6 sm:border-t-0 sm:border-l sm:pl-8 sm:pt-0">
@@ -169,17 +163,6 @@ export default function AdminActorDetailPage() {
           </div>
         )}
       </div>
-
-      {actor.notes && (
-        <div>
-          <h2 className="text-lg font-semibold">Notas</h2>
-          <Card className="mt-4">
-            <CardContent className="p-4 text-sm text-muted-foreground whitespace-pre-wrap">
-              {actor.notes}
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       <div>
         <h2 className="text-lg font-semibold">Proyectos vinculados</h2>

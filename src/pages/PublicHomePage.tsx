@@ -212,7 +212,7 @@ export function PublicHomePage() {
           className={cn(
             "hidden w-44 shrink-0 flex-col gap-2 transition-all duration-300 md:flex",
             sidebarVisible
-              ? "sticky top-24 self-start opacity-100"
+              ? "sticky top-40 self-start opacity-100"
               : "opacity-0",
           )}
           aria-hidden={!sidebarVisible}

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import type { GetActorsParams } from "@/services/actors.service";
 import { getActorById, getActors } from "@/services/actors.service";
@@ -9,6 +9,7 @@ export function useActors(params?: GetActorsParams) {
   return useQuery({
     queryKey: [...ACTORS_LIST_KEY, params?.pillar ?? "all"],
     queryFn: () => getActors(params),
+    placeholderData: keepPreviousData,
   });
 }
 

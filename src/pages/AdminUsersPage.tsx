@@ -113,8 +113,7 @@ export default function AdminUsersPage() {
       <div>
         <h2 className="text-2xl font-semibold">Gestión de usuarios</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Usuarios del panel administrativo (solo super usuario puede crear
-          cuentas nuevas).
+          Listado de usuarios con acceso al panel de administración.
         </p>
       </div>
 
@@ -235,8 +234,8 @@ export default function AdminUsersPage() {
 
       {!isSuperUser && (
         <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
-          Solo los super usuarios pueden crear nuevas cuentas. Puedes ver el
-          listado del equipo.
+          Tu rol actual no tiene permisos para crear o eliminar cuentas. Puedes
+          ver el listado del equipo.
         </p>
       )}
 

@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useActor } from "@/hooks/use-actors";
 import { PILLAR_LABELS } from "@/lib/project";
 import { cn } from "@/lib/utils";
@@ -63,8 +64,8 @@ export default function AdminActorDetailPage() {
   if (isLoading) {
     return (
       <AdminPage>
-        <div className="h-10 w-64 animate-pulse rounded bg-muted" />
-        <div className="mt-8 h-32 animate-pulse rounded-lg bg-muted" />
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="mt-8 h-32 w-full rounded-lg" />
       </AdminPage>
     );
   }

@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -206,7 +207,7 @@ export default function AdminProjectsPage() {
         <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
         <div className={`${adminListRegionClassName} mt-6 space-y-3`}>
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-16 animate-pulse rounded-lg bg-muted" />
+            <Skeleton key={i} className="h-16 w-full rounded-lg" />
           ))}
         </div>
       </AdminPage>

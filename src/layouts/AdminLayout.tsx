@@ -14,6 +14,7 @@ import almanaturaLogo from "@/assets/almanatura-logo.svg";
 import { getInitials } from "@/lib/avatar";
 import { NavigationProgress } from "@/components/navigation-progress";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Sheet,
   SheetContent,
@@ -94,10 +95,7 @@ export function AdminLayout() {
                 </Badge>
               </NavLink>
             ) : (
-              <span
-                className="inline-flex h-10 w-28 animate-pulse rounded-sm bg-muted"
-                aria-hidden
-              />
+              <Skeleton className="h-10 w-28 rounded-sm" />
             )}
           </div>
         </div>

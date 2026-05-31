@@ -47,7 +47,7 @@ function PillarButton({
       <Button
         variant={isActive ? "default" : "outline"}
         className={cn(
-          "w-full justify-start gap-3 text-sm font-medium transition-all",
+          "w-full justify-start gap-3 text-[var(--text-size-sm)] font-medium transition-all",
           isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
         )}
         onClick={onClick}
@@ -62,7 +62,7 @@ function PillarButton({
     <Button
       variant={isActive ? "default" : "outline"}
       className={cn(
-        "h-11 shrink-0 gap-2 px-4 text-sm font-medium transition-all",
+        "h-[var(--size-button-default)] shrink-0 gap-2 px-4 text-[var(--text-size-sm)] font-medium transition-all",
         isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
       )}
       onClick={onClick}
@@ -94,7 +94,9 @@ export function PublicHomePage() {
 
   const topFiltersRef = useRef<HTMLDivElement>(null);
   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const asideRef = useRef<HTMLElement | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [mobileFiltersDimmed, setMobileFiltersDimmed] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -112,11 +114,56 @@ export function PublicHomePage() {
     };
   }, []);
 
+  // Ensure that when the sidebar is hidden (aria-hidden) its focusable children
+  // are not tabbable. Use a small effect to set `inert` where supported and
+  // fallback to removing tabindex from focusable elements.
+  useEffect(() => {
+    const aside = asideRef.current;
+    if (!aside) return;
+
+    // prefer native inert
+    try {
+      // cast to a shaped type to avoid explicit any
+      const a = aside as HTMLElement & { inert?: boolean };
+      a.inert = !sidebarVisible;
+    } catch {
+      // ignore if inert not supported
+    }
+
+    const focusable = aside.querySelectorAll<HTMLElement>(
+      "a[href], button, input, select, textarea, [tabindex]",
+    );
+
+    focusable.forEach((el) => {
+      if (!sidebarVisible) {
+        if (el.hasAttribute("tabindex")) {
+          el.setAttribute(
+            "data-prev-tabindex",
+            el.getAttribute("tabindex") || "",
+          );
+        }
+        el.setAttribute("tabindex", "-1");
+      } else {
+        if (el.hasAttribute("data-prev-tabindex")) {
+          const prev = el.getAttribute("data-prev-tabindex");
+          if (prev === "") el.removeAttribute("tabindex");
+          else el.setAttribute("tabindex", prev || "0");
+          el.removeAttribute("data-prev-tabindex");
+        } else {
+          el.removeAttribute("tabindex");
+        }
+      }
+    });
+  }, [sidebarVisible]);
+
   useEffect(() => {
     const handleScroll = () => {
-      setShowBackToTop(window.scrollY > 300);
+      const scrollY = window.scrollY;
+      setShowBackToTop(scrollY > 300);
+      setMobileFiltersDimmed(scrollY > 120);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -160,6 +207,7 @@ export function PublicHomePage() {
       <div className="relative flex gap-8 md:min-h-[16rem]">
         {/* Desktop sticky sidebar */}
         <aside
+          ref={asideRef}
           className={cn(
             "hidden w-44 shrink-0 flex-col gap-2 transition-all duration-300 md:flex",
             sidebarVisible
@@ -168,7 +216,7 @@ export function PublicHomePage() {
           )}
           aria-hidden={!sidebarVisible}
         >
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="mb-1 text-[var(--text-size-xs)] font-semibold uppercase tracking-wider text-muted-foreground">
             Filtrar
           </p>
           {allPillars.map((pillar) => (
@@ -234,7 +282,7 @@ export function PublicHomePage() {
                   <p className="text-lg font-semibold text-foreground">
                     No hay proyectos en esta categoría todavía
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-[var(--text-size-sm)] text-muted-foreground">
                     Explora otra categoría o vuelve más tarde para ver
                     novedades.
                   </p>
@@ -282,7 +330,7 @@ export function PublicHomePage() {
                       <CardHeader className="gap-2 px-5 pt-5 md:px-6">
                         <Badge
                           variant="secondary"
-                          className="w-fit gap-1.5 px-2.5 py-1 text-xs font-medium"
+                          className="w-fit gap-1.5 px-2.5 py-1 text-[var(--text-size-xs)] font-medium"
                         >
                           <PillarIcon size={14} weight="bold" aria-hidden />
                           {config.label}
@@ -297,28 +345,30 @@ export function PublicHomePage() {
                           {project.description}
                         </p>
 
-                        <div className="space-y-1.5 text-sm text-muted-foreground">
-                          <p className="flex items-center gap-2">
+                        <div className="space-y-2 text-base text-muted-foreground md:text-[var(--text-size-sm)]">
+                          <p className="flex items-start gap-2.5">
                             <CalendarDots
-                              size={18}
+                              size={20}
                               weight="bold"
-                              className="shrink-0 text-primary/70"
+                              className="mt-0.5 shrink-0 text-primary/70"
                               aria-hidden
                             />
-                            <span>
+                            <span className="leading-snug">
                               {formatDateLong(project.startsAt)} —{" "}
                               {formatDateLong(project.endsAt)}
                             </span>
                           </p>
                           {project.location && (
-                            <p className="flex items-center gap-2">
+                            <p className="flex items-start gap-2.5">
                               <MapPin
-                                size={18}
+                                size={20}
                                 weight="bold"
-                                className="shrink-0 text-primary/70"
+                                className="mt-0.5 shrink-0 text-primary/70"
                                 aria-hidden
                               />
-                              <span>{project.location}</span>
+                              <span className="leading-snug">
+                                {project.location}
+                              </span>
                             </p>
                           )}
                         </div>
@@ -375,11 +425,18 @@ export function PublicHomePage() {
       </div>
 
       {/* Mobile floating filter bar (sticky bottom, stops before footer) */}
-      <div className="sticky bottom-0 z-40 -mx-5 mt-8 border-t border-border bg-background/95 px-5 py-4 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] backdrop-blur-md md:hidden">
-        <p className="mb-3 text-xs font-semibold text-muted-foreground">
-          Filtrar por tema:
+      <div
+        className={cn(
+          "sticky bottom-0 z-40 -mx-5 mt-8 border-t py-4 backdrop-blur-xl transition-all duration-300 md:hidden",
+          mobileFiltersDimmed
+            ? "border-border/50 bg-background/78 shadow-[0_-2px_10px_rgba(0,0,0,0.06)]"
+            : "border-border bg-background/95 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
+        )}
+      >
+        <p className="mb-3 px-5 text-[var(--text-size-xs)] font-semibold text-muted-foreground uppercase tracking-wider">
+          Explorar por categoría:
         </p>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 px-5 pb-2">
           {allPillars.map((pillar) => {
             const config = pillar ? PILLAR_CONFIG[pillar] : null;
             const Icon = config?.icon ?? SquaresFour;
@@ -391,12 +448,17 @@ export function PublicHomePage() {
                 key={`mobile-${pillar ?? "all"}`}
                 variant={isActive ? "default" : "outline"}
                 className={cn(
-                  "h-10 gap-1.5 px-3 text-xs font-semibold",
-                  isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
+                  "h-12 gap-2 text-[0.95rem] font-bold active:scale-95 transition-transform",
+                  !pillar && "col-span-2",
+                  isActive ? "shadow-md" : "bg-muted/20 hover:bg-muted/50",
                 )}
                 onClick={() => setActivePillar(pillar)}
               >
-                <Icon size={16} weight="duotone" aria-hidden />
+                <Icon
+                  size={20}
+                  weight={isActive ? "fill" : "duotone"}
+                  aria-hidden
+                />
                 {label}
               </Button>
             );

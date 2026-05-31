@@ -98,10 +98,10 @@ export default function PublicProjectDetailPage() {
       <Button
         type="button"
         variant="ghost"
-        className="-ml-3 w-fit gap-2 px-3 text-muted-foreground hover:text-foreground"
+        className="-ml-3 h-12 w-fit gap-2 px-4 bg-muted/30 text-base font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
         onClick={() => navigate(-1)}
       >
-        <ArrowLeft size={20} weight="bold" aria-hidden />
+        <ArrowLeft size={22} weight="bold" aria-hidden />
         Volver
       </Button>
 
@@ -120,7 +120,10 @@ export default function PublicProjectDetailPage() {
         )}
 
         <CardHeader className="gap-3 px-5 pt-6 md:px-8">
-          <Badge variant="secondary" className="w-fit px-2.5 py-1 text-xs">
+          <Badge
+            variant="secondary"
+            className="w-fit px-2.5 py-1 text-[var(--text-size-xs)]"
+          >
             {config.label}
           </Badge>
           <CardTitle className="text-2xl font-bold leading-tight md:text-3xl">
@@ -134,7 +137,7 @@ export default function PublicProjectDetailPage() {
           </p>
 
           <div className="space-y-2 text-muted-foreground">
-            <p className="flex items-start gap-2 text-sm md:text-base">
+            <p className="flex items-start gap-2 text-[var(--text-size-sm)] md:text-base">
               <CalendarDots
                 size={22}
                 weight="bold"
@@ -147,7 +150,7 @@ export default function PublicProjectDetailPage() {
               </span>
             </p>
             {project.location && (
-              <p className="flex items-start gap-2 text-sm md:text-base">
+              <p className="flex items-start gap-2 text-[var(--text-size-sm)] md:text-base">
                 <MapPin
                   size={22}
                   weight="bold"

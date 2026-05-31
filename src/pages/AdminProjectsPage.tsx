@@ -206,7 +206,7 @@ export default function AdminProjectsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
             {projects?.length ?? 0} proyectos registrados
           </p>
         </div>
@@ -231,27 +231,32 @@ export default function AdminProjectsPage() {
             {/* Desktop table */}
             <div className="mt-6 hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
-                <table className="min-w-[640px] w-full text-sm">
-                  <thead className="border-b bg-muted/50">
+                <table className="min-w-[640px] w-full text-[var(--text-size-sm)]">
+                  <thead className="border-b bg-muted/30">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Título
                       </th>
-                      <th className="px-4 py-3 text-left font-medium">Pilar</th>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Pilar
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Estado
                       </th>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Inicio
                       </th>
-                      <th className="px-4 py-3 text-right font-medium">
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Acciones
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {projects.map((project) => (
-                      <tr key={project.id} className="hover:bg-muted/30">
+                      <tr
+                        key={project.id}
+                        className="hover:bg-muted/50 transition-colors"
+                      >
                         <td className="max-w-[200px] truncate px-4 py-3 font-medium">
                           {project.title}
                         </td>
@@ -285,6 +290,7 @@ export default function AdminProjectsPage() {
                               size="icon"
                               onClick={() => openEdit(project)}
                               aria-label="Editar proyecto"
+                              className="hover:bg-primary/10 hover:text-primary transition-colors"
                             >
                               <PencilSimple size={18} />
                             </Button>
@@ -293,6 +299,7 @@ export default function AdminProjectsPage() {
                               size="icon"
                               onClick={() => setDeleteTarget(project)}
                               aria-label="Eliminar proyecto"
+                              className="hover:bg-destructive/10 hover:text-destructive transition-colors"
                             >
                               <Trash size={18} />
                             </Button>
@@ -308,49 +315,51 @@ export default function AdminProjectsPage() {
             {/* Mobile cards */}
             <div className="mt-6 space-y-3 md:hidden">
               {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="flex items-center justify-between gap-3 rounded-lg border p-4"
-                >
-                  <div className="min-w-0 flex-1">
+                <div key={project.id} className="rounded-lg border p-4">
+                  <div className="min-w-0">
                     <p className="truncate font-medium">{project.title}</p>
-                    <div className="mt-1 flex items-center gap-2">
+                    <p className="mt-1 text-[var(--text-size-xs)] text-muted-foreground">
+                      {formatDateShort(project.startsAt)} ·{" "}
+                      {PILLAR_LABELS[project.pillar]}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
                       <Badge
                         variant={STATUS_VARIANT[project.status]}
-                        className="text-xs"
+                        className="text-[var(--text-size-xs)]"
                       >
                         {STATUS_LABELS[project.status]}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {PILLAR_LABELS[project.pillar]}
-                      </span>
                     </div>
                   </div>
-                  <div className="flex shrink-0 gap-1">
+                  <div className="mt-4 grid grid-cols-3 gap-2">
                     <Link
                       to={`/admin/projects/${project.id}`}
                       className={cn(
-                        buttonVariants({ variant: "ghost", size: "icon" }),
+                        buttonVariants({ variant: "outline", size: "default" }),
+                        "h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]",
                       )}
                       aria-label="Ver detalle"
                     >
                       <Eye size={18} />
+                      Ver
                     </Link>
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant="outline"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]"
                       onClick={() => openEdit(project)}
                       aria-label="Editar proyecto"
                     >
                       <PencilSimple size={18} />
+                      Editar
                     </Button>
                     <Button
-                      variant="ghost"
-                      size="icon"
+                      variant="outline"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)] text-destructive hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => setDeleteTarget(project)}
                       aria-label="Eliminar proyecto"
                     >
                       <Trash size={18} />
+                      Elim.
                     </Button>
                   </div>
                 </div>

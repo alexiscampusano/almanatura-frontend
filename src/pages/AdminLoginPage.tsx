@@ -66,7 +66,9 @@ export function AdminLoginPage() {
           aria-label="Preparando sesión"
         >
           <Spinner size="lg" />
-          <p className="text-sm text-muted-foreground">Preparando acceso…</p>
+          <p className="text-[var(--text-size-sm)] text-muted-foreground">
+            Preparando acceso…
+          </p>
         </main>
       </>
     );
@@ -83,7 +85,9 @@ export function AdminLoginPage() {
           aria-label="Redirigiendo al panel"
         >
           <Spinner size="lg" />
-          <p className="text-sm text-muted-foreground">Entrando al panel…</p>
+          <p className="text-[var(--text-size-sm)] text-muted-foreground">
+            Entrando al panel…
+          </p>
         </main>
       </>
     );
@@ -95,7 +99,7 @@ export function AdminLoginPage() {
       <main className="flex min-h-svh items-center justify-center bg-muted/20 px-4 py-8">
         <section className="w-full max-w-md border border-border bg-card p-6 shadow-sm">
           <h1 className="text-2xl font-semibold">Ingreso administrativo</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-[var(--text-size-sm)] text-muted-foreground">
             Solo usuarios internos autorizados pueden acceder.
           </p>
           <form
@@ -110,11 +114,14 @@ export function AdminLoginPage() {
                 type="email"
                 autoComplete="email"
                 disabled={isSubmitting}
-                className="h-11 px-3 text-base md:text-xs"
+                className="h-[var(--size-input-default)] px-3 text-base md:text-[var(--text-size-xs)]"
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-sm text-destructive" role="alert">
+                <p
+                  className="text-[var(--text-size-sm)] text-destructive"
+                  role="alert"
+                >
                   {errors.email.message}
                 </p>
               )}
@@ -126,23 +133,29 @@ export function AdminLoginPage() {
                 type="password"
                 autoComplete="current-password"
                 disabled={isSubmitting}
-                className="h-11 px-3 text-base md:text-xs"
+                className="h-[var(--size-input-default)] px-3 text-base md:text-[var(--text-size-xs)]"
                 {...register("password")}
               />
               {errors.password && (
-                <p className="text-sm text-destructive" role="alert">
+                <p
+                  className="text-[var(--text-size-sm)] text-destructive"
+                  role="alert"
+                >
                   {errors.password.message}
                 </p>
               )}
             </div>
             {errors.root && (
-              <p className="text-sm text-destructive" role="alert">
+              <p
+                className="text-[var(--text-size-sm)] text-destructive"
+                role="alert"
+              >
                 {errors.root.message}
               </p>
             )}
             <Button
               type="submit"
-              className="mt-2 h-11 gap-2"
+              className="mt-2 h-[var(--size-button-default)] gap-2"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -155,7 +168,7 @@ export function AdminLoginPage() {
               )}
             </Button>
           </form>
-          <p className="mt-6 text-center text-sm">
+          <p className="mt-6 text-center text-[var(--text-size-sm)]">
             <Link
               to="/"
               className="text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"

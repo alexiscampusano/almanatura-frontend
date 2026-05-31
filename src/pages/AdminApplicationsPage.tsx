@@ -71,7 +71,9 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
 
   if (options.length === 0) {
     return (
-      <span className="text-sm text-muted-foreground">Sin transiciones</span>
+      <span className="text-[var(--text-size-sm)] text-muted-foreground">
+        Sin transiciones
+      </span>
     );
   }
 
@@ -83,7 +85,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
           if (v != null) setTarget(v as ApplicationStatus);
         }}
       >
-        <SelectTrigger className="h-10 w-full sm:w-[200px]">
+        <SelectTrigger className="h-[var(--size-input-default)] w-full sm:w-[200px]">
           <SelectValue placeholder="Siguiente estado">
             {target ? APPLICATION_STATUS_LABELS[target] : null}
           </SelectValue>
@@ -98,7 +100,7 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
       </Select>
       <Button
         size="sm"
-        className="h-10 gap-2"
+        className="h-[var(--size-button-default)] gap-2"
         disabled={!target || patchMutation.isPending}
         onClick={() => {
           if (!target) return;
@@ -174,12 +176,12 @@ export default function AdminApplicationsPage() {
             if (v != null) setProjectId(v);
           }}
         >
-          <SelectTrigger className="h-11 w-full">
+          <SelectTrigger className="h-[var(--size-input-default)] w-full">
             <SelectValue placeholder="Todos los proyectos">
               {projectId === "all"
-                ? null
+                ? "Todos los proyectos"
                 : (projects?.find((p) => String(p.id) === projectId)?.title ??
-                  null)}
+                  "Todos los proyectos")}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -200,10 +202,10 @@ export default function AdminApplicationsPage() {
             if (v != null) setStatus(v);
           }}
         >
-          <SelectTrigger className="h-11 w-full">
+          <SelectTrigger className="h-[var(--size-input-default)] w-full">
             <SelectValue placeholder="Todos los estados">
               {status === "all"
-                ? null
+                ? "Todos los estados"
                 : APPLICATION_STATUS_LABELS[status as ApplicationStatus]}
             </SelectValue>
           </SelectTrigger>
@@ -224,7 +226,7 @@ export default function AdminApplicationsPage() {
           value={searchName}
           onChange={(e) => setSearchName(e.target.value)}
           placeholder="Nombre o email"
-          className="h-11 w-full"
+          className="h-[var(--size-input-default)] w-full"
         />
       </div>
     </>
@@ -245,7 +247,7 @@ export default function AdminApplicationsPage() {
     <AdminPage>
       <div>
         <h2 className="text-2xl font-semibold">Solicitudes</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
           Revisa postulaciones y actualiza el estado según el flujo definido.
         </p>
       </div>
@@ -279,37 +281,42 @@ export default function AdminApplicationsPage() {
           <>
             <div className="hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
-                <table className="min-w-[900px] w-full text-sm">
-                  <thead className="border-b bg-muted/50">
+                <table className="min-w-[900px] w-full text-[var(--text-size-sm)]">
+                  <thead className="border-b bg-muted/30">
                     <tr>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Solicitante
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Proyecto
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Estado
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">DNI</th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        DNI
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Creada
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Acción
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {filtered.map((app) => (
-                      <tr key={app.id} className="hover:bg-muted/30">
+                      <tr
+                        key={app.id}
+                        className="hover:bg-muted/50 transition-colors"
+                      >
                         <td className="px-3 py-3">
                           <div className="font-medium">{app.fullName}</div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-[var(--text-size-xs)] text-muted-foreground">
                             {app.email}
                           </div>
                           {app.phone && (
-                            <div className="text-xs text-muted-foreground">
+                            <div className="text-[var(--text-size-xs)] text-muted-foreground">
                               {app.phone}
                             </div>
                           )}
@@ -325,7 +332,7 @@ export default function AdminApplicationsPage() {
                             {APPLICATION_STATUS_LABELS[app.status]}
                           </Badge>
                         </td>
-                        <td className="px-3 py-3 align-top font-mono text-xs">
+                        <td className="px-3 py-3 align-top font-mono text-[var(--text-size-xs)]">
                           {app.nationalId}
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 align-top text-muted-foreground">
@@ -351,7 +358,7 @@ export default function AdminApplicationsPage() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-medium">{app.fullName}</p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-[var(--text-size-xs)] text-muted-foreground">
                           {app.email}
                         </p>
                       </div>
@@ -359,11 +366,13 @@ export default function AdminApplicationsPage() {
                         {APPLICATION_STATUS_LABELS[app.status]}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-[var(--text-size-sm)] text-muted-foreground">
                       {projectTitleById.get(app.projectId) ??
                         `Proyecto #${app.projectId}`}
                     </p>
-                    <p className="font-mono text-xs">DNI: {app.nationalId}</p>
+                    <p className="font-mono text-[var(--text-size-xs)]">
+                      DNI: {app.nationalId}
+                    </p>
                     <TransitionControls
                       key={`${app.id}-${app.status}`}
                       app={app}

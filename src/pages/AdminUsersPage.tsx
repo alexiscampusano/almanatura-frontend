@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ export default function AdminUsersPage() {
     handleSubmit,
     reset,
     setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting },
     setError,
   } = useForm<CreateUserSchema>({
@@ -61,7 +61,7 @@ export default function AdminUsersPage() {
     },
   });
 
-  const selectedRole = watch("role");
+  const selectedRole = useWatch({ control, name: "role" });
 
   const onSubmit = (data: CreateUserSchema) => {
     createMutation.mutate(
@@ -92,7 +92,7 @@ export default function AdminUsersPage() {
     <AdminPage className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold">Gestión de usuarios</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
           Usuarios del panel administrativo (solo super usuario puede crear
           cuentas nuevas).
         </p>
@@ -106,7 +106,10 @@ export default function AdminUsersPage() {
         >
           <h3 className="text-lg font-medium">Crear usuario interno</h3>
           {errors.root && (
-            <p className="text-sm text-destructive" role="alert">
+            <p
+              className="text-[var(--text-size-sm)] text-destructive"
+              role="alert"
+            >
               {errors.root.message}
             </p>
           )}
@@ -117,11 +120,11 @@ export default function AdminUsersPage() {
                 id="new-name"
                 maxLength={120}
                 disabled={isSubmitting}
-                className="h-11"
+                className="h-[var(--size-input-default)]"
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-sm text-destructive">
+                <p className="text-[var(--text-size-sm)] text-destructive">
                   {errors.name.message}
                 </p>
               )}
@@ -133,11 +136,11 @@ export default function AdminUsersPage() {
                 type="email"
                 maxLength={180}
                 disabled={isSubmitting}
-                className="h-11"
+                className="h-[var(--size-input-default)]"
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-sm text-destructive">
+                <p className="text-[var(--text-size-sm)] text-destructive">
                   {errors.email.message}
                 </p>
               )}
@@ -149,11 +152,11 @@ export default function AdminUsersPage() {
                 type="password"
                 autoComplete="new-password"
                 disabled={isSubmitting}
-                className="h-11"
+                className="h-[var(--size-input-default)]"
                 {...register("password")}
               />
               {errors.password && (
-                <p className="text-sm text-destructive">
+                <p className="text-[var(--text-size-sm)] text-destructive">
                   {errors.password.message}
                 </p>
               )}
@@ -167,7 +170,7 @@ export default function AdminUsersPage() {
                 }
                 disabled={isSubmitting}
               >
-                <SelectTrigger className="h-11 w-full">
+                <SelectTrigger className="h-[var(--size-input-default)] w-full">
                   <SelectValue placeholder="Seleccionar rol">
                     {ROLE_LABELS[selectedRole]}
                   </SelectValue>
@@ -182,7 +185,7 @@ export default function AdminUsersPage() {
                 </SelectContent>
               </Select>
               {errors.role && (
-                <p className="text-sm text-destructive">
+                <p className="text-[var(--text-size-sm)] text-destructive">
                   {errors.role.message}
                 </p>
               )}
@@ -202,7 +205,7 @@ export default function AdminUsersPage() {
       )}
 
       {!isSuperUser && (
-        <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+        <p className="rounded-md border border-border bg-muted/40 px-4 py-3 text-[var(--text-size-sm)] text-muted-foreground">
           Solo los super usuarios pueden crear nuevas cuentas. Puedes ver el
           listado del equipo.
         </p>
@@ -218,13 +221,15 @@ export default function AdminUsersPage() {
           </div>
         )}
         {!isLoading && users && users.length === 0 && (
-          <p className="text-sm text-muted-foreground">No hay usuarios.</p>
+          <p className="text-[var(--text-size-sm)] text-muted-foreground">
+            No hay usuarios.
+          </p>
         )}
         {!isLoading && users && users.length > 0 && (
           <>
             <div className="hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
-                <table className="min-w-[520px] w-full text-sm">
+                <table className="min-w-[520px] w-full text-[var(--text-size-sm)]">
                   <thead className="border-b bg-muted/50">
                     <tr>
                       <th className="px-4 py-3 text-left font-medium">
@@ -252,17 +257,20 @@ export default function AdminUsersPage() {
                 </table>
               </div>
             </div>
-            <ul className="space-y-2 md:hidden">
+            <ul className="space-y-3 md:hidden">
               {users.map((u) => (
                 <li
                   key={u.id}
-                  className="flex flex-col gap-1 rounded-lg border p-3"
+                  className="flex flex-col gap-2 rounded-lg border p-4"
                 >
                   <span className="font-medium">{u.name}</span>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-[var(--text-size-sm)] text-muted-foreground break-words">
                     {u.email}
                   </span>
-                  <Badge className="w-fit" variant={roleBadgeVariant(u.role)}>
+                  <Badge
+                    className="w-fit mt-2"
+                    variant={roleBadgeVariant(u.role)}
+                  >
                     {ROLE_LABELS[u.role]}
                   </Badge>
                 </li>

@@ -7,20 +7,15 @@ import { useAccessibilityStore } from "@/stores/accessibility.store";
 
 const queryClient = new QueryClient();
 
-function FontSizeSync() {
-  const fontSizeScale = useAccessibilityStore((state) => state.fontSizeScale);
+function App() {
+  const fontSizeScale = useAccessibilityStore((s) => s.fontSizeScale);
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${fontSizeScale * 100}%`;
   }, [fontSizeScale]);
 
-  return null;
-}
-
-function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <FontSizeSync />
       <RouterProvider router={appRouter} />
     </QueryClientProvider>
   );

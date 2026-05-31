@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { PublicApplicationDialog } from "@/components/PublicApplicationForm";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Card,
   CardContent,
@@ -52,8 +53,8 @@ export default function PublicProjectDetailPage() {
   if (isLoading) {
     return (
       <section className="mx-auto w-full max-w-3xl py-6">
-        <div className="mb-6 h-10 w-40 animate-pulse rounded bg-muted" />
-        <div className="h-64 w-full animate-pulse rounded-lg bg-muted" />
+        <Skeleton className="mb-6 h-10 w-40" />
+        <Skeleton className="h-64 w-full rounded-lg" />
       </section>
     );
   }

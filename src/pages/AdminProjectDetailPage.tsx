@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ProjectImpactSection } from "@/components/admin/ProjectImpactSection";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAdminProject } from "@/hooks/use-admin-project";
 import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/datetime";
@@ -53,8 +54,8 @@ export default function AdminProjectDetailPage() {
   if (isLoading) {
     return (
       <AdminPage>
-        <div className="h-8 w-48 animate-pulse rounded bg-muted" />
-        <div className="mt-6 h-64 animate-pulse rounded-lg bg-muted" />
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="mt-6 h-64 w-full rounded-lg" />
       </AdminPage>
     );
   }

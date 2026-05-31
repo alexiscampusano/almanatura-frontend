@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
@@ -231,7 +232,7 @@ export default function AdminUsersPage() {
         {isLoading && (
           <div className="space-y-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="h-12 animate-pulse rounded bg-muted" />
+              <Skeleton key={i} className="h-12 w-full" />
             ))}
           </div>
         )}

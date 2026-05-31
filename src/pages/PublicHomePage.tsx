@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PublicApplicationDialog } from "@/components/PublicApplicationForm";
 
 import { usePublicProjects } from "@/hooks/use-public-projects";
@@ -244,17 +245,15 @@ export function PublicHomePage() {
             {isLoading && (
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <div className="h-44 w-full rounded-t-lg bg-muted md:h-48" />
-                    <CardHeader>
-                      <div className="h-5 w-1/3 rounded bg-muted" />
-                      <div className="mt-3 h-6 w-3/4 rounded bg-muted" />
+                  <Card key={i}>
+                    <Skeleton className="h-44 w-full rounded-t-lg rounded-b-none md:h-48" />
+                    <CardHeader className="pb-3">
+                      <Skeleton className="mb-2 h-5 w-1/3 rounded-full" />
+                      <Skeleton className="h-6 w-3/4" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
-                        <div className="h-4 w-full rounded bg-muted" />
-                        <div className="h-4 w-2/3 rounded bg-muted" />
-                      </div>
+                    <CardContent className="space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-2/3" />
                     </CardContent>
                   </Card>
                 ))}

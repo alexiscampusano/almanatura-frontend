@@ -446,7 +446,6 @@ export function PublicHomePage() {
                 variant={isActive ? "default" : "outline"}
                 className={cn(
                   "h-12 gap-2 text-[0.95rem] font-bold active:scale-95 transition-transform",
-                  !pillar && "col-span-2",
                   isActive ? "shadow-md" : "bg-muted/20 hover:bg-muted/50",
                 )}
                 onClick={() => setActivePillar(pillar)}

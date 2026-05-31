@@ -15,7 +15,5 @@ export type ActorResponse = {
   email?: string;
   phone?: string;
   nationalId?: string;
-  notes?: string;
-  createdAt?: string;
   projects: ActorProjectInfo[];
 };

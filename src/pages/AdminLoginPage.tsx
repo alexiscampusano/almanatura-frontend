@@ -1,4 +1,5 @@
-import { useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -15,6 +16,7 @@ import { login } from "@/services/auth.service";
 import { useAuthStore } from "@/stores/auth.store";
 
 export function AdminLoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const hasHydrated = useAuthHydrated();
@@ -128,14 +130,26 @@ export function AdminLoginPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="admin-login-password">Contraseña</Label>
-              <Input
-                id="admin-login-password"
-                type="password"
-                autoComplete="current-password"
-                disabled={isSubmitting}
-                className="h-[var(--size-input-default)] px-3 text-base md:text-[var(--text-size-xs)]"
-                {...register("password")}
-              />
+              <div className="relative">
+                <Input
+                  id="admin-login-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  className="h-[var(--size-input-default)] px-3 pr-10 text-base md:text-[var(--text-size-xs)]"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                >
+                  {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
               {errors.password && (
                 <p
                   className="text-[var(--text-size-sm)] text-destructive"

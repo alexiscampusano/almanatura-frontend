@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,6 +41,7 @@ function roleBadgeVariant(role: InternalRole): "default" | "secondary" {
 export default function AdminUsersPage() {
   const user = useAuthStore((s) => s.user);
   const isSuperUser = user?.role === "SUPER_USER";
+  const [showPassword, setShowPassword] = useState(false);
 
   const { data: users, isLoading, isError } = useInternalUsers();
   const createMutation = useCreateInternalUser();
@@ -67,7 +70,10 @@ export default function AdminUsersPage() {
     createMutation.mutate(
       { ...data, enabled: true },
       {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset();
+          setShowPassword(false);
+        },
         onError: (err) => {
           setError("root", {
             message: getErrorMessage(err, "No se pudo crear el usuario."),
@@ -147,14 +153,26 @@ export default function AdminUsersPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="new-password">Contraseña</Label>
-              <Input
-                id="new-password"
-                type="password"
-                autoComplete="new-password"
-                disabled={isSubmitting}
-                className="h-[var(--size-input-default)]"
-                {...register("password")}
-              />
+              <div className="relative">
+                <Input
+                  id="new-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  disabled={isSubmitting}
+                  className="h-[var(--size-input-default)] w-full pr-10"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+                  aria-label={
+                    showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                  }
+                >
+                  {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-[var(--text-size-sm)] text-destructive">
                   {errors.password.message}

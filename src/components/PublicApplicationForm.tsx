@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,7 +37,7 @@ export function PublicApplicationDialog({
     register,
     handleSubmit,
     reset: resetForm,
-    watch,
+    control,
     setValue,
     formState: { errors, isSubmitting },
     setError,
@@ -51,7 +51,7 @@ export function PublicApplicationDialog({
     },
   });
 
-  const acceptPolicy = watch("acceptPolicy");
+  const acceptPolicy = useWatch({ control, name: "acceptPolicy" });
 
   function handleOpenChange(next: boolean) {
     setOpen(next);

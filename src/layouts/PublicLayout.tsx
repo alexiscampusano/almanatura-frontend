@@ -70,6 +70,7 @@ export function PublicLayout() {
         id="main-content"
         className="mx-auto w-full max-w-5xl flex-1 overflow-x-clip px-5 py-6 md:px-6 md:py-8"
       >
+        <h1 className="sr-only">AlmaNatura</h1>
         <Outlet />
       </main>
 

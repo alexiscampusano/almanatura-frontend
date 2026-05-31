@@ -57,8 +57,8 @@
   --popover-foreground: #38332e;
   --primary: #8f0d57;
   --primary-foreground: #ffffff;
-  --secondary: #a0968b;
-  --secondary-foreground: #ffffff;
+  --secondary: #d2c8be;
+  --secondary-foreground: #38332e;
   --muted: #e8e6e3;
   --muted-foreground: #766c60;
   --accent: #ad1069;
@@ -169,5 +169,22 @@
   button,
   a {
     @apply touch-manipulation;
+  }
+
+  /* Ensure elements that use primary background have readable foreground color. */
+  [class*="bg-primary"] {
+    color: var(--primary-foreground) !important;
+  }
+  [class*="bg-primary"] a,
+  [class*="bg-primary"] button {
+    color: inherit !important;
+  }
+
+  [class*="bg-secondary"] {
+    color: var(--secondary-foreground) !important;
+  }
+  [class*="bg-secondary"] a,
+  [class*="bg-secondary"] button {
+    color: inherit !important;
   }
 }

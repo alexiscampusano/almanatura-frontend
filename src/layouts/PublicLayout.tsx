@@ -58,7 +58,7 @@ export function PublicLayout() {
               <a
                 href="mailto:hola@almanatura.com"
                 aria-label="Contacto"
-                className="flex h-12 items-center justify-center gap-2 rounded-md border-2 border-primary-foreground/80 bg-transparent px-3 md:px-6 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+                className="flex h-12 items-center justify-center gap-2 rounded-md border-2 border-primary-foreground/80 bg-transparent px-3 md:px-6 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground/20 hover:border-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
                 title="Contacto"
               >
                 <EnvelopeSimple size={22} weight="bold" aria-hidden="true" />

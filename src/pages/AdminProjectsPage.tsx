@@ -35,6 +35,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -221,7 +229,7 @@ export default function AdminProjectsPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">Gestión de proyectos</h2>
-          <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
+          <p className="mt-1 text-sm text-muted-foreground">
             {projects?.length ?? 0} proyectos registrados
           </p>
         </div>
@@ -284,90 +292,75 @@ export default function AdminProjectsPage() {
         {projects && projects.length > 0 && (
           <>
             {/* Desktop table */}
-            <div className="mt-6 hidden rounded-lg border md:block">
-              <div className="overflow-x-auto">
-                <table className="min-w-[640px] w-full text-[var(--text-size-sm)]">
-                  <thead className="border-b bg-muted/30">
-                    <tr>
-                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Título
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Pilar
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Estado
-                      </th>
-                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Inicio
-                      </th>
-                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Acciones
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y">
-                    {projects.map((project) => (
-                      <tr
-                        key={project.id}
-                        className="hover:bg-muted/50 transition-colors"
-                      >
-                        <td className="max-w-[200px] truncate px-4 py-3 font-medium">
-                          {project.title}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {PILLAR_LABELS[project.pillar]}
-                        </td>
-                        <td className="px-4 py-3">
-                          <Badge variant={STATUS_VARIANT[project.status]}>
-                            {STATUS_LABELS[project.status]}
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {formatDateShort(project.startsAt)}
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger
-                              className={cn(
-                                buttonVariants({
-                                  variant: "ghost",
-                                  size: "icon",
-                                }),
-                                "h-8 w-8 p-0",
-                              )}
+            <div className="mt-6 hidden rounded-lg border bg-card md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Título</TableHead>
+                    <TableHead>Pilar</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Inicio</TableHead>
+                    <TableHead className="text-right">Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {projects.map((project) => (
+                    <TableRow key={project.id}>
+                      <TableCell className="max-w-[200px] truncate font-medium">
+                        {project.title}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {PILLAR_LABELS[project.pillar]}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={STATUS_VARIANT[project.status]}>
+                          {STATUS_LABELS[project.status]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {formatDateShort(project.startsAt)}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger
+                            className={cn(
+                              buttonVariants({
+                                variant: "ghost",
+                                size: "icon",
+                              }),
+                              "h-8 w-8 p-0",
+                            )}
+                          >
+                            <DotsThreeVertical size={18} />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() =>
+                                navigate(`/admin/projects/${project.id}`)
+                              }
+                              className="flex items-center gap-2 cursor-pointer"
                             >
-                              <DotsThreeVertical size={18} />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  navigate(`/admin/projects/${project.id}`)
-                                }
-                                className="flex items-center gap-2 cursor-pointer"
-                              >
-                                <Eye size={16} /> Ver detalle
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => openEdit(project)}
-                                className="flex items-center gap-2 cursor-pointer"
-                              >
-                                <PencilSimple size={16} /> Editar
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => setDeleteTarget(project)}
-                                className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
-                              >
-                                <Trash size={16} /> Eliminar
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                              <Eye size={16} /> Ver detalle
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => openEdit(project)}
+                              className="flex items-center gap-2 cursor-pointer"
+                            >
+                              <PencilSimple size={16} /> Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => setDeleteTarget(project)}
+                              className="flex items-center gap-2 cursor-pointer text-destructive focus:text-destructive"
+                            >
+                              <Trash size={16} /> Eliminar
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
 
             {/* Mobile cards */}
@@ -376,14 +369,14 @@ export default function AdminProjectsPage() {
                 <div key={project.id} className="rounded-lg border p-4">
                   <div className="min-w-0">
                     <p className="truncate font-medium">{project.title}</p>
-                    <p className="mt-1 text-[var(--text-size-xs)] text-muted-foreground">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {formatDateShort(project.startsAt)} ·{" "}
                       {PILLAR_LABELS[project.pillar]}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
                       <Badge
                         variant={STATUS_VARIANT[project.status]}
-                        className="text-[var(--text-size-xs)]"
+                        className="text-xs"
                       >
                         {STATUS_LABELS[project.status]}
                       </Badge>
@@ -394,7 +387,7 @@ export default function AdminProjectsPage() {
                       to={`/admin/projects/${project.id}`}
                       className={cn(
                         buttonVariants({ variant: "outline", size: "default" }),
-                        "h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]",
+                        "h-[var(--size-button-default)] gap-2 px-3 text-sm",
                       )}
                       aria-label="Ver detalle"
                     >
@@ -403,7 +396,7 @@ export default function AdminProjectsPage() {
                     </Link>
                     <Button
                       variant="outline"
-                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)]"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-sm"
                       onClick={() => openEdit(project)}
                       aria-label="Editar proyecto"
                     >
@@ -412,7 +405,7 @@ export default function AdminProjectsPage() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="h-[var(--size-button-default)] gap-2 px-3 text-[var(--text-size-sm)] text-destructive hover:bg-destructive/10 hover:text-destructive"
+                      className="h-[var(--size-button-default)] gap-2 px-3 text-sm text-destructive hover:bg-destructive/10 hover:text-destructive"
                       onClick={() => setDeleteTarget(project)}
                       aria-label="Eliminar proyecto"
                     >

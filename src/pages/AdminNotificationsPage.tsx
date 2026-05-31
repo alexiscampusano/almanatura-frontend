@@ -54,7 +54,7 @@ export default function AdminNotificationsPage() {
     <AdminPage>
       <div>
         <h2 className="text-2xl font-semibold">Registrar notificación</h2>
-        <p className="mt-1 text-[var(--text-size-sm)] text-muted-foreground">
+        <p className="mt-1 text-sm text-muted-foreground">
           Deja constancia de un envío previsto (correo). El sistema la guarda
           como pendiente para auditoría; el envío real puede configurarse más
           adelante.
@@ -68,10 +68,7 @@ export default function AdminNotificationsPage() {
           noValidate
         >
           {errors.root && (
-            <p
-              className="text-[var(--text-size-sm)] text-destructive"
-              role="alert"
-            >
+            <p className="text-sm text-destructive" role="alert">
               {errors.root.message}
             </p>
           )}
@@ -89,7 +86,7 @@ export default function AdminNotificationsPage() {
               {...register("recipientHint")}
             />
             {errors.recipientHint && (
-              <p className="text-[var(--text-size-sm)] text-destructive">
+              <p className="text-sm text-destructive">
                 {errors.recipientHint.message}
               </p>
             )}
@@ -104,7 +101,7 @@ export default function AdminNotificationsPage() {
               {...register("subject")}
             />
             {errors.subject && (
-              <p className="text-[var(--text-size-sm)] text-destructive">
+              <p className="text-sm text-destructive">
                 {errors.subject.message}
               </p>
             )}
@@ -120,9 +117,7 @@ export default function AdminNotificationsPage() {
               {...register("body")}
             />
             {errors.body && (
-              <p className="text-[var(--text-size-sm)] text-destructive">
-                {errors.body.message}
-              </p>
+              <p className="text-sm text-destructive">{errors.body.message}</p>
             )}
           </div>
 

@@ -58,7 +58,7 @@ export function AdminLayout() {
             <Link
               to="/"
               aria-label="Volver al inicio público"
-              className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-[var(--text-size-sm)] font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="inline-flex items-center gap-2 rounded-sm border border-border px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
             >
               <img
                 src={almanaturaLogo}
@@ -73,7 +73,7 @@ export function AdminLayout() {
                 aria-label={`Mi cuenta, ${roleLabel(user.role)}`}
                 className={({ isActive }) =>
                   cn(
-                    "inline-flex items-center gap-2 rounded-sm border px-2.5 py-2 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    "inline-flex items-center gap-2 rounded-sm border px-2.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
                       ? "border-primary bg-primary/5 text-foreground"
                       : "border-border bg-background hover:bg-muted/80",
@@ -81,14 +81,14 @@ export function AdminLayout() {
                 }
               >
                 <span
-                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-[var(--text-size-xs)] font-semibold text-primary-foreground"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
                   aria-hidden
                 >
                   {getInitials(user.name)}
                 </span>
                 <Badge
                   variant="secondary"
-                  className="max-w-[11rem] shrink truncate font-normal text-[var(--text-size-xs)] sm:max-w-[10rem] sm:text-[var(--text-size-xs)]"
+                  className="max-w-[11rem] shrink truncate font-normal text-xs sm:max-w-[10rem] sm:text-xs"
                 >
                   {roleLabel(user.role)}
                 </Badge>
@@ -168,7 +168,7 @@ export function AdminLayout() {
                 to={item.to}
                 className={({ isActive }) =>
                   cn(
-                    "inline-flex min-h-[var(--size-button-default)] items-center rounded-r-full px-5 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    "inline-flex min-h-[var(--size-button-default)] items-center rounded-r-full px-5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
                       ? "bg-primary text-primary-foreground shadow-md"
                       : "hover:bg-white/10 hover:text-white",

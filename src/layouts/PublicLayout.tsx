@@ -25,7 +25,7 @@ export function PublicLayout() {
       <NavigationProgress />
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-[var(--text-size-sm)] focus:font-medium focus:ring-2 focus:ring-ring"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-background focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-ring"
       >
         Saltar al contenido principal
       </a>
@@ -155,7 +155,7 @@ export function PublicLayout() {
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-6 text-[var(--text-size-sm)] opacity-80 sm:flex-row">
+          <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-6 text-sm opacity-80 sm:flex-row">
             <p className="text-center sm:text-left">
               © {new Date().getFullYear()} AlmaNatura. Todos los derechos
               reservados.

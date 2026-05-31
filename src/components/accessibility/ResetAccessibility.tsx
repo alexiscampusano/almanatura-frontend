@@ -27,7 +27,7 @@ export default function ResetAccessibility() {
   return (
     <Button
       variant="ghost"
-      className="hidden h-[var(--size-button-sm)] items-center gap-2 px-3 text-[var(--text-size-sm)] sm:inline-flex"
+      className="hidden h-[var(--size-button-sm)] items-center gap-2 px-3 text-sm sm:inline-flex"
       onClick={handleReset}
       aria-label="Reset accessibility settings"
       title="Reset accessibility settings"

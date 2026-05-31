@@ -345,28 +345,30 @@ export function PublicHomePage() {
                           {project.description}
                         </p>
 
-                        <div className="space-y-1.5 text-[var(--text-size-sm)] text-muted-foreground">
-                          <p className="flex items-center gap-2">
+                        <div className="space-y-2 text-base text-muted-foreground md:text-[var(--text-size-sm)]">
+                          <p className="flex items-start gap-2.5">
                             <CalendarDots
-                              size={18}
+                              size={20}
                               weight="bold"
-                              className="shrink-0 text-primary/70"
+                              className="mt-0.5 shrink-0 text-primary/70"
                               aria-hidden
                             />
-                            <span>
+                            <span className="leading-snug">
                               {formatDateLong(project.startsAt)} —{" "}
                               {formatDateLong(project.endsAt)}
                             </span>
                           </p>
                           {project.location && (
-                            <p className="flex items-center gap-2">
+                            <p className="flex items-start gap-2.5">
                               <MapPin
-                                size={18}
+                                size={20}
                                 weight="bold"
-                                className="shrink-0 text-primary/70"
+                                className="mt-0.5 shrink-0 text-primary/70"
                                 aria-hidden
                               />
-                              <span>{project.location}</span>
+                              <span className="leading-snug">
+                                {project.location}
+                              </span>
                             </p>
                           )}
                         </div>
@@ -425,16 +427,16 @@ export function PublicHomePage() {
       {/* Mobile floating filter bar (sticky bottom, stops before footer) */}
       <div
         className={cn(
-          "sticky bottom-0 z-40 -mx-5 mt-8 border-t px-5 py-4 backdrop-blur-xl transition-all duration-300 md:hidden",
+          "sticky bottom-0 z-40 -mx-5 mt-8 border-t py-4 backdrop-blur-xl transition-all duration-300 md:hidden",
           mobileFiltersDimmed
             ? "border-border/50 bg-background/78 shadow-[0_-2px_10px_rgba(0,0,0,0.06)]"
             : "border-border bg-background/95 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]",
         )}
       >
-        <p className="mb-3 text-[var(--text-size-xs)] font-semibold text-muted-foreground">
-          Filtrar por tema:
+        <p className="mb-3 px-5 text-[var(--text-size-xs)] font-semibold text-muted-foreground uppercase tracking-wider">
+          Explorar por categoría:
         </p>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 px-5 pb-2">
           {allPillars.map((pillar) => {
             const config = pillar ? PILLAR_CONFIG[pillar] : null;
             const Icon = config?.icon ?? SquaresFour;
@@ -446,12 +448,17 @@ export function PublicHomePage() {
                 key={`mobile-${pillar ?? "all"}`}
                 variant={isActive ? "default" : "outline"}
                 className={cn(
-                  "h-10 gap-1.5 px-3 text-[var(--text-size-xs)] font-semibold",
-                  isActive ? "shadow-sm" : "bg-muted/20 hover:bg-muted/50",
+                  "h-12 gap-2 text-[0.95rem] font-bold active:scale-95 transition-transform",
+                  !pillar && "col-span-2",
+                  isActive ? "shadow-md" : "bg-muted/20 hover:bg-muted/50",
                 )}
                 onClick={() => setActivePillar(pillar)}
               >
-                <Icon size={16} weight="duotone" aria-hidden />
+                <Icon
+                  size={20}
+                  weight={isActive ? "fill" : "duotone"}
+                  aria-hidden
+                />
                 {label}
               </Button>
             );

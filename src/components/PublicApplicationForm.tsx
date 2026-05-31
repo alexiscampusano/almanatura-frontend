@@ -97,7 +97,11 @@ export function PublicApplicationDialog({
       >
         Quiero participar
       </DialogTrigger>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+      <DialogContent
+        className="max-h-[90vh] overflow-y-auto sm:max-w-lg"
+        // @ts-expect-error - onInteractOutside works on some UI libs but not typed here
+        onInteractOutside={(e: Event) => e.preventDefault()}
+      >
         {success ? (
           <>
             <DialogHeader>

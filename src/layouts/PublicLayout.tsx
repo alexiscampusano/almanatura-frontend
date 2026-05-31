@@ -48,17 +48,21 @@ export function PublicLayout() {
             <div className="flex items-center gap-2 md:gap-4">
               <Link
                 to="/"
-                className="flex h-12 items-center gap-2 rounded-md px-3 md:px-4 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+                aria-label="Inicio"
+                className="flex h-12 items-center justify-center gap-2 rounded-md px-3 md:px-4 text-base font-medium text-primary-foreground transition-colors hover:bg-primary-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+                title="Inicio"
               >
-                <House size={22} weight="fill" />
-                <span>Inicio</span>
+                <House size={22} weight="fill" aria-hidden="true" />
+                <span className="hidden md:inline">Inicio</span>
               </Link>
               <a
                 href="mailto:hola@almanatura.com"
-                className="flex h-12 items-center gap-2 rounded-md border-2 border-primary-foreground/80 bg-transparent px-4 md:px-6 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+                aria-label="Contacto"
+                className="flex h-12 items-center justify-center gap-2 rounded-md border-2 border-primary-foreground/80 bg-transparent px-3 md:px-6 text-base font-semibold text-primary-foreground transition-all hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95"
+                title="Contacto"
               >
-                <EnvelopeSimple size={22} weight="bold" />
-                <span>Contacto</span>
+                <EnvelopeSimple size={22} weight="bold" aria-hidden="true" />
+                <span className="hidden md:inline">Contacto</span>
               </a>
             </div>
           </div>
@@ -152,13 +156,13 @@ export function PublicLayout() {
 
           {/* Bottom Bar */}
           <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-primary-foreground/20 pt-6 text-[var(--text-size-sm)] opacity-80 sm:flex-row">
-            <p>
+            <p className="text-center sm:text-left">
               © {new Date().getFullYear()} AlmaNatura. Todos los derechos
               reservados.
             </p>
             <Link
               to="/admin"
-              className="font-medium underline underline-offset-4 hover:text-primary-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70"
+              className="flex min-h-[44px] items-center justify-center px-4 py-2 font-medium underline underline-offset-4 hover:text-primary-foreground hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/70 active:scale-95 transition-transform"
             >
               Acceso equipo administrador
             </Link>

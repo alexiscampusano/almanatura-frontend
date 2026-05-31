@@ -82,10 +82,10 @@
   --sidebar-border: #d7d2cb;
   --sidebar-ring: #8f0d57;
   /* Design tokens for component sizing (mobile-first) */
-  --size-button-default: 2.75rem; /* ~h-11 */
+  --size-button-default: 3rem; /* 48px */
   --size-button-sm: 2rem; /* ~h-8 */
-  --size-button-lg: 3rem; /* ~h-12 */
-  --size-input-default: 2.75rem; /* ~h-11 */
+  --size-button-lg: 3.5rem; /* 56px */
+  --size-input-default: 3rem; /* 48px */
   --size-input-sm: 2rem; /* ~h-8 */
   --text-size-sm: 0.875rem; /* 14px */
   --text-size-xs: 0.75rem; /* 12px */

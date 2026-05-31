@@ -98,10 +98,10 @@ export default function PublicProjectDetailPage() {
       <Button
         type="button"
         variant="ghost"
-        className="-ml-3 w-fit gap-2 px-3 text-muted-foreground hover:text-foreground"
+        className="-ml-3 h-12 w-fit gap-2 px-4 bg-muted/30 text-base font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground active:scale-95"
         onClick={() => navigate(-1)}
       >
-        <ArrowLeft size={20} weight="bold" aria-hidden />
+        <ArrowLeft size={22} weight="bold" aria-hidden />
         Volver
       </Button>
 

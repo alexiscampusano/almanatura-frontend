@@ -12,6 +12,11 @@ import {
   adminListRegionClassName,
 } from "@/components/admin/admin-page";
 import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
+import {
+  EnvelopeSimple,
+  Phone,
+  IdentificationCard,
+} from "@phosphor-icons/react";
 import { useActors } from "@/hooks/use-actors";
 import { getAvatarColor, getInitials } from "@/lib/avatar";
 import { ALL_PILLARS, PILLAR_LABELS } from "@/lib/project";
@@ -179,12 +184,38 @@ export default function AdminActorsPage() {
                       >
                         {getInitials(actor.fullName)}
                       </span>
-                      <div className="min-w-0">
-                        <CardTitle className="truncate">
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="truncate text-base mb-1">
                           {actor.fullName}
                         </CardTitle>
-                        <CardContent className="p-0 text-xs text-muted-foreground">
-                          {actor.region}
+                        <CardContent className="p-0 text-xs text-muted-foreground flex flex-col gap-1 mt-1">
+                          {actor.email && (
+                            <div className="flex items-center gap-1.5 truncate">
+                              <EnvelopeSimple className="size-3.5 shrink-0" />
+                              <span className="truncate">{actor.email}</span>
+                            </div>
+                          )}
+                          {actor.phone && (
+                            <div className="flex items-center gap-1.5 truncate">
+                              <Phone className="size-3.5 shrink-0" />
+                              <span className="truncate">{actor.phone}</span>
+                            </div>
+                          )}
+                          {actor.nationalId && (
+                            <div className="flex items-center gap-1.5 truncate">
+                              <IdentificationCard className="size-3.5 shrink-0" />
+                              <span className="truncate">
+                                {actor.nationalId}
+                              </span>
+                            </div>
+                          )}
+                          {!actor.email &&
+                            !actor.phone &&
+                            !actor.nationalId && (
+                              <span className="italic text-muted-foreground/70">
+                                Sin datos de contacto
+                              </span>
+                            )}
                         </CardContent>
                       </div>
                     </div>

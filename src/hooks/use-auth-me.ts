@@ -10,7 +10,7 @@ export function useSyncCurrentUser() {
   const updateUser = useAuthStore((s) => s.updateUser);
 
   const { data } = useQuery({
-    queryKey: ["auth", "me"],
+    queryKey: ["auth", "me", accessToken],
     queryFn: fetchCurrentUser,
     enabled: Boolean(accessToken),
     staleTime: 60_000,

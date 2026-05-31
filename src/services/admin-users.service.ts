@@ -13,3 +13,7 @@ export async function createInternalUser(
   const response = await apiClient.post<UserSummary>("/admin/users", data);
   return response.data;
 }
+
+export async function deleteUser(id: number): Promise<void> {
+  await apiClient.delete(`/admin/users/${id}`);
+}

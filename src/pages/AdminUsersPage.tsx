@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
-import { Eye, EyeSlash } from "@phosphor-icons/react";
+import { Eye, EyeSlash, Trash } from "@phosphor-icons/react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import {
   useCreateInternalUser,
   useInternalUsers,
+  useDeleteInternalUser,
 } from "@/hooks/use-admin-users";
 import { getErrorMessage } from "@/lib/error-handler";
 import { createUserSchema, type CreateUserSchema } from "@/lib/schemas";
@@ -46,6 +58,7 @@ export default function AdminUsersPage() {
 
   const { data: users, isLoading, isError } = useInternalUsers();
   const createMutation = useCreateInternalUser();
+  const deleteMutation = useDeleteInternalUser();
 
   const {
     register,
@@ -253,6 +266,9 @@ export default function AdminUsersPage() {
                         Correo
                       </th>
                       <th className="px-4 py-3 text-left font-medium">Rol</th>
+                      <th className="px-4 py-3 text-right font-medium">
+                        Acciones
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
@@ -264,6 +280,50 @@ export default function AdminUsersPage() {
                           <Badge variant={roleBadgeVariant(u.role)}>
                             {ROLE_LABELS[u.role]}
                           </Badge>
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          {u.id !== user?.id && isSuperUser && (
+                            <AlertDialog>
+                              <AlertDialogTrigger
+                                render={
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                    title="Eliminar usuario"
+                                  />
+                                }
+                              >
+                                <Trash size={20} />
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    ¿Eliminar usuario?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Esta acción eliminará de forma permanente al
+                                    usuario{" "}
+                                    <span className="font-medium text-foreground">
+                                      {u.email}
+                                    </span>
+                                    . No podrá volver a ingresar al panel.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>
+                                    Cancelar
+                                  </AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => deleteMutation.mutate(u.id)}
+                                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                  >
+                                    Eliminar
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -281,12 +341,51 @@ export default function AdminUsersPage() {
                   <span className="text-sm text-muted-foreground break-words">
                     {u.email}
                   </span>
-                  <Badge
-                    className="w-fit mt-2"
-                    variant={roleBadgeVariant(u.role)}
-                  >
-                    {ROLE_LABELS[u.role]}
-                  </Badge>
+                  <div className="mt-2 flex items-center justify-between">
+                    <Badge variant={roleBadgeVariant(u.role)}>
+                      {ROLE_LABELS[u.role]}
+                    </Badge>
+                    {u.id !== user?.id && isSuperUser && (
+                      <AlertDialog>
+                        <AlertDialogTrigger
+                          render={
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                              title="Eliminar usuario"
+                            />
+                          }
+                        >
+                          <Trash size={20} />
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              ¿Eliminar usuario?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Esta acción eliminará de forma permanente al
+                              usuario{" "}
+                              <span className="font-medium text-foreground">
+                                {u.email}
+                              </span>
+                              . No podrá volver a ingresar al panel.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => deleteMutation.mutate(u.id)}
+                              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                              Eliminar
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

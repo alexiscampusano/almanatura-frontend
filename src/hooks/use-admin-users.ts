@@ -38,3 +38,14 @@ export function useCreateInternalUser() {
     onSettled: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 }
+
+export function useDeleteInternalUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) =>
+      import("@/services/admin-users.service").then((m) => m.deleteUser(id)),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+    },
+  });
+}

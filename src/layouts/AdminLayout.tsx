@@ -39,9 +39,9 @@ export function AdminLayout() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
-    <div className="min-h-svh bg-background text-foreground">
+    <div className="min-h-svh bg-background text-foreground flex flex-col">
       <NavigationProgress />
-      <header className="border-b border-border px-4 py-4 md:px-6">
+      <header className="sticky top-0 z-30 border-b border-border bg-card shadow-sm px-4 py-4 md:px-6">
         <div className="mx-auto flex w-full max-w-[1400px] flex-wrap items-center gap-3">
           <h1 className="min-w-0 basis-full flex-1 text-lg font-semibold sm:basis-auto">
             Panel administrativo
@@ -95,7 +95,7 @@ export function AdminLayout() {
         </div>
       </header>
 
-      <div className="border-b border-border px-4 py-3 sm:hidden">
+      <div className="border-b border-border bg-card shadow-sm px-4 py-3 sm:hidden">
         <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
           <Button
             variant="outline"
@@ -124,10 +124,10 @@ export function AdminLayout() {
                   onClick={() => setMobileNavOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      "flex min-h-[var(--size-button-lg)] items-center rounded-sm border px-4 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                      "flex min-h-[var(--size-button-lg)] items-center rounded-md px-4 text-base font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                       isActive
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground",
+                        ? "bg-primary text-primary-foreground shadow-md"
+                        : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
                     )
                   }
                 >
@@ -139,11 +139,11 @@ export function AdminLayout() {
         </Sheet>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1400px] flex-col md:flex-row">
-        <aside className="hidden shrink-0 border-b border-border md:block md:w-64 md:border-b-0 md:border-r">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col md:flex-row">
+        <aside className="hidden shrink-0 border-b border-border bg-card/40 md:block md:w-64 md:border-b-0 md:border-r">
           <nav
             aria-label="Navegación del panel admin"
-            className="grid gap-1 px-4 py-5"
+            className="grid gap-1 py-5 pr-4"
           >
             {adminNavigation.map((item) => (
               <NavLink
@@ -151,10 +151,10 @@ export function AdminLayout() {
                 to={item.to}
                 className={({ isActive }) =>
                   cn(
-                    "inline-flex min-h-[var(--size-button-default)] items-center rounded-sm border border-transparent px-3 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                    "inline-flex min-h-[var(--size-button-default)] items-center rounded-r-full px-5 text-[var(--text-size-sm)] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                     isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                      ? "bg-primary text-primary-foreground shadow-md"
+                      : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
                   )
                 }
               >

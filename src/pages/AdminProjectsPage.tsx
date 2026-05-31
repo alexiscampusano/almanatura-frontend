@@ -232,26 +232,31 @@ export default function AdminProjectsPage() {
             <div className="mt-6 hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
                 <table className="min-w-[640px] w-full text-[var(--text-size-sm)]">
-                  <thead className="border-b bg-muted/50">
+                  <thead className="border-b bg-muted/30">
                     <tr>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Título
                       </th>
-                      <th className="px-4 py-3 text-left font-medium">Pilar</th>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Pilar
+                      </th>
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Estado
                       </th>
-                      <th className="px-4 py-3 text-left font-medium">
+                      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Inicio
                       </th>
-                      <th className="px-4 py-3 text-right font-medium">
+                      <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Acciones
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {projects.map((project) => (
-                      <tr key={project.id} className="hover:bg-muted/30">
+                      <tr
+                        key={project.id}
+                        className="hover:bg-muted/50 transition-colors"
+                      >
                         <td className="max-w-[200px] truncate px-4 py-3 font-medium">
                           {project.title}
                         </td>
@@ -285,6 +290,7 @@ export default function AdminProjectsPage() {
                               size="icon"
                               onClick={() => openEdit(project)}
                               aria-label="Editar proyecto"
+                              className="hover:bg-primary/10 hover:text-primary transition-colors"
                             >
                               <PencilSimple size={18} />
                             </Button>
@@ -293,6 +299,7 @@ export default function AdminProjectsPage() {
                               size="icon"
                               onClick={() => setDeleteTarget(project)}
                               aria-label="Eliminar proyecto"
+                              className="hover:bg-destructive/10 hover:text-destructive transition-colors"
                             >
                               <Trash size={18} />
                             </Button>

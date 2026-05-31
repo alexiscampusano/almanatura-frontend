@@ -179,9 +179,9 @@ export default function AdminApplicationsPage() {
           <SelectTrigger className="h-[var(--size-input-default)] w-full">
             <SelectValue placeholder="Todos los proyectos">
               {projectId === "all"
-                ? null
+                ? "Todos los proyectos"
                 : (projects?.find((p) => String(p.id) === projectId)?.title ??
-                  null)}
+                  "Todos los proyectos")}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
@@ -205,7 +205,7 @@ export default function AdminApplicationsPage() {
           <SelectTrigger className="h-[var(--size-input-default)] w-full">
             <SelectValue placeholder="Todos los estados">
               {status === "all"
-                ? null
+                ? "Todos los estados"
                 : APPLICATION_STATUS_LABELS[status as ApplicationStatus]}
             </SelectValue>
           </SelectTrigger>
@@ -282,29 +282,34 @@ export default function AdminApplicationsPage() {
             <div className="hidden rounded-lg border md:block">
               <div className="overflow-x-auto">
                 <table className="min-w-[900px] w-full text-[var(--text-size-sm)]">
-                  <thead className="border-b bg-muted/50">
+                  <thead className="border-b bg-muted/30">
                     <tr>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Solicitante
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Proyecto
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Estado
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">DNI</th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        DNI
+                      </th>
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Creada
                       </th>
-                      <th className="px-3 py-3 text-left font-medium">
+                      <th className="px-3 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Acción
                       </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
                     {filtered.map((app) => (
-                      <tr key={app.id} className="hover:bg-muted/30">
+                      <tr
+                        key={app.id}
+                        className="hover:bg-muted/50 transition-colors"
+                      >
                         <td className="px-3 py-3">
                           <div className="font-medium">{app.fullName}</div>
                           <div className="text-[var(--text-size-xs)] text-muted-foreground">

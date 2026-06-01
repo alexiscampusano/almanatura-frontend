@@ -14,6 +14,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -28,6 +37,7 @@ import {
   adminListRegionClassName,
 } from "@/components/admin/admin-page";
 import { NotificationDialog } from "@/components/admin/NotificationDialog";
+import { ApplicationHistoryDialog } from "@/components/admin/ApplicationHistoryDialog";
 import { MobileFilterSheet } from "@/components/admin/mobile-filter-sheet";
 
 import {
@@ -80,52 +90,108 @@ function TransitionControls({ app }: { app: AdminApplicationResponse }) {
   const options = allowedNextStatuses(app.status);
   const [target, setTarget] = useState<ApplicationStatus | "">("");
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [notes, setNotes] = useState("");
+
   if (options.length === 0) {
     return (
       <span className="text-sm text-muted-foreground">Sin transiciones</span>
     );
   }
 
+  const handleApply = () => {
+    if (!target) return;
+    patchMutation.mutate(
+      { id: app.id, status: target, notes },
+      {
+        onSuccess: () => {
+          setDialogOpen(false);
+          setTarget("");
+          setNotes("");
+        },
+      },
+    );
+  };
+
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-      <Select
-        value={target === "" ? undefined : target}
-        onValueChange={(v) => {
-          if (v != null) setTarget(v as ApplicationStatus);
-        }}
-      >
-        <SelectTrigger className="h-[var(--size-input-default)] w-full sm:w-[200px]">
-          <SelectValue placeholder="Siguiente estado">
-            {target ? APPLICATION_STATUS_LABELS[target] : null}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((s) => (
-            <SelectItem key={s} value={s}>
-              {APPLICATION_STATUS_LABELS[s]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Button
-        size="sm"
-        className="h-[var(--size-button-default)] gap-2"
-        disabled={!target || patchMutation.isPending}
-        onClick={() => {
-          if (!target) return;
-          patchMutation.mutate({ id: app.id, status: target });
-        }}
-      >
-        {patchMutation.isPending ? (
-          <>
-            <Spinner size="sm" className="text-primary-foreground" />
-            Aplicando
-          </>
-        ) : (
-          "Aplicar"
-        )}
-      </Button>
-    </div>
+    <>
+      <div className="flex flex-col gap-2 min-w-[140px] max-w-[180px]">
+        <Select
+          value={target}
+          onValueChange={(v) => {
+            if (v != null) setTarget(v as ApplicationStatus);
+          }}
+        >
+          <SelectTrigger className="h-[var(--size-input-default)] w-full text-xs">
+            <SelectValue placeholder="Siguiente estado">
+              {target ? APPLICATION_STATUS_LABELS[target] : null}
+            </SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((s) => (
+              <SelectItem key={s} value={s}>
+                {APPLICATION_STATUS_LABELS[s]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          size="sm"
+          className="h-[var(--size-button-default)] gap-2"
+          disabled={!target || patchMutation.isPending}
+          onClick={() => {
+            if (!target) return;
+            setDialogOpen(true);
+          }}
+        >
+          {patchMutation.isPending ? (
+            <>
+              <Spinner size="sm" className="text-primary-foreground" />
+              Aplicando
+            </>
+          ) : (
+            "Aplicar"
+          )}
+        </Button>
+      </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Confirmar transición</DialogTitle>
+            <DialogDescription>
+              Vas a cambiar el estado a{" "}
+              <strong>{target ? APPLICATION_STATUS_LABELS[target] : ""}</strong>
+              . Puedes añadir una observación opcional que quedará registrada en
+              el historial de esta solicitud.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="notes">Observaciones (Opcional)</Label>
+              <Textarea
+                id="notes"
+                placeholder="Ej: Falta enviar el documento de identidad..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setDialogOpen(false)}
+              disabled={patchMutation.isPending}
+            >
+              Cancelar
+            </Button>
+            <Button onClick={handleApply} disabled={patchMutation.isPending}>
+              {patchMutation.isPending ? "Guardando..." : "Confirmar"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 
@@ -343,7 +409,7 @@ export default function AdminApplicationsPage() {
                   <TableRow>
                     <TableHead>Solicitante</TableHead>
                     <TableHead>Proyecto</TableHead>
-                    <TableHead>Estado</TableHead>
+                    <TableHead>Estado y Revisión</TableHead>
                     <TableHead>DNI</TableHead>
                     <TableHead>Creada</TableHead>
                     <TableHead>Acción</TableHead>
@@ -352,8 +418,14 @@ export default function AdminApplicationsPage() {
                 <TableBody>
                   {filtered.map((app) => (
                     <TableRow key={app.id}>
-                      <TableCell>
-                        <div className="font-medium">{app.fullName}</div>
+                      <TableCell className="align-top whitespace-normal min-w-[180px]">
+                        <div className="font-medium flex items-center gap-2">
+                          {app.fullName}
+                          <ApplicationHistoryDialog
+                            applicationId={app.id}
+                            applicantName={app.fullName}
+                          />
+                        </div>
                         <div className="text-xs text-muted-foreground flex items-center gap-2">
                           {app.email}
                           {app.email && (
@@ -369,16 +441,32 @@ export default function AdminApplicationsPage() {
                           </div>
                         )}
                       </TableCell>
-                      <TableCell className="max-w-[180px] align-top">
+                      <TableCell className="max-w-[200px] align-top whitespace-normal">
                         <span className="line-clamp-2">
                           {projectTitleById.get(app.projectId) ??
                             `#${app.projectId}`}
                         </span>
                       </TableCell>
-                      <TableCell className="align-top">
-                        <Badge variant={statusBadgeVariant(app.status)}>
-                          {APPLICATION_STATUS_LABELS[app.status]}
-                        </Badge>
+                      <TableCell className="align-top whitespace-normal">
+                        <div className="flex flex-col items-start gap-2">
+                          <Badge variant={statusBadgeVariant(app.status)}>
+                            {APPLICATION_STATUS_LABELS[app.status]}
+                          </Badge>
+                          {app.lastModifiedBy && app.status !== "SUBMITTED" && (
+                            <div className="flex flex-col text-[0.7rem] leading-tight text-muted-foreground gap-0.5">
+                              <span>
+                                Por:{" "}
+                                <span
+                                  className="font-medium truncate max-w-[120px]"
+                                  title={app.lastModifiedBy}
+                                >
+                                  {app.lastModifiedBy.split("@")[0]}
+                                </span>
+                              </span>
+                              <span>{formatDate(app.updatedAt)}</span>
+                            </div>
+                          )}
+                        </div>
                       </TableCell>
                       <TableCell className="align-top font-mono text-xs">
                         {app.nationalId}
@@ -404,7 +492,13 @@ export default function AdminApplicationsPage() {
                   <CardContent className="space-y-3 p-4 pt-4">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <p className="font-medium">{app.fullName}</p>
+                        <div className="font-medium flex items-center gap-2">
+                          {app.fullName}
+                          <ApplicationHistoryDialog
+                            applicationId={app.id}
+                            applicantName={app.fullName}
+                          />
+                        </div>
                         <div className="text-xs text-muted-foreground flex items-center gap-2 mt-1">
                           {app.email}
                           {app.email && (
@@ -419,7 +513,23 @@ export default function AdminApplicationsPage() {
                         {APPLICATION_STATUS_LABELS[app.status]}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    {app.lastModifiedBy && app.status !== "SUBMITTED" && (
+                      <div className="rounded-md bg-muted/40 p-2 text-xs text-muted-foreground mt-2 border border-border/50">
+                        <p>
+                          <span className="font-semibold text-foreground/80">
+                            Revisado por:
+                          </span>{" "}
+                          {app.lastModifiedBy}
+                        </p>
+                        <p className="mt-0.5">
+                          <span className="font-semibold text-foreground/80">
+                            Fecha:
+                          </span>{" "}
+                          {formatDate(app.updatedAt)}
+                        </p>
+                      </div>
+                    )}
+                    <p className="text-sm text-muted-foreground mt-2">
                       {projectTitleById.get(app.projectId) ??
                         `Proyecto #${app.projectId}`}
                     </p>

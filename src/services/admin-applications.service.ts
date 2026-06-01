@@ -1,5 +1,6 @@
 import type {
   AdminApplicationResponse,
+  ApplicationHistoryResponse,
   ApplicationStatus,
 } from "@/types/application";
 
@@ -37,10 +38,20 @@ export async function getApplication(
 export async function patchApplicationStatus(
   id: number,
   status: ApplicationStatus,
+  notes?: string,
 ): Promise<AdminApplicationResponse> {
   const response = await apiClient.patch<AdminApplicationResponse>(
     `/admin/applications/${id}`,
-    { status },
+    { status, notes },
+  );
+  return response.data;
+}
+
+export async function getApplicationHistory(
+  id: number,
+): Promise<ApplicationHistoryResponse[]> {
+  const response = await apiClient.get<ApplicationHistoryResponse[]>(
+    `/admin/applications/${id}/history`,
   );
   return response.data;
 }

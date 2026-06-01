@@ -53,9 +53,13 @@ export function NotificationDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button variant="outline" size="sm" className="gap-1.5 h-8">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-7 w-7 text-muted-foreground shrink-0"
+            title="Enviar Correo"
+          >
             <Envelope size={16} />
-            Enviar Correo
           </Button>
         }
       />

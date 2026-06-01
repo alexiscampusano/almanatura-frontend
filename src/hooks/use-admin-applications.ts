@@ -9,6 +9,7 @@ import type { SearchApplicationsParams } from "@/services/admin-applications.ser
 import {
   patchApplicationStatus,
   searchApplications,
+  getApplicationHistory,
 } from "@/services/admin-applications.service";
 import type {
   AdminApplicationResponse,
@@ -27,11 +28,25 @@ export function useAdminApplications(params: SearchApplicationsParams) {
   });
 }
 
+export function useApplicationHistory(id: number) {
+  return useQuery({
+    queryKey: ["application-history", id],
+    queryFn: () => getApplicationHistory(id),
+  });
+}
+
 export function usePatchApplicationStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }: { id: number; status: ApplicationStatus }) =>
-      patchApplicationStatus(id, status),
+    mutationFn: ({
+      id,
+      status,
+      notes,
+    }: {
+      id: number;
+      status: ApplicationStatus;
+      notes?: string;
+    }) => patchApplicationStatus(id, status, notes),
     onMutate: async ({ id, status }) => {
       await queryClient.cancelQueries({ queryKey: ["admin-applications"] });
       const previous = queryClient.getQueryData(["admin-applications"]);
@@ -49,8 +64,11 @@ export function usePatchApplicationStatus() {
         queryClient.setQueryData(["admin-applications"], context.previous);
       }
     },
-    onSettled: () => {
+    onSettled: (_data, _error, variables) => {
       void queryClient.invalidateQueries({ queryKey: ["admin-applications"] });
+      void queryClient.invalidateQueries({
+        queryKey: ["application-history", variables.id],
+      });
     },
   });
 }

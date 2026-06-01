@@ -30,4 +30,15 @@ export type AdminApplicationResponse = {
   phone: string | null;
   nationalId: string;
   createdAt: string;
+  updatedAt: string;
+  lastModifiedBy: string | null;
+};
+
+export type ApplicationHistoryResponse = {
+  id: number;
+  oldStatus: ApplicationStatus | null;
+  newStatus: ApplicationStatus;
+  changedBy: string;
+  notes?: string;
+  changedAt: string;
 };

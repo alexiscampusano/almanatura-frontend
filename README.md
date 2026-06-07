@@ -1,16 +1,24 @@
 # Alma Natura Frontend
 
-Frontend application for Alma Natura, built with React 19, TypeScript, Vite, Tailwind CSS v4, and shadcn-based UI primitives.
+[![CI](https://github.com/alexiscampusano/almanatura-frontend/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/alexiscampusano/almanatura-frontend/actions/workflows/ci.yml?query=branch%3Amain)
+
+Frontend application for Alma Natura, built with React 19, TypeScript, Vite 8, Tailwind CSS v4, and shadcn-based UI primitives. Serves as the public-facing Vitrina de Proyectos and the internal admin Dashboard for Fundación AlmaNatura.
 
 ## Tech Stack
 
-- React 19 + TypeScript
-- Vite 8
-- Tailwind CSS v4 + shadcn styles
-- Zustand (global client state)
-- Axios (HTTP client + interceptors)
-- TanStack Query (server state)
-- React Router
+| Category       | Technology                                  |
+| -------------- | ------------------------------------------- |
+| Language       | React 19 + TypeScript                       |
+| Bundler        | Vite 8                                      |
+| Styling        | Tailwind CSS v4 + shadcn/base-ui primitives |
+| Client state   | Zustand                                     |
+| Server state   | TanStack Query                              |
+| Routing        | React Router v7                             |
+| HTTP           | Axios + axios-retry                         |
+| Forms          | React Hook Form + Zod                       |
+| Notifications  | Sonner                                      |
+| Carousel       | Embla Carousel                              |
+| Error tracking | Sentry                                      |
 
 ## Requirements
 
@@ -44,22 +52,13 @@ npm run dev
 
 The app runs at `http://localhost:5173`.
 
-## Accessibility policy (font scaling)
+## Environment variables
 
-- Root font-size is controlled by CSS (`html { font-size: 100% }`).
-- The app exposes a limited user font-scale range (0.9–1.3) to improve readability without breaking layout. The persisted preference key is `alma-natura-accessibility` in `localStorage`.
-- A visible "Reset accessibility" control exists in the admin header to restore defaults and clear the saved preference.
+| Variable            | Description          | Default                        |
+| ------------------- | -------------------- | ------------------------------ |
+| `VITE_API_BASE_URL` | Backend API base URL | `http://localhost:8080/api/v1` |
 
-## Developer: MCP DevTools (DEV)
-
-- The project uses external MCP DevTools for inspecting Model Context Protocol data during development. Do not add in-app dev overlays for MCP data. Install and use the MCP DevTools extension or webview when needed.
-- Keep MCP DevTools usage scoped to local/dev environments only; do not reference or bundle MCP helpers into production code.
-
-### Environment variables
-
-- `VITE_API_BASE_URL`: backend base URL used by the frontend API client.
-- Local development file: `.env.local` (ignored by git).
-- Template file tracked in repo: `.env.example`.
+Local development file: `.env.local` (ignored by git). Template: `.env.example` (tracked).
 
 ## Scripts
 
@@ -155,136 +154,196 @@ almanatura-frontend/
 ├── public/                           # Static public assets served as-is
 ├── src/
 │   ├── assets/
-│   │   └── almanatura-logo.svg      # Brand logo
+│   │   ├── almanatura-logo.svg       # Brand logo
+│   │   └── hero.png                  # Hero section image
 │   ├── components/
-│   │   └── ui/
-│   │       └── button.tsx            # Shared UI primitive (variant-based button)
+│   │   ├── accessibility/
+│   │   │   ├── AccessibilityBar.tsx  # Font scale control bar
+│   │   │   └── ResetAccessibility.tsx # Reset accessibility defaults
+│   │   ├── admin/
+│   │   │   ├── admin-page.tsx        # Reusable admin page shell
+│   │   │   ├── ApplicationHistoryDialog.tsx  # Application status history
+│   │   │   ├── mobile-filter-sheet.tsx       # Mobile filter bottom sheet
+│   │   │   ├── NotificationDialog.tsx        # Send notification dialog
+│   │   │   └── ProjectImpactSection.tsx      # Impact metrics section
+│   │   ├── ui/                       # Shared UI primitives (shadcn/base-ui)
+│   │   │   ├── alert-dialog.tsx
+│   │   │   ├── badge.tsx
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── checkbox.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── dropdown-menu.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   ├── select.tsx
+│   │   │   ├── sheet.tsx
+│   │   │   ├── skeleton.tsx
+│   │   │   ├── spinner.tsx
+│   │   │   ├── table.tsx
+│   │   │   └── textarea.tsx
+│   │   ├── error-boundary.tsx        # Global error boundary
+│   │   ├── navigation-progress.tsx   # Route transition progress bar
+│   │   └── PublicApplicationForm.tsx # Public project application form + dialog
+│   ├── hooks/
+│   │   ├── use-actors.ts             # TanStack Query: admin actor CRUD
+│   │   ├── use-admin-applications.ts # Admin applications list/filter
+│   │   ├── use-admin-project.ts      # Single admin project
+│   │   ├── use-admin-projects.ts     # Admin projects list
+│   │   ├── use-admin-reports.ts      # Reports dashboard data
+│   │   ├── use-admin-users.ts        # Admin user management
+│   │   ├── use-auth-hydrated.ts      # Auth state hydration check
+│   │   ├── use-auth-me.ts            # Current user query
+│   │   ├── use-confirm-dialog.ts     # Confirmation dialog state
+│   │   ├── use-debounce.ts           # Debounce utility hook
+│   │   ├── use-local-storage.ts      # localStorage binding hook
+│   │   ├── use-project-impact.ts     # Project impact entries
+│   │   ├── use-public-project.ts     # Public single project detail
+│   │   ├── use-public-projects.ts    # Public projects list (infinite)
+│   │   └── use-send-notification.ts  # Send outbound notification
 │   ├── layouts/
-│   │   ├── AdminLayout.tsx           # Shell for internal admin pages (sidebar nav)
-│   │   └── PublicLayout.tsx          # Shell for public pages (header + footer)
+│   │   ├── AdminLayout.tsx           # Admin shell (sidebar nav + header)
+│   │   └── PublicLayout.tsx          # Public shell (header + footer)
 │   ├── lib/
+│   │   ├── application-status.ts     # Status labels and variants
+│   │   ├── avatar.ts                 # Avatar color/initial helpers
+│   │   ├── datetime.ts               # Date formatting
+│   │   ├── error-handler.ts          # API error classification
+│   │   ├── feature-flags.ts          # Feature flag definitions
+│   │   ├── project.ts                # Project pillar config and labels
+│   │   ├── schemas/                  # Zod validation schemas
+│   │   │   ├── application.schema.ts
+│   │   │   ├── auth.schema.ts
+│   │   │   ├── index.ts
+│   │   │   ├── notification.schema.ts
+│   │   │   ├── project.schema.ts
+│   │   │   └── user.schema.ts
+│   │   ├── sentry.ts                 # Sentry client configuration
 │   │   └── utils.ts                  # Shared utilities (`cn` helper)
-│   ├── pages/
-│   │   ├── AdminActorsPage.tsx       # Admin actors directory (placeholder)
-│   │   ├── AdminApplicationsPage.tsx # Admin applications management (placeholder)
-│   │   ├── AdminLoginPage.tsx        # Admin login page + submit flow
-│   │   ├── AdminProjectsPage.tsx     # Admin projects management (placeholder)
-│   │   ├── AdminReportsPage.tsx      # Admin reports dashboard (placeholder)
-│   │   ├── AdminUsersPage.tsx        # Admin user management (placeholder)
-│   │   └── PublicHomePage.tsx         # Public home (projects list entry point)
+│   ├── pages/                        # Page components (one per route)
+│   │   ├── PublicHomePage.tsx        # Public Vitrina de Proyectos
+│   │   ├── PublicProjectDetailPage.tsx # Public project detail view
+│   │   ├── AdminLoginPage.tsx        # Admin login form
+│   │   ├── AdminProjectsPage.tsx     # Admin project CRUD list
+│   │   ├── AdminProjectDetailPage.tsx # Admin single project management
+│   │   ├── AdminApplicationsPage.tsx # Applications management
+│   │   ├── AdminActorsPage.tsx       # Actors directory list
+│   │   ├── AdminActorDetailPage.tsx  # Actor detail + applications
+│   │   ├── AdminNotificationsPage.tsx # Outbound notification history
+│   │   ├── AdminReportsPage.tsx      # Reports and metrics dashboard
+│   │   ├── AdminMePage.tsx           # Current user profile
+│   │   └── AdminUsersPage.tsx        # User management (SUPER_USER only)
 │   ├── routes/
-│   │   ├── ProtectedRoute.tsx        # Route guard for authenticated admin routes
+│   │   ├── ProtectedRoute.tsx        # Auth route guard
 │   │   └── router.tsx                # Central route definitions
-│   ├── services/
+│   ├── services/                     # API service modules
 │   │   ├── api.client.ts             # Axios base client + interceptors
-│   │   └── auth.service.ts           # Auth API calls (`/auth/login`)
+│   │   ├── auth.service.ts           # Auth API calls (/auth/login)
+│   │   ├── projects.service.ts       # Public projects API
+│   │   ├── applications.service.ts   # Public applications API
+│   │   ├── admin-projects.service.ts # Admin projects CRUD
+│   │   ├── admin-applications.service.ts # Admin applications
+│   │   ├── admin-project-impact.service.ts # Impact entries
+│   │   ├── actors.service.ts         # Admin actors
+│   │   ├── admin-users.service.ts    # Admin user management
+│   │   ├── admin-reports.service.ts  # Reports data
+│   │   └── admin-notifications.service.ts # Notifications
 │   ├── stores/
-│   │   ├── accessibility.store.ts    # Global accessibility state (font scale)
-│   │   └── auth.store.ts             # Global auth/session state
+│   │   ├── accessibility.store.ts    # Font scale state (localStorage)
+│   │   └── auth.store.ts             # Auth session state (sessionStorage)
+│   ├── types/                        # TypeScript type definitions
+│   │   ├── actor.ts
+│   │   ├── application.ts
+│   │   ├── common.ts
+│   │   ├── impact.ts
+│   │   ├── notification.ts
+│   │   ├── project.ts
+│   │   ├── reports.ts
+│   │   └── user.ts
 │   ├── App.tsx                       # App composition (providers + router + font sync)
-│   ├── index.css                     # Global styles, tokens, typography, Tailwind layers
+│   ├── App.css
+│   ├── index.css                     # Global styles, tokens, Tailwind layers
 │   └── main.tsx                      # React entry point
 ├── components.json                   # shadcn/base-ui component config
 ├── eslint.config.js                  # ESLint flat config
-├── package.json                      # Dependencies and npm scripts
+├── package.json
 ├── tsconfig.json                     # Root TypeScript project references
 ├── tsconfig.app.json                 # TS config for browser app code
-├── tsconfig.node.json                # TS config for Node/Vite tooling files
-└── vite.config.ts                    # Vite config (React compiler, Tailwind plugin, aliases)
+├── tsconfig.node.json                # TS config for Node/Vite tooling
+└── vite.config.ts                    # Vite config (React compiler, Tailwind, aliases)
 ```
 
-## Core Architecture: Folder and File Responsibilities
-
-### App bootstrap
-
-- `src/main.tsx`: React entry point, mounts `App` inside `StrictMode`.
-  - `src/App.tsx`: application shell wiring:
-    - `QueryClientProvider` for server-state operations.
-    - global `RouterProvider`.
-- `src/index.css`: global styles, Tailwind imports, design tokens, and brand typography setup.
+## Core Architecture
 
 ### Routing
 
-- `src/routes/router.tsx`: central route table for public and admin areas.
-- `src/routes/ProtectedRoute.tsx`: admin route guard that validates auth session and redirects to `/admin/login` when unauthorized or expired.
+Admin routes (all under `/admin`, protected by `ProtectedRoute`):
 
-Admin routes (all under `/admin`, protected):
-
-| Path                  | Page                    | Backend resource      |
-| --------------------- | ----------------------- | --------------------- |
-| `/admin/projects`     | `AdminProjectsPage`     | `/admin/projects`     |
-| `/admin/applications` | `AdminApplicationsPage` | `/admin/applications` |
-| `/admin/actors`       | `AdminActorsPage`       | `/admin/actors`       |
-| `/admin/reports`      | `AdminReportsPage`      | `/admin/reports/*`    |
-| `/admin/users`        | `AdminUsersPage`        | `/admin/users`        |
+| Path                   | Page                     | Backend resource       |
+| ---------------------- | ------------------------ | ---------------------- |
+| `/admin/projects`      | `AdminProjectsPage`      | `/admin/projects`      |
+| `/admin/projects/:id`  | `AdminProjectDetailPage` | `/admin/projects/{id}` |
+| `/admin/applications`  | `AdminApplicationsPage`  | `/admin/applications`  |
+| `/admin/actors`        | `AdminActorsPage`        | `/admin/actors`        |
+| `/admin/actors/:id`    | `AdminActorDetailPage`   | `/admin/actors/{id}`   |
+| `/admin/notifications` | `AdminNotificationsPage` | `/admin/notifications` |
+| `/admin/reports`       | `AdminReportsPage`       | `/admin/reports/*`     |
+| `/admin/users`         | `AdminUsersPage`         | `/admin/users`         |
+| `/admin/me`            | `AdminMePage`            | `/auth/me`             |
 
 Public routes:
 
-| Path | Page             | Backend resource |
-| ---- | ---------------- | ---------------- |
-| `/`  | `PublicHomePage` | `GET /projects`  |
+| Path            | Page                      | Backend resource                                  |
+| --------------- | ------------------------- | ------------------------------------------------- |
+| `/`             | `PublicHomePage`          | `GET /projects` (paginated, filterable by pillar) |
+| `/projects/:id` | `PublicProjectDetailPage` | `GET /projects/{id}`                              |
 
 ### Global state
 
-- `src/stores/accessibility.store.ts`: accessibility state (`fontSizeScale`) with persisted value in `localStorage`.
-- `src/stores/auth.store.ts`: auth session state (`accessToken`, `tokenType`, `expiresAt`, `user`) persisted in `sessionStorage`.
+- `accessibility.store.ts`: `fontSizeScale` persisted in `localStorage`.
+- `auth.store.ts`: `accessToken`, `tokenType`, `expiresAt`, `user` persisted in `sessionStorage`.
 
 ### API layer
 
-- `src/services/api.client.ts`: shared Axios instance:
-  - reads `VITE_API_BASE_URL`.
-  - injects JWT from auth store in request interceptor.
-  - handles global `401` by clearing session and redirecting to login.
-- `src/services/auth.service.ts`: auth-specific API calls (`/auth/login`).
+- `services/api.client.ts`: shared Axios instance — reads `VITE_API_BASE_URL`, injects JWT from auth store, handles global `401` by clearing session and redirecting to login.
+- All other `services/*.ts` modules expose typed functions that use `api.client`.
 
-### Layouts and pages
+### Data flows
 
-- `src/layouts/PublicLayout.tsx`: public shell (header/main/footer).
-- `src/layouts/AdminLayout.tsx`: internal admin shell with sidebar navigation.
-- `src/pages/PublicHomePage.tsx`: public home placeholder for published projects list.
-- `src/pages/AdminLoginPage.tsx`: admin login UI and API integration.
-- `src/pages/AdminProjectsPage.tsx`: project management (placeholder).
-- `src/pages/AdminApplicationsPage.tsx`: applications management (placeholder).
-- `src/pages/AdminActorsPage.tsx`: actors directory (placeholder).
-- `src/pages/AdminReportsPage.tsx`: reports dashboard (placeholder).
-- `src/pages/AdminUsersPage.tsx`: internal user management (placeholder).
-
-### Shared utilities and UI primitives
-
-- `src/lib/utils.ts`: shared utility helpers (`cn` class merging helper).
-- `src/components/ui/button.tsx`: reusable button primitive and variants.
-
-## Data Flows
-
-### Authentication/session flow
+**Authentication:**
 
 1. `AdminLoginPage` submits credentials via `auth.service`.
 2. `auth.service` calls `/auth/login` using `api.client`.
-3. Login response is saved in `auth.store` (`sessionStorage` persistence).
-4. `api.client` attaches `Authorization` header automatically to next requests.
-5. `ProtectedRoute` validates session before rendering admin area.
-6. On `401`, session is cleared and the user is redirected to `/admin/login`.
+3. Response is saved in `auth.store` (sessionStorage).
+4. `api.client` attaches `Authorization: Bearer <token>` to subsequent requests.
+5. `ProtectedRoute` validates session before rendering admin routes.
+6. On `401`, session is cleared and user is redirected to `/admin/login`.
 
-### Accessibility font-size flow
+**Public projects:**
 
-1. `accessibility.store` stores `fontSizeScale` and persists it in `localStorage`.
-2. `App.tsx` subscribes to `fontSizeScale`.
-3. App updates `document.documentElement.style.fontSize` so the whole UI scales consistently.
+1. `PublicHomePage` calls `usePublicProjects(pillar?`).
+2. Hook calls `projects.service` with pagination and optional pillar filter.
+3. Service uses `api.client` (no auth required for public endpoints).
+4. Result is displayed in a responsive card grid with infinite scroll.
+
+**Application submission:**
+
+1. User opens `PublicApplicationDialog` from a project card.
+2. Fills form (name, email, DNI, phone) validated with Zod.
+3. `applications.service` POSTs to `/applications`.
+4. Rate-limited by backend (429 possible).
+
+## Accessibility policy (font scaling)
+
+- Root font-size is controlled by CSS (`html { font-size: 100% }`).
+- The app exposes a limited user font-scale range (0.9–1.3) to improve readability without breaking layout. The persisted preference key is `alma-natura-accessibility` in `localStorage`.
+- A visible "Reset accessibility" control exists in the admin header to restore defaults and clear the saved preference.
 
 ## How to Extend the Project
 
-- Add a new public/admin page:
-  1. Create component in `src/pages/`.
-  2. If needed, mount it inside `PublicLayout` or `AdminLayout`.
-  3. Register route in `src/routes/router.tsx`.
-- Add a new API integration:
-  1. Create service module in `src/services/`.
-  2. Use `api.client` (do not create ad-hoc fetch clients).
-  3. Add React Query hooks near the consuming feature when appropriate.
-- Add new global state:
-  1. Create focused store in `src/stores/`.
-  2. Persist only when needed (`localStorage`/`sessionStorage`).
-  3. Keep stores small and feature-oriented.
+- Add a new page: create component in `src/pages/`, wrap in `AdminLayout` or `PublicLayout`, register route in `src/routes/router.tsx`.
+- Add a new API integration: create service module in `src/services/`, use `api.client`, add TanStack Query hook in `src/hooks/` when appropriate.
+- Add global state: create focused store in `src/stores/`, persist only when needed.
 
 ## CI and Code Quality
 
@@ -292,9 +351,30 @@ Public routes:
 - CI checks: formatting, lint, typecheck, and build.
 - Husky + lint-staged run formatting/linting over staged files during commit.
 
+## Deploy
+
+The frontend is deployed on **Vercel** (Edge Network). The production build command is:
+
+```bash
+npm run build
+```
+
+Required environment variables on Vercel:
+
+| Variable            | Value                               |
+| ------------------- | ----------------------------------- |
+| `VITE_API_BASE_URL` | `https://api.almanatura.org/api/v1` |
+| `SENTRY_AUTH_TOKEN` | _(optional, for source maps)_       |
+
+Deployment is automatic via GitHub integration on the `main` branch.
+
 ## Contribution Checklist
 
 - Branch created from `dev`.
 - Conventional Commit message used.
 - `npm run format:check`, `npm run lint`, `npm run typecheck`, and `npm run build` pass.
 - PR targets `dev` and includes clear scope + test notes.
+
+## License
+
+Private — Fundación AlmaNatura.
